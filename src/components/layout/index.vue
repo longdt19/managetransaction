@@ -1,61 +1,71 @@
 <template>
-  <el-container class="app-container">
-    <el-aside width="200px" style="background-color: #545c64">
-      <leftbar-component></leftbar-component>
-    </el-aside>
-
-    <el-container>
-      <el-header style="text-align: right; font-size: 12px">
-        <el-dropdown>
-          <i class="el-icon-setting" style="margin-right: 15px"></i>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>View</el-dropdown-item>
-            <el-dropdown-item>Add</el-dropdown-item>
-            <el-dropdown-item>Delete</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <span>longdt</span>
-      </el-header>
-
-      <el-main>
-        <router-view/>
-      </el-main>
-    </el-container>
-  </el-container>
+  <div class="app-wrapper" :class="classObj">
+    <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"></div>
+    <sidebar class="sidebar-container"></sidebar>
+    <div class="main-container">
+      <navbar></navbar>
+      <app-main></app-main>
+    </div>
+  </div>
 </template>
 
 <script>
-import TopheaderComponent from './topheader'
-import LeftbarComponent from './leftbar'
+import Navbar from './Navbar'
+import Sidebar from './Sidebar'
+import AppMain from './AppMain'
+import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
-  components: { TopheaderComponent, LeftbarComponent },
-  data () {
-    const item = {
-      date: '2016-05-02',
-      name: 'Tom',
-      address: 'No. 189, Grove St, Los Angeles'
+  name: 'layout',
+  components: {
+    Navbar,
+    Sidebar,
+    AppMain
+  },
+  mixins: [ResizeMixin],
+  computed: {
+    sidebar () {
+      return this.$store.state.app.sidebar
+    },
+    device () {
+      return this.$store.state.app.device
+    },
+    classObj () {
+      return {
+        hideSidebar: !this.sidebar.opened,
+        openSidebar: this.sidebar.opened,
+        withoutAnimation: this.sidebar.withoutAnimation,
+        mobile: this.device === 'mobile'
+      }
     }
-    return {
-      tableData: Array(20).fill(item)
+  },
+  methods: {
+    handleClickOutside () {
+      this.$store.dispatch('closeSideBar', { withoutAnimation: false })
     }
   }
 }
 </script>
 
-<style>
-  .app-container {
-    position: absolute;
+<style rel="stylesheet/scss" lang="scss" scoped>
+  @import "src/styles/mixin.scss";
+  .app-wrapper {
+    @include clearfix;
+    position: relative;
+    height: 100%;
     width: 100%;
-    height: 100%
+    &.mobile.openSidebar{
+      position: fixed;
+      top: 0;
+    }
   }
-  .el-header {
-    background-color: #B3C0D1;
-    color: #333;
-    line-height: 60px;
-  }
-
-  .el-aside {
-    color: #545c64;
+  .drawer-bg {
+    background: #000;
+    opacity: 0.3;
+    width: 100%;
+    top: 0;
+    height: 100%;
+    position: absolute;
+    z-index: 999;
   }
 </style>

@@ -1,16 +1,17 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+
+import Element from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+
+import '@/styles/index.scss' // global css
+
 import App from './App'
 import router from './router'
-import './element-variables.scss'
+import store from './store'
 
-import ElementUI from 'element-ui'
-import locale from 'element-ui/lib/locale/lang/vi'
-import moment from 'moment'
-
-moment.locale('vi')
-Vue.use(ElementUI, { locale })
+Vue.use(Element, {
+  size: 'medium' // set element-ui default size
+})
 
 Vue.config.productionTip = false
 
@@ -18,6 +19,6 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  components: { App },
-  template: '<App/>'
+  store,
+  render: h => h(App)
 })

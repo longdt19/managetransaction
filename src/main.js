@@ -2,6 +2,8 @@ import Vue from 'vue'
 
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import locale from 'element-ui/lib/locale/lang/vi'
+import moment from 'moment'
 
 import '@/styles/index.scss' // global css
 
@@ -10,8 +12,12 @@ import router from './router'
 import store from './store'
 
 Vue.use(Element, {
-  size: 'medium' // set element-ui default size
+  size: 'medium', // set element-ui default size
+  locale
 })
+
+moment.locale('vi')
+// Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 

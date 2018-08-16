@@ -1,8 +1,29 @@
 <template>
-  <el-menu class="navbar" mode="horizontal">
-    <div class="hamburger-container">
-      <button @click="toggleSideBar">dcm long</button>
-    </div>
+  <el-menu class="navbar" mode="horizontal" style="margin-bottom: 10px">
+    <el-row>
+      <el-col :span="12"><div class="grid-content bg-purple">
+        <el-button @click="toggleSideBar" round size="small">
+          <i :class="icon_class"></i>
+        </el-button>
+      </div></el-col>
+      <el-col :span="12">
+        <div class="grid-content bg-purple-light" style="text-align: right; margin-right: 20px">
+          <span>longdt.19@gmail.com</span>
+          <el-dropdown>
+            <el-button  size="small">
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>Action 1</el-dropdown-item>
+              <el-dropdown-item>Action 2</el-dropdown-item>
+              <el-dropdown-item>Action 3</el-dropdown-item>
+              <el-dropdown-item>Action 4</el-dropdown-item>
+              <el-dropdown-item>Action 5</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+      </el-col>
+    </el-row>
   </el-menu>
 </template>
 
@@ -18,10 +39,26 @@ export default {
       'avatar'
     ])
   },
+  data () {
+    return {
+      icon_class: ''
+    }
+  },
   methods: {
     toggleSideBar () {
       this.$store.dispatch('toggleSideBar')
+      this.change_icon_toggle()
+    },
+    change_icon_toggle () {
+      if (this.sidebar.opened === false) {
+        this.icon_class = 'el-icon-arrow-right'
+      } else {
+        this.icon_class = 'el-icon-arrow-left'
+      }
     }
+  },
+  created () {
+    this.change_icon_toggle()
   }
 }
 </script>
@@ -29,11 +66,13 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .navbar {
   height: 50px;
-  line-height: 50px;
+  justify-content: center;
+  align-items: center;
+  line-height: 40px;
   border-radius: 0px !important;
   .hamburger-container {
-    line-height: 58px;
-    height: 50px;
+    line-height: 40px;
+    height: 0px;
     float: left;
     padding: 0 10px;
   }

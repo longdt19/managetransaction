@@ -1,22 +1,27 @@
 <template>
 <section>
   <el-row :butter="10">
-    <el-col :span="8"><div class="grid-content bg-purple">
+    <el-col :span="7"><div class="grid-content bg-purple">
       <div class="group">
         <input type="text" required :value="value"   v-bind="$attrs"   @input="updateModel" ref="input" />
         <label>{{ input_bank }}</label>
       </div>
     </div></el-col>
-    <el-col :span="8"><div class="grid-content bg-purple-light">
+    <el-col :span="7"><div class="grid-content bg-purple-light">
       <div class="group">
         <input type="text" required :value="value"   v-bind="$attrs"   @input="updateModel" ref="input" />
         <label>{{ input_category }}</label>
       </div>
     </div></el-col>
-    <el-col :span="8"><div class="grid-content bg-purple">
+    <el-col :span="7"><div class="grid-content bg-purple">
       <div class="group">
         <input type="text" required :value="value"   v-bind="$attrs"   @input="updateModel" ref="input" />
         <label>{{ input_customer }}</label>
+      </div>
+    </div></el-col>
+    <el-col :span="3"><div class="grid-content bg-purple" style="    margin-top: 5px;">
+      <div class="group">
+        <el-button slot="append" icon="el-icon-search"></el-button>
       </div>
     </div></el-col>
   </el-row>
@@ -39,7 +44,6 @@ export default {
     }
   },
   created () {
-    console.log('this.$parent', this.$parent)
     this.input_bank = this.$parent.note_input_search.bank
     this.input_category = this.$parent.note_input_search.category
     this.input_customer = this.$parent.note_input_search.customer

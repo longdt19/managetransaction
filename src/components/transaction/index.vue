@@ -2,10 +2,14 @@
 <section>
   <div class="" style="margin-bottom: 20px">
     <el-row>
-      <el-col :span="12"><div class="grid-content bg-purple">
+      <el-col :span="18"><div class="grid-content bg-purple">
         <span style="font-size: 24px; margin-bottom: 50px">Thống kê chi tiết các giao dịch</span>
       </div></el-col>
-      <el-col :span="12"><div class="grid-content bg-purple-light" style="text-align: right">
+      <el-col :span="3"><div class="grid-content bg-purple-light" style="text-align: right">
+        <!-- <el-button>Thêm mới giao dịch</el-button> -->
+        <add-transaction-component></add-transaction-component>
+      </div></el-col>
+      <el-col :span="3"><div class="grid-content bg-purple-light" style="text-align: right">
         <el-button>Xuất Excel</el-button>
       </div></el-col>
     </el-row>
@@ -55,7 +59,7 @@
       <search-component  style="width: 100%"></search-component>
     </div>
     <div class="">
-      <el-button slot="append" icon="el-icon-search"></el-button>
+      <!-- <el-button slot="append" icon="el-icon-search"></el-button> -->
     </div>
   </div>
 
@@ -113,10 +117,11 @@
 </template>
 
 <script>
-import SearchComponent from '@/components/search'
+import SearchComponent from '@/components/transaction/search'
+import AddTransactionComponent from './add_transaction'
 
 export default {
-  components: { SearchComponent },
+  components: { SearchComponent, AddTransactionComponent },
   data () {
     return {
       from_date: '',

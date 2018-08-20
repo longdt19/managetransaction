@@ -1,16 +1,14 @@
 <template>
 <section>
-  <el-row>
-    <el-col :span="16"><div class="grid-content bg-purple">
+  <el-row style="justify-content: center; align-items: center; display: flex">
+    <el-col :xs="24"  :md="16"><div class="grid-content bg-purple">
       <img src="/static/login/images/login.png" alt="" class="img-fluid">
     </div></el-col>
-    <el-col :span="8"><div class="grid-content bg-purple">
-      <div class="col-sm-6 col-md-4 col-form">
-        <br>
-        <br>
-        <div class="form-content" style="width: 100%">
-          <h1 class="form-tittle">Login</h1>
-          <p class="form-description">Sypply Chain Management System</p>
+    <el-col :xs="24" :md="8"><div class="grid-content bg-purple">
+      <div class="" >
+        <h2 class="form-tittle">Login</h2>
+      </div>
+          <p class="form-description">Management System</p>
           <div class="form-group">
             <input type="username" class="form-control" id="id_email" placeholder="Username" name="username">
           </div>
@@ -18,8 +16,6 @@
             <input type="password" class="form-control" id="id_password" placeholder="Password" name="password">
           </div>
           <button  type="submit" class="btn btn-primary">Login In</button>
-        </div>
-      </div>
     </div></el-col>
   </el-row>
 </section>

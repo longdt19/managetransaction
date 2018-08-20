@@ -109,9 +109,6 @@ export default {
 }
 </script>
 <style scoped="">
-.my-dialog {
-  height: 500px;
-}
 .el-input, el-input__inner {
   width: 100%;
 }

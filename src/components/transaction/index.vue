@@ -98,7 +98,7 @@
     <el-table-column prop="paid" label="Đã thanh toán">
     </el-table-column>
 
-    <el-table-column prop="unpaid" label="Chưa thanh toán">
+    <el-table-column prop="unpaid" label="Còn nợ">
     </el-table-column>
 
     <el-table-column prop="performer" label="Người tạo">
@@ -113,6 +113,12 @@
     <el-table-column prop="action" label="Thao tác">
     </el-table-column>
   </el-table>
+  <div class="block" style="margin-top: 30px; text-align: right">
+    <el-pagination
+      layout="prev, pager, next"
+      :total="50">
+    </el-pagination>
+  </div>
 </section>
 </template>
 

@@ -78,6 +78,12 @@
 
       </el-table>
     </div>
+    <div class="block" style="margin-top: 30px; text-align: right">
+      <el-pagination
+        layout="prev, pager, next"
+        :total="50">
+      </el-pagination>
+    </div>
   </section>
 </template>
 

@@ -1,25 +1,30 @@
 <template>
 <section>
   <el-row :butter="10">
-    <el-col :span="7"><div class="grid-content bg-purple">
+    <el-col :xs="24" :md="2"><div class="grid-content bg-purple">
+      <div class="group">
+        <span>Tìm kiếm:</span>
+      </div>
+    </div></el-col>
+    <el-col :md="4"><div class="grid-content bg-purple">
       <div class="group">
         <input type="text" required :value="value"   v-bind="$attrs"   @input="updateModel" ref="input" />
         <label>{{ input_bank }}</label>
       </div>
     </div></el-col>
-    <el-col :span="7"><div class="grid-content bg-purple-light">
+    <el-col :md="4"><div class="grid-content bg-purple-light">
       <div class="group">
         <input type="text" required :value="value"   v-bind="$attrs"   @input="updateModel" ref="input" />
         <label>{{ input_category }}</label>
       </div>
     </div></el-col>
-    <el-col :span="7"><div class="grid-content bg-purple">
+    <el-col :md="4"><div class="grid-content bg-purple">
       <div class="group">
         <input type="text" required :value="value"   v-bind="$attrs"   @input="updateModel" ref="input" />
         <label>{{ input_customer }}</label>
       </div>
     </div></el-col>
-    <el-col :span="3"><div class="grid-content bg-purple" style="    margin-top: 5px;">
+    <el-col :xs="24" :md="2"><div class="grid-content bg-purple" style="    margin-top: 5px;">
       <div class="group">
         <el-button slot="append" icon="el-icon-search"></el-button>
       </div>

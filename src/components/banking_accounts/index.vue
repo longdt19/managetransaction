@@ -2,18 +2,18 @@
   <section>
     <div class="" style="margin-bottom: 20px">
       <el-row>
-        <el-col :span="12"><div class="grid-content bg-purple">
+        <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
           <span style="font-size: 24px; margin-bottom: 50px">Thống kê chi tiết ngân hàng</span>
         </div></el-col>
-        <el-col :span="12"><div class="grid-content bg-purple-light" style="text-align: right">
+        <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
           <el-button>Xuất Excel</el-button>
         </div></el-col>
       </el-row>
     </div>
     <el-row>
-      <el-col :span="12"><div class="grid-content bg-purple">
-        <el-row>
-          <el-col :span="12"><div class="grid-content bg-purple">
+      <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
+        <el-row :gutter="5">
+          <el-col :xs="24" :md="12"><div class="grid-content bg-purple" style="margin-left: 12px">
             <span>Từ ngày:</span>
             <el-date-picker
               v-model="from_date"
@@ -21,7 +21,7 @@
             >
             </el-date-picker>
           </div></el-col>
-          <el-col :span="12"><div class="grid-content bg-purple-light">
+          <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
             <span>Đến ngày:</span>
             <el-date-picker
               v-model="to_date"
@@ -32,16 +32,16 @@
         </el-row>
       </div></el-col>
 
-      <el-col :span="12"><div class="grid-content bg-purple-light">
+      <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
         <el-row>
           <el-col :span="8"><div class="grid-content bg-purple">
-            <span>Có: </span>
+            <span>Có: 165413216543</span>
           </div></el-col>
           <el-col :span="8"><div class="grid-content bg-purple-light">
-            <span>Nợ: </span>
+            <span>Nợ: 34653214654</span>
           </div></el-col>
           <el-col :span="8"><div class="grid-content bg-purple-light">
-            <span>Tổng: </span>
+            <span>Tổng: 65486431</span>
           </div></el-col>
         </el-row>
       </div></el-col>
@@ -68,13 +68,64 @@
         <el-table-column prop="balance" label="Số dư">
         </el-table-column>
 
-        <el-table-column prop="sub_total" label="Có">
+        <el-table-column label="Đầu kỳ" header-align="center" border>
+          <el-table-column label="Có">
+            <template slot-scope="scope">
+              <span style="font-size: 10px">100000000</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Nợ">
+            <template slot-scope="scope">
+              <span style="font-size: 10px">100000000</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Tổng">
+            <template slot-scope="scope">
+              <span style="font-size: 10px">100000000</span>
+            </template>
+          </el-table-column>
         </el-table-column>
 
-        <el-table-column prop="unpaid" label="Nợ">
+        <el-table-column label="Giữa kỳ" header-align="center" border>
+          <el-table-column label="Có">
+            <template slot-scope="scope">
+              <span style="font-size: 10px">100000000</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Nợ">
+            <template slot-scope="scope">
+              <span style="font-size: 10px">100000000</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Tổng">
+            <template slot-scope="scope">
+              <span style="font-size: 10px">100000000</span>
+            </template>
+          </el-table-column>
         </el-table-column>
 
-        <el-table-column prop="total" label="Tổng">
+        <el-table-column label="Cuối kỳ" header-align="center" border>
+          <el-table-column label="Có">
+            <template slot-scope="scope">
+              <span style="font-size: 10px">100000000</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Nợ">
+            <template slot-scope="scope">
+              <span style="font-size: 10px">100000000</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Tổng">
+            <template slot-scope="scope">
+              <span style="font-size: 10px">100000000</span>
+            </template>
+          </el-table-column>
         </el-table-column>
       </el-table>
     </div>
@@ -127,6 +178,6 @@ export default {
 </script>
 <style scoped="">
 .el-input, el-input__inner {
-  width: 50%;
+  width: 150px;
 }
 </style>

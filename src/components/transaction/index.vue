@@ -2,22 +2,22 @@
 <section>
   <div class="" style="margin-bottom: 20px">
     <el-row>
-      <el-col :span="18"><div class="grid-content bg-purple">
+      <el-col :xs="24" :md="16"><div class="grid-content bg-purple">
         <span style="font-size: 24px; margin-bottom: 50px">Thống kê chi tiết các giao dịch</span>
       </div></el-col>
-      <el-col :span="3"><div class="grid-content bg-purple-light" style="text-align: right">
+      <el-col :xs="12" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
         <!-- <el-button>Thêm mới giao dịch</el-button> -->
         <add-transaction-component></add-transaction-component>
       </div></el-col>
-      <el-col :span="3"><div class="grid-content bg-purple-light" style="text-align: right">
+      <el-col :xs="12" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
         <el-button>Xuất Excel</el-button>
       </div></el-col>
     </el-row>
   </div>
   <el-row>
-    <el-col :span="12"><div class="grid-content bg-purple">
+    <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
       <el-row>
-        <el-col :span="12"><div class="grid-content bg-purple">
+        <el-col :xs="24" :md="12"><div class="grid-content bg-purple" style="margin-left: 12px">
           <span>Từ ngày:</span>
           <el-date-picker
             v-model="from_date"
@@ -25,7 +25,7 @@
           >
           </el-date-picker>
         </div></el-col>
-        <el-col :span="12"><div class="grid-content bg-purple-light">
+        <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
           <span>Đến ngày:</span>
           <el-date-picker
             v-model="to_date"
@@ -36,32 +36,33 @@
       </el-row>
     </div></el-col>
 
-    <el-col :span="12"><div class="grid-content bg-purple-light">
+    <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
       <el-row>
         <el-col :span="8"><div class="grid-content bg-purple">
-          <span>Có: </span>
+          <span>Có: 1800000000</span>
         </div></el-col>
         <el-col :span="8"><div class="grid-content bg-purple-light">
-          <span>Nợ: </span>
+          <span>Nợ: 500000000</span>
         </div></el-col>
         <el-col :span="8"><div class="grid-content bg-purple-light">
-          <span>Tổng: </span>
+          <span>Tổng: 1300000000 </span>
         </div></el-col>
       </el-row>
     </div></el-col>
   </el-row>
 
-  <div style="margin-top: 15px; margin-bottom: 25px; display: flex; align-items: center">
+  <div class=""  style="margin-top: 15px">
+    <search-component  style="width: 100%"></search-component>
+  </div>
+
+  <!-- <div style="margin-top: 15px; margin-bottom: 25px; align-items: center">
     <div class="" style="margin-right: 5px">
       <span>Tìm kiếm: </span>
     </div>
     <div class="" style="margin-top: 10px">
       <search-component  style="width: 100%"></search-component>
     </div>
-    <div class="">
-      <!-- <el-button slot="append" icon="el-icon-search"></el-button> -->
-    </div>
-  </div>
+  </div> -->
 
   <el-table
     :data="tableData"
@@ -138,9 +139,9 @@ export default {
       search_customer: '',
       search_category: '',
       note_input_search: {
-        'bank': 'Nhập tên ngân hàng',
-        'category': 'Nhập loại giao dịch',
-        'customer': 'Nhập khách hàng'
+        'bank': 'Tên ngân hàng',
+        'category': 'Loại giao dịch',
+        'customer': 'Khách hàng'
       },
       tableData: [
         {
@@ -182,6 +183,6 @@ export default {
 </script>
 <style scoped="">
 .el-input, el-input__inner {
-  width: 50%;
+  width: 150px;
 }
 </style>

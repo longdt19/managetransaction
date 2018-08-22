@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar wrapClass="scrollbar-wrapper">
     <el-menu
-      default-active="2"
+      :default-active="defaultActive"
       class="el-menu-vertical-demo"
       mode="vertical"
       :show-timeout="200"
@@ -10,22 +10,35 @@
       text-color="#bfcbd9"
       active-text-color="#409EFF"
     >
-    <el-menu-item index="transaction" @click.native="go_to('transaction')">
-      <i class="el-icon-menu"></i>
-      <span>Chi tiết</span>
-    </el-menu-item>
+
+      <el-menu-item index="transaction" @click.native="go_to('transaction')">
+        <el-tooltip class="item" effect="dark" content="Thống kê chung" placement="right">
+          <i class="el-icon-setting"></i>
+        </el-tooltip>
+        <span>Chi tiết</span>
+      </el-menu-item>
+
       <el-menu-item index="banking-accounts" @click.native="go_to('banking-accounts')">
-        <i class="el-icon-menu"></i>
+        <el-tooltip class="item" effect="dark" content="Thống kê chi tiết tài khoản ngân hàng" placement="right">
+          <i class="el-icon-setting"></i>
+        </el-tooltip>
         <span>Ngân hàng</span>
       </el-menu-item>
+
       <el-menu-item index="customer-accounts" @click.native="go_to('customer-accounts')">
-        <i class="el-icon-setting"></i>
+        <el-tooltip class="item" effect="dark" content="Thống kê chi tiết tài khoản khách hàng" placement="right">
+          <i class="el-icon-setting"></i>
+        </el-tooltip>
         <span>Khách hàng</span>
       </el-menu-item>
+
       <el-menu-item index="products" @click.native="go_to('products')">
-        <i class="el-icon-setting"></i>
+        <el-tooltip class="item" effect="dark" content="Thống kê chi tiết các sản phẩm" placement="right">
+          <i class="el-icon-setting"></i>
+        </el-tooltip>
         <span>Sản phẩm</span>
       </el-menu-item>
+
     </el-menu>
   </el-scrollbar>
 </template>
@@ -35,6 +48,11 @@ import { mapGetters } from 'vuex'
 
 export default {
   components: { },
+  data () {
+    return {
+      defaultActive: ''
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar'
@@ -47,6 +65,9 @@ export default {
     go_to (path) {
       this.$router.push('/' + path)
     }
+  },
+  created () {
+    this.defaultActive = this.$route.name
   }
 }
 </script>

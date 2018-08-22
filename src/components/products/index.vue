@@ -51,71 +51,70 @@
       <el-table
         :data="tableData"
         style="width: 100%"
-        border
       >
-        <el-table-column prop="code" label="Mã sản phẩm" width="100">
+        <el-table-column prop="code" label="Mã sản phẩm" width="100" header-align="center">
         </el-table-column>
 
-        <el-table-column prop="name" label="Tên sản phẩm" width="150">
+        <el-table-column prop="name" label="Tên sản phẩm" width="150" header-align="center">
         </el-table-column>
 
-        <el-table-column prop="balance" label="Số dư">
+        <el-table-column prop="balance" label="Số dư" header-align="center">
         </el-table-column>
 
-        <el-table-column label="Đầu kỳ" header-align="center" border>
-          <el-table-column label="Có">
+        <el-table-column label="Đầu kỳ" header-align="center">
+          <el-table-column label="Có" header-align="center">
             <template slot-scope="scope">
               <span style="font-size: 10px">100000000</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="Nợ">
+          <el-table-column label="Nợ" header-align="center">
             <template slot-scope="scope">
               <span style="font-size: 10px">100000000</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="Tổng">
-            <template slot-scope="scope">
-              <span style="font-size: 10px">100000000</span>
-            </template>
-          </el-table-column>
-        </el-table-column>
-
-        <el-table-column label="Giữa kỳ" header-align="center" border>
-          <el-table-column label="Có">
-            <template slot-scope="scope">
-              <span style="font-size: 10px">100000000</span>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="Nợ">
-            <template slot-scope="scope">
-              <span style="font-size: 10px">100000000</span>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="Tổng">
+          <el-table-column label="Tổng" header-align="center">
             <template slot-scope="scope">
               <span style="font-size: 10px">100000000</span>
             </template>
           </el-table-column>
         </el-table-column>
 
-        <el-table-column label="Cuối kỳ" header-align="center" border>
-          <el-table-column label="Có">
+        <el-table-column label="Giữa kỳ" header-align="center">
+          <el-table-column label="Có" header-align="center">
             <template slot-scope="scope">
               <span style="font-size: 10px">100000000</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="Nợ">
+          <el-table-column label="Nợ" header-align="center">
             <template slot-scope="scope">
               <span style="font-size: 10px">100000000</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="Tổng">
+          <el-table-column label="Tổng" header-align="center">
+            <template slot-scope="scope">
+              <span style="font-size: 10px">100000000</span>
+            </template>
+          </el-table-column>
+        </el-table-column>
+
+        <el-table-column label="Cuối kỳ" header-align="center">
+          <el-table-column label="Có" header-align="center">
+            <template slot-scope="scope">
+              <span style="font-size: 10px">100000000</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Nợ" header-align="center">
+            <template slot-scope="scope">
+              <span style="font-size: 10px">100000000</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Tổng" header-align="center">
             <template slot-scope="scope">
               <span style="font-size: 10px">100000000</span>
             </template>

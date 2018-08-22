@@ -67,52 +67,85 @@
   <el-table
     :data="tableData"
     style="width: 100%"
-    border
   >
-    <el-table-column  prop="code" label="Mã giao dịch">
-      <!-- <template slot-scope="scope">
-        {{scope.code}}
-      </template> -->
+    <el-table-column type="index" label="STT" width="50"></el-table-column>
+
+    <!-- ***********************************************************************
+    ************************   Thông tin    ************************************
+    ************************************************************************ -->
+    <el-table-column label="Thông tin" header-align="center">
+
+      <el-table-column prop="date" label="Ngày tạo" header-align="center">
+      </el-table-column>
+
+      <el-table-column  prop="code" label="Mã giao dịch" header-align="center">
+        <!-- <template slot-scope="scope">
+          {{scope.code}}
+        </template> -->
+      </el-table-column>
+
+      <el-table-column prop="status" label="Trạng thái" header-align="center">
+      </el-table-column>
+
+      <!-- chọn đúng tên trong danh sách khách hàng có sẵn. nếu không có phải sang tạo mới -->
+      <el-table-column prop="owner" label="Người giao dịch" header-align="center">
+      </el-table-column>
+
     </el-table-column>
 
-    <el-table-column prop="owner" label="Người giao dịch">
+    <!-- ***********************************************************************
+    ************************   Đơn hàng    ************************************
+    ************************************************************************ -->
+
+    <el-table-column label="Đơn hàng" header-align="center">
+
+      <!-- chọn từ sheep Sản phẩm -->
+      <el-table-column prop="product" label="Sản phẩm" header-align="center">
+      </el-table-column>
+
+      <!-- số tiền mình đã nạp cho sản phẩm đó -->
+      <el-table-column prop="price" label="Số tiền" header-align="center">
+      </el-table-column>
+
+      <el-table-column prop="extract" label="Chiết suất(%)" header-align="center">
+      </el-table-column>
+
+      <!-- khi khách hàng chuyển tiền có thể thêm bớt số lẻ
+      cái này dùng để ghi chi tiết khách hàng thêm hay bớt bao nhiêu
+      để hiểu đc thực tế mình chỉ nhận được ngân hàng nào để khớp với số dư trong ngân hàng đó -->
+      <el-table-column prop="discount" label="Bớt tiền" header-align="center">
+      </el-table-column>
+
+      <!-- tổng thành tiền thực tế phải thu khách hàng -->
+      <el-table-column prop="total" label="Tổng" header-align="center">
+      </el-table-column>
+
     </el-table-column>
 
-    <el-table-column prop="product" label="Sản phẩm">
+    <!-- ***********************************************************************
+    ************************   Thanh toán   ************************************
+    ************************************************************************ -->
+
+    <el-table-column label="Thanh toán" header-align="center">
+
+      <!-- ngân hàng khách hàng dùng để thanh toán -->
+      <el-table-column prop="bank" label="Ngân hàng" header-align="center">
+      </el-table-column>
+
+      <el-table-column prop="paid" label="Đã thanh toán" header-align="center">
+      </el-table-column>
+
+      <el-table-column prop="unpaid" label="Còn nợ" header-align="center">
+      </el-table-column>
+
     </el-table-column>
 
-    <el-table-column prop="bank" label="Ngân hàng">
+    <el-table-column prop="note" label="Ghi chú" header-align="center">
     </el-table-column>
 
-    <el-table-column prop="price" label="Số tiền">
+    <el-table-column prop="performer" label="Người tạo" header-align="center">
     </el-table-column>
 
-    <el-table-column prop="extract" label="Chiết suất(%)">
-    </el-table-column>
-
-    <el-table-column prop="discount" label="Bớt tiền">
-    </el-table-column>
-
-    <el-table-column prop="total" label="Tổng">
-    </el-table-column>
-
-    <el-table-column prop="paid" label="Đã thanh toán">
-    </el-table-column>
-
-    <el-table-column prop="unpaid" label="Còn nợ">
-    </el-table-column>
-
-    <el-table-column prop="performer" label="Người tạo">
-    </el-table-column>
-
-    <el-table-column prop="date" label="Ngày tạo">
-    </el-table-column>
-
-    <el-table-column prop="status" label="Trạng thái">
-    </el-table-column>
-
-    <el-table-column prop="action" label="Thao tác">
-    </el-table-column>
   </el-table>
   <div class="block" style="margin-top: 30px; text-align: right">
     <el-pagination
@@ -158,7 +191,8 @@ export default {
           performer: 'longdt',
           date: '22/23/2012',
           status: 'Trạng Thái',
-          action: 'Tác động'
+          action: 'Tác động',
+          note: 'hihihihihihihihihihi'
         },
         {
           code: '123465',
@@ -174,7 +208,8 @@ export default {
           performer: 'longdt',
           date: '22/23/2012',
           status: 'Trạng Thái',
-          action: 'Tác động'
+          action: 'Tác động',
+          note: 'hihihihihihihihihihi'
         }
       ]
     }
@@ -185,4 +220,6 @@ export default {
 .el-input, el-input__inner {
   width: 150px;
 }
+</style>
+<style>
 </style>

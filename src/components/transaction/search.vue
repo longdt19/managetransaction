@@ -7,26 +7,48 @@
       </div>
     </div></el-col>
     <el-col :md="4"><div class="grid-content bg-purple">
-      <div class="group">
-        <input type="text" required :value="value"   v-bind="$attrs"   @input="updateModel" ref="input" />
-        <label>{{ input_bank }}</label>
+      <div class="group" v-loading="$parent.loading_bankList" element-loading-spinner="el-icon-loading">
+        <el-select v-model="input_bank" placeholder="Chọn ngân hàng" filterable>
+          <el-option
+            v-for="item in $parent.bank_list"
+            :key="item.id"
+            :label="item.bankName"
+            :value="item.accountNumber">
+            <span style="float: left">{{ item.bankName }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.userName }}</span>
+          </el-option>
+        </el-select>
       </div>
     </div></el-col>
     <el-col :md="4"><div class="grid-content bg-purple-light">
-      <div class="group">
-        <input type="text" required :value="value"   v-bind="$attrs"   @input="updateModel" ref="input" />
-        <label>{{ input_category }}</label>
+      <div class="group" v-loading="$parent.loading_productList" element-loading-spinner="el-icon-loading">
+        <el-select v-model="input_product" filterable placeholder="Chọn sản phẩm">
+          <el-option
+            v-for="item in $parent.product_list"
+            :key="item.id"
+            :label="item.name"
+            :value="item.type">
+          </el-option>
+        </el-select>
       </div>
     </div></el-col>
-    <el-col :md="4"><div class="grid-content bg-purple">
-      <div class="group">
-        <input type="text" required :value="value"   v-bind="$attrs"   @input="updateModel" ref="input" />
-        <label>{{ input_customer }}</label>
+    <el-col :md="4" ><div class="grid-content bg-purple">
+      <div class="group" v-loading="$parent.loading_customerList" element-loading-spinner="el-icon-loading">
+        <el-select v-model="input_customer" placeholder="Chọn khách hàng" filterable>
+          <el-option
+            v-for="item in $parent.customer_list"
+            :key="item.id"
+            :label="item.name"
+            :value="item.name">
+            <span style="float: left">{{ item.name }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.azAccount }}</span>
+          </el-option>
+        </el-select>
       </div>
     </div></el-col>
-    <el-col :xs="24" :md="2"><div class="grid-content bg-purple" style="    margin-top: 5px;">
+    <el-col :xs="24" :md="2"><div class="grid-content bg-purple" style="">
       <div class="group">
-        <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-button slot="append" icon="el-icon-search" @click.native="search"></el-button>
       </div>
     </div></el-col>
   </el-row>
@@ -35,23 +57,23 @@
 
 <script>
 export default {
-  props: ['label', 'value'],
   data () {
     return {
       input_bank: '',
-      input_category: '',
+      input_product: '',
       input_customer: ''
     }
   },
   methods: {
-    updateModel () {
-      this.$emit('search', this.$refs.input.value.toString())
+    search () {
+      if (this.input_bank === '' && this.input_product === '' && this.input_customer === '') {
+        this.$message.error('Vui lòng chọn trường tìm kiếm')
+        return ''
+      }
     }
   },
   created () {
-    this.input_bank = this.$parent.note_input_search.bank
-    this.input_category = this.$parent.note_input_search.category
-    this.input_customer = this.$parent.note_input_search.customer
+    // this.bank_list = this.$parent.bank_list
   }
 }
 </script>
@@ -102,4 +124,10 @@ export default {
   input:focus {
     border-color: #0088cc;
   }
+
+</style>
+<style media="screen">
+.el-loading-spinner {
+  top: 80%
+}
 </style>

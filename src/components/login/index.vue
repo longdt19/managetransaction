@@ -4,7 +4,7 @@
     <el-col :xs="24"  :md="16"><div class="grid-content bg-purple">
       <img src="/static/login/images/login.png" alt="" class="img-fluid">
     </div></el-col>
-    <el-col :xs="24" :md="8"><div class="grid-content bg-purple">
+    <el-col :xs="24" :md="8" v-loading="loading"><div class="grid-content bg-purple"  >
       <div class="" >
         <h2 class="form-tittle">Login</h2>
       </div>
@@ -15,7 +15,7 @@
           <div class="form-group">
             <input v-model="password" type="password" class="form-control" id="id_password" placeholder="Password" name="password">
           </div>
-          <button  type="submit" class="btn btn-primary" @click="login">Login In</button>
+          <el-button  type="submit" class="btn btn-primary" @click="login">Login In</el-button>
     </div></el-col>
   </el-row>
 </section>
@@ -23,21 +23,36 @@
 
 <script>
 import { LOGIN_URL } from '@/constants/endpoints'
+
 export default {
   data () {
     return {
       username: 'admin',
-      password: 'admin'
+      password: 'admin',
+      loading: false
     }
   },
   methods: {
     async login () {
-      let formData = new FormData()
-      formData.append('username', 'admin')
-      formData.append('password', 'admin')
-      const response = await this.$services.do_request('post', LOGIN_URL, formData)
+      if (this.loading) return
 
-      console.log('response', response)
+      this.loading = true
+
+      let formData = new FormData()
+      formData.append('username', this.username)
+      formData.append('password', this.password)
+
+      const response = await this.$services.do_request('post', LOGIN_URL, formData)
+      this.loading = false
+
+      if (response.data.data) {
+        const token = response.data.data.tokenState.jwt
+        this.$store.commit('Common/tokenLoaded', token)
+      } else if (response.data.code === 401) {
+        this.$message.error('Tài khoản không đúng')
+      } else {
+        this.$message.error('Lỗi hệ thống! Đăng nhập thất bại')
+      }
     }
   }
 }

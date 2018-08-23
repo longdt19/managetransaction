@@ -66,16 +66,18 @@
 
   <el-table
     :data="tableData"
-    style="width: 100%"
-  >
+    style="width: 100%">
+
     <el-table-column type="index" label="STT" width="50"></el-table-column>
 
     <!-- ***********************************************************************
     ************************   Thông tin    ************************************
     ************************************************************************ -->
-    <el-table-column label="Thông tin" header-align="center">
+    <el-table-column
+      label="Thông tin"
+      header-align="center">
 
-      <el-table-column prop="date" label="Ngày tạo" header-align="center">
+      <el-table-column prop="date" label="Ngày tạo" header-align="center" >
       </el-table-column>
 
       <el-table-column  prop="code" label="Mã giao dịch" header-align="center">
@@ -157,6 +159,8 @@
 </template>
 
 <script>
+import { BANK_LIST_URL, CUSTOMER_LIST_URL, PRODUCT_LIST_URL } from '@/constants/endpoints'
+
 import SearchComponent from '@/components/transaction/search'
 import AddTransactionComponent from './add_transaction'
 
@@ -211,8 +215,60 @@ export default {
           action: 'Tác động',
           note: 'hihihihihihihihihihi'
         }
-      ]
+      ],
+      bank_list: [],
+      loading_bankList: false,
+      customer_list: [],
+      loading_customerList: false,
+      product_list: [],
+      loading_productList: false
     }
+  },
+  methods: {
+    async load_bank_list () {
+      if (this.loading_bankList) return
+
+      this.loading_bankList = true
+      const response = await this.$services.do_request('get', BANK_LIST_URL)
+      this.loading_bankList = false
+
+      if (response.data.data) {
+        this.bank_list = response.data.data
+      } else {
+        this.$router.push('/e-500')
+      }
+    },
+    async load_customer_list () {
+      if (this.loading_customerList) return
+
+      this.loading_customerList = true
+      const response = await this.$services.do_request('get', CUSTOMER_LIST_URL)
+      this.loading_customerList = false
+
+      if (response.data.data) {
+        this.customer_list = response.data.data
+      } else {
+        this.$router.push('/e-500')
+      }
+    },
+    async load_product_list () {
+      if (this.loading_productList) return
+
+      this.loading_productList = true
+      const response = await this.$services.do_request('get', PRODUCT_LIST_URL)
+      this.loading_productList = false
+
+      if (response.data.data) {
+        this.product_list = response.data.data
+      } else {
+        this.$router.push('/e-500')
+      }
+    }
+  },
+  created () {
+    this.load_bank_list()
+    this.load_customer_list()
+    this.load_product_list()
   }
 }
 </script>
@@ -220,6 +276,7 @@ export default {
 .el-input, el-input__inner {
   width: 150px;
 }
+
 </style>
 <style>
 </style>

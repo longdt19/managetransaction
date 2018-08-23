@@ -4,7 +4,8 @@ const INIT_STATE = {
   bank_list: [],
   transaction_category_list: [],
   customer_list: [],
-  token: null
+  token: null,
+  constants_loaded: null
 }
 
 export default {
@@ -25,9 +26,17 @@ export default {
     tokenLoaded: (state, value) => {
       state.token = value
     },
+    constants_loaded: (state, value) => {
+      state.constants_loaded = value
+    }
   },
   actions: {},
   getters: {
-    common_data: state => state
+    common_data: state => state,
+    token: state => state.token,
+    bank_list: state => state.bank_list,
+    transaction_category_list: state => state.transaction_category_list,
+    customer_list: state => state.customer_list,
+    constants_loaded: state => state.constants_loaded
   }
 }

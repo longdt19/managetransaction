@@ -31,10 +31,10 @@ Vue.mixin({
   }
 })
 
-router.beforeEach((to, _from, next) => {
-  console.log('backend', process.env.BACKEND_URL)
-  next()
-})
+// router.beforeEach((to, _from, next) => {
+//   console.log('backend', process.env.BACKEND_URL)
+//   next()
+// })
 
 const createApp = () => {
   /* eslint-disable no-new */

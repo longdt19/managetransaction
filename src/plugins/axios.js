@@ -2,10 +2,7 @@
 import Axios from 'axios'
 
 const axios = Axios.create({
-  baseURL: process.env.BACKEND_URL,
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  }
+  baseURL: process.env.BACKEND_URL
 })
 
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -52,15 +49,14 @@ class Services {
       // authorization issue
       else if (status === 401) {
         // TODO: handle authorization issue
-        this.context.$store.commit('User/signed_out')
-        window.location.href = process.env.BACKEND_URL + '/sign-out'
+        // this.context.$store.commit('User/signed_out')
+        window.location.href = process.env.FRONTEND_URL + '/login'
       }
     }
     return response
   }
 
   async do_request (method, url, payload, onUploadProgress) {
-    console.log('url', url)
     if (!payload || !(payload instanceof Object)) payload = {}
 
     // init request
@@ -79,8 +75,9 @@ class Services {
   make_request_data (method, data, handle_progress = null) {
     if (method === 'get' || method === 'delete') {
       return [{
-        headers: this.get_auth_header(),
-        params: data
+        headers: {...this.get_auth_header(), 'Content-Type': 'application/json'},
+        params: data,
+        data: {}
       }]
     } else if (method === 'post' || method === 'put' || method === 'patch') {
       const options = {}
@@ -95,9 +92,9 @@ class Services {
   get_auth_header () {
     if (!process.browser) return {}
     if (!this.context) return {}
-    console.log('this.context.$store.getters', this.context.$store.state.Common.token)
+
     return {
-      Authorization: this.context.$store.state.Common.token
+      Authorization: this.context.$store.getters['Common/token']
     }
   }
 }

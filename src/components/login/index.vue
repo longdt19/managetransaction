@@ -48,6 +48,7 @@ export default {
       if (response.data.data) {
         const token = response.data.data.tokenState.jwt
         this.$store.commit('Common/tokenLoaded', token)
+        this.$router.push('/')
       } else if (response.data.code === 401) {
         this.$message.error('Tài khoản không đúng')
       } else {

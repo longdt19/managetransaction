@@ -30,29 +30,45 @@
           <el-date-picker
             v-model="to_date"
             type="date"
-            >
+          >
           </el-date-picker>
         </div></el-col>
       </el-row>
     </div></el-col>
 
     <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
-      <el-row>
+      <el-row >
         <el-col :span="8"><div class="grid-content bg-purple">
-          <span>Có: 1800000000</span>
+          <span>Có: {{statistic.owed}}</span>
         </div></el-col>
         <el-col :span="8"><div class="grid-content bg-purple-light">
-          <span>Nợ: 500000000</span>
+          <span>Nợ: {{statistic.paid}}</span>
         </div></el-col>
         <el-col :span="8"><div class="grid-content bg-purple-light">
-          <span>Tổng: 1300000000 </span>
+          <span>Tổng: {{statistic.total}} </span>
         </div></el-col>
       </el-row>
     </div></el-col>
   </el-row>
 
-  <div class=""  style="margin-top: 15px">
-    <search-component  style="width: 100%"></search-component>
+  <div class="" style="display: flex; align-items: flex-end; justify-content: space-between">
+
+    <div class=""  style="margin-top: 15px">
+      <search-component ></search-component>
+    </div>
+    <div class="" style="text-align: right">
+      <el-row>
+        <span>Hiển thị: </span>
+        <el-select v-model="pagination.per_page" style="width: 80px">
+          <el-option
+          v-for="item in pagination.list"
+          :key="item"
+          :label="item"
+          :value="item">
+        </el-option>
+      </el-select>
+      </el-row>
+    </div>
   </div>
 
   <!-- <div style="margin-top: 15px; margin-bottom: 25px; align-items: center">
@@ -78,11 +94,14 @@
       header-align="center">
 
       <el-table-column prop="date" label="Ngày tạo" header-align="center" >
+        <!-- <template slot-scope="scope">
+          {{scope.row.product.created}}
+        </template> -->
       </el-table-column>
 
       <el-table-column  prop="code" label="Mã giao dịch" header-align="center">
         <!-- <template slot-scope="scope">
-          {{scope.code}}
+          {{scope.row.product.code}}
         </template> -->
       </el-table-column>
 
@@ -159,7 +178,7 @@
 </template>
 
 <script>
-import { BANK_LIST_URL, CUSTOMER_LIST_URL, PRODUCT_LIST_URL } from '@/constants/endpoints'
+import { BANK_LIST_URL, CUSTOMER_LIST_URL, PRODUCT_LIST_URL, TRANSACTION_LIST_URL } from '@/constants/endpoints'
 
 import SearchComponent from '@/components/transaction/search'
 import AddTransactionComponent from './add_transaction'
@@ -168,6 +187,23 @@ export default {
   components: { SearchComponent, AddTransactionComponent },
   data () {
     return {
+      options: [{
+        value: 'Option1',
+        label: 'Option1'
+      }, {
+        value: 'Option2',
+        label: 'Option2'
+      }, {
+        value: 'Option3',
+        label: 'Option3'
+      }, {
+        value: 'Option4',
+        label: 'Option4'
+      }, {
+        value: 'Option5',
+        label: 'Option5'
+      }],
+      value: '',
       from_date: '',
       to_date: '',
       input: '',
@@ -216,50 +252,91 @@ export default {
           note: 'hihihihihihihihihihi'
         }
       ],
-      bank_list: [],
-      loading_bankList: false,
-      customer_list: [],
-      loading_customerList: false,
-      product_list: [],
-      loading_productList: false
+      pagination: {
+        page: 1,
+        per_page: 10,
+        list: [10, 20, 30]
+      },
+      statistic: {},
+      transaction: {
+        list: [],
+        loading: false,
+        total: null
+      },
+      bank: {
+        list: [],
+        loading: false
+      },
+      product: {
+        list: [],
+        loading: false
+      },
+      customer: {
+        list: [],
+        loading: false
+      }
     }
   },
   methods: {
-    async load_bank_list () {
-      if (this.loading_bankList) return
+    async load_transaction_list () {
+      if (this.transaction.loading) return
 
-      this.loading_bankList = true
-      const response = await this.$services.do_request('get', BANK_LIST_URL)
-      this.loading_bankList = false
+      this.transaction.loading = true
+
+      // let parrams = {}
+      // console.log('param', encodeURI(parrams))
+      const data = {
+        search: {},
+        size: 10,
+        page: 0
+      }
+      const response = await this.$services.do_request('get', TRANSACTION_LIST_URL, data)
+      console.log('response', response)
+      this.transaction.loading = false
 
       if (response.data.data) {
-        this.bank_list = response.data.data
+        this.transaction.list = response.data.data.content
+        this.statistic = response.data.data.statistic
+        console.log('123123', this.statistic)
+      } else {
+        this.$router.push('/e-500')
+      }
+    },
+    async load_bank_list () {
+      if (this.bank.loading) return
+
+      this.bank.loading = true
+      const response = await this.$services.do_request('get', BANK_LIST_URL)
+      this.bank.loading = false
+
+      if (response.data.data) {
+        this.bank.list = response.data.data
       } else {
         this.$router.push('/e-500')
       }
     },
     async load_customer_list () {
-      if (this.loading_customerList) return
+      if (this.customer.loading) return
 
-      this.loading_customerList = true
+      this.customer.loading = true
       const response = await this.$services.do_request('get', CUSTOMER_LIST_URL)
-      this.loading_customerList = false
+      this.customer.loading = false
 
       if (response.data.data) {
-        this.customer_list = response.data.data
+        this.customer.list = response.data.data
       } else {
         this.$router.push('/e-500')
       }
     },
     async load_product_list () {
-      if (this.loading_productList) return
+      if (this.product.loading) return
 
-      this.loading_productList = true
+      this.product.loading = true
       const response = await this.$services.do_request('get', PRODUCT_LIST_URL)
-      this.loading_productList = false
+      this.product.loading = false
 
       if (response.data.data) {
-        this.product_list = response.data.data
+        this.product.list = response.data.data
       } else {
         this.$router.push('/e-500')
       }
@@ -269,6 +346,7 @@ export default {
     this.load_bank_list()
     this.load_customer_list()
     this.load_product_list()
+    this.load_transaction_list()
   }
 }
 </script>

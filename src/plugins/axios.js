@@ -41,6 +41,7 @@ class Services {
     if (!response) response = {status: 500}
     if (this.context) {
       const status = response.status
+      console.log('status', status)
       // network error
       if (!status || status >= 500) {
         // TODO: handle network error and server error

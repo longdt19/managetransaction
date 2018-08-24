@@ -6,11 +6,11 @@
         <span>Tìm kiếm:</span>
       </div>
     </div></el-col>
-    <el-col :md="4"><div class="grid-content bg-purple">
-      <div class="group" v-loading="$parent.loading_bankList" element-loading-spinner="el-icon-loading">
-        <el-select v-model="input_bank" placeholder="Chọn ngân hàng" filterable>
+    <el-col :xs="24" :sm="6" :md="6"><div class="grid-content bg-purple">
+      <div class="group" v-loading="$parent.bank.loading" element-loading-spinner="el-icon-loading">
+        <el-select v-model="input_bank" placeholder="Chọn ngân hàng" filterable clearable>
           <el-option
-            v-for="item in $parent.bank_list"
+            v-for="item in $parent.bank.list"
             :key="item.id"
             :label="item.bankName"
             :value="item.accountNumber">
@@ -20,11 +20,12 @@
         </el-select>
       </div>
     </div></el-col>
-    <el-col :md="4"><div class="grid-content bg-purple-light">
-      <div class="group" v-loading="$parent.loading_productList" element-loading-spinner="el-icon-loading">
-        <el-select v-model="input_product" filterable placeholder="Chọn sản phẩm">
+
+    <el-col :xs="24" :sm="6" :md="6"><div class="grid-content bg-purple-light">
+      <div class="group" v-loading="$parent.product.loading" element-loading-spinner="el-icon-loading">
+        <el-select v-model="input_product" filterable placeholder="Chọn sản phẩm" clearable>
           <el-option
-            v-for="item in $parent.product_list"
+            v-for="item in $parent.product.list"
             :key="item.id"
             :label="item.name"
             :value="item.type">
@@ -32,11 +33,12 @@
         </el-select>
       </div>
     </div></el-col>
-    <el-col :md="4" ><div class="grid-content bg-purple">
-      <div class="group" v-loading="$parent.loading_customerList" element-loading-spinner="el-icon-loading">
-        <el-select v-model="input_customer" placeholder="Chọn khách hàng" filterable>
+
+    <el-col :xs="24" :sm="6" :md="6"><div class="grid-content bg-purple">
+      <div class="group" v-loading="$parent.customer.loading" element-loading-spinner="el-icon-loading">
+        <el-select v-model="input_customer" placeholder="Chọn khách hàng" filterable clearable>
           <el-option
-            v-for="item in $parent.customer_list"
+            v-for="item in $parent.customer.list"
             :key="item.id"
             :label="item.name"
             :value="item.name">
@@ -46,7 +48,8 @@
         </el-select>
       </div>
     </div></el-col>
-    <el-col :xs="24" :md="2"><div class="grid-content bg-purple" style="">
+
+    <el-col :xs="24" :sm="2" :md="3"><div class="grid-content bg-purple" style="">
       <div class="group">
         <el-button slot="append" icon="el-icon-search" @click.native="search"></el-button>
       </div>
@@ -61,11 +64,24 @@ export default {
     return {
       input_bank: '',
       input_product: '',
-      input_customer: ''
+      input_customer: '',
+      from_date: {
+        day: null,
+        month: null,
+        year: null
+      },
+      to_date: {
+        day: null,
+        month: null,
+        year: null
+      }
     }
   },
   methods: {
     search () {
+      console.log(this.$parent.from_date)
+      console.log(this.$parent.from_date.getTime())
+
       if (this.input_bank === '' && this.input_product === '' && this.input_customer === '') {
         this.$message.error('Vui lòng chọn trường tìm kiếm')
         return ''
@@ -73,7 +89,6 @@ export default {
     }
   },
   created () {
-    // this.bank_list = this.$parent.bank_list
   }
 }
 </script>

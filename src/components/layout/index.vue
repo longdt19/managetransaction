@@ -43,6 +43,11 @@ export default {
     handleClickOutside () {
       this.$store.dispatch('closeSideBar', { withoutAnimation: false })
     }
+  },
+  beforeCreate () {
+    if (!this.$store.getters['Common/token']) {
+      this.$router.push('/login')
+    }
   }
 }
 </script>

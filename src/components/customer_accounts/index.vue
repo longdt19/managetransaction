@@ -12,22 +12,27 @@
     </div>
     <el-row>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
-        <el-row>
-          <el-col :xs="24" :md="12"><div class="grid-content bg-purple" style="margin-left: 12px">
+        <el-row :gutter="5">
+          <el-col :xs="24" :md="10"><div class="grid-content bg-purple" style="margin-left: 12px">
             <span>Từ ngày:</span>
             <el-date-picker
               v-model="from_date"
               type="date"
+              value-format="dd-MM-yyyy"
             >
             </el-date-picker>
           </div></el-col>
-          <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
+          <el-col :xs="24" :md="10"><div class="grid-content bg-purple-light">
             <span>Đến ngày:</span>
             <el-date-picker
               v-model="to_date"
               type="date"
+              value-format="dd-MM-yyyy"
               >
             </el-date-picker>
+          </div></el-col>
+          <el-col :xs="24" :md="4"><div class="grid-content bg-purple-light">
+            <el-button slot="append" icon="el-icon-search" @click.native="search"></el-button>
           </div></el-col>
         </el-row>
       </div></el-col>
@@ -35,13 +40,13 @@
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
         <el-row>
           <el-col :span="8"><div class="grid-content bg-purple">
-            <span>Có: </span>
+            <span>Có: {{statistic.owed}}</span>
           </div></el-col>
           <el-col :span="8"><div class="grid-content bg-purple-light">
-            <span>Nợ: </span>
+            <span>Nợ: {{statistic.paid}}</span>
           </div></el-col>
           <el-col :span="8"><div class="grid-content bg-purple-light">
-            <span>Tổng: </span>
+            <span>Tổng: {{statistic.total}}</span>
           </div></el-col>
         </el-row>
       </div></el-col>
@@ -49,7 +54,7 @@
 
     <div class="" style="margin-top: 15px;">
       <el-table
-        :data="tableData"
+        :data="customer_list"
         style="width: 100%"
         header-align="center"
       >
@@ -57,108 +62,107 @@
 
         <el-table-column prop="name" label="Tên" header-align="center">
           <template slot-scope="scope">
-            <span style="font-size: 10px">{{scope.row.name}}</span>
+            {{scope.row.name}}
           </template>
         </el-table-column>
 
         <el-table-column prop="account" label="Tài khoản" header-align="center">
           <template slot-scope="scope">
-            <span style="font-size: 10px">{{scope.row.account}}</span>
+            {{scope.row.azAccount}}
           </template>
         </el-table-column>
 
         <el-table-column prop="phone" label="Số điện thoại" header-align="center">
           <template slot-scope="scope">
-            <span style="font-size: 10px">{{scope.row.phone}}</span>
+            {{scope.row.phone}}
           </template>
         </el-table-column>
 
         <el-table-column prop="address" label="Địa chỉ" header-align="center">
           <template slot-scope="scope">
-            <el-tooltip :content="scope.row.address.description" placement="top">
-              <span style="font-size: 10px">{{scope.row.address.name}}</span>
+            <el-tooltip :content="scope.row.address" placement="top">
+              <span style="font-size: 10px">{{scope.row.address}}</span>
             </el-tooltip>
           </template>
         </el-table-column>
 
-        <el-table-column prop="group" label="Nhóm khách hàng" header-align="center">
-          <template slot-scope="scope">
-            <span style="font-size: 10px">{{scope.row.group}}</span>
-          </template>
+        <el-table-column label="Nhóm khách hàng" header-align="center">
+          <!-- <template slot-scope="scope">
+            {{scope.row.phone}}
+          </template> -->
         </el-table-column>
 
-        <el-table-column prop="note" label="Ghi chú" header-align="center">
-          <template slot-scope="scope">
+        <el-table-column label="Ghi chú" header-align="center">
+          <!-- <template slot-scope="scope">
             <span style="font-size: 10px">{{scope.row.note}}</span>
-          </template>
+          </template> -->
         </el-table-column>
 
-        <el-table-column prop="unpaid" label="Nợ trước" header-align="center">
-          <template slot-scope="scope">
-            <span style="font-size: 10px">{{scope.row.unpaid}}</span>
-          </template>
+        <el-table-column label="Nợ trước" header-align="center">
+          <!-- <template slot-scope="scope">
+            {{scope.row.phone}}
+          </template> -->
         </el-table-column>
 
-        <el-table-column prop="before" label="Tồn đầu kỳ" header-align="center">
-          <el-table-column label="Nạp" header-align="center">
+        <el-table-column label="Đầu kỳ" header-align="center">
+          <el-table-column label="Nhập" header-align="center">
             <template slot-scope="scope">
-              <span style="font-size: 10px">{{scope.row.before.admission}}</span>
+              {{scope.row.beforePeriodPaid}}
             </template>
           </el-table-column>
 
-          <el-table-column label="Thanh toán" header-align="center">
+          <el-table-column label="Xuất" header-align="center">
             <template slot-scope="scope">
-              <span style="font-size: 10px">{{scope.row.before.paid}}</span>
+              {{scope.row.beforePeriodOwed}}
             </template>
           </el-table-column>
 
-          <el-table-column label="Tổng" header-align="center">
+          <el-table-column label="Tồn" header-align="center">
             <template slot-scope="scope">
-              <span style="font-size: 10px">{{scope.row.before.total}}</span>
-            </template>
-          </el-table-column>
-        </el-table-column>
-
-        <el-table-column prop="mid" label="Tồn giữa kỳ" header-align="center">
-          <el-table-column label="Nạp" header-align="center">
-            <template slot-scope="scope">
-              <span style="font-size: 10px">{{scope.row.mid.admission}}</span>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="Thanh toán" header-align="center">
-            <template slot-scope="scope">
-              <span style="font-size: 10px">{{scope.row.mid.paid}}</span>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="Tổng" header-align="center">
-            <template slot-scope="scope">
-              <span style="font-size: 10px">{{scope.row.mid.total}}</span>
+              {{scope.row.beforePeriodTotal}}
             </template>
           </el-table-column>
         </el-table-column>
 
-        <el-table-column prop="behind" label="Tồn cuối kỳ" header-align="center">
-          <el-table-column label="Nạp" header-align="center">
+        <el-table-column label="Giữa kỳ" header-align="center" border>
+          <el-table-column label="Nhập" header-align="center">
             <template slot-scope="scope">
-              <span style="font-size: 10px">{{scope.row.behind.admission}}</span>
+              {{scope.row.inPeriodPaid}}
             </template>
           </el-table-column>
 
-          <el-table-column label="Thanh toán" header-align="center">
+          <el-table-column label="Xuất" header-align="center">
             <template slot-scope="scope">
-              <span style="font-size: 10px">{{scope.row.behind.paid}}</span>
+              {{scope.row.inPeriodOwed}}
             </template>
           </el-table-column>
 
-          <el-table-column label="Tổng" header-align="center">
+          <el-table-column label="Tồn" header-align="center">
             <template slot-scope="scope">
-              <span style="font-size: 10px">{{scope.row.behind.admission}}</span>
+              {{scope.row.inPeriodTotal}}
             </template>
           </el-table-column>
         </el-table-column>
 
+        <el-table-column label="Cuối kỳ" header-align="center">
+          <el-table-column label="Nhập" header-align="center">
+            <template slot-scope="scope">
+              {{scope.row.afterPeriodPaid}}
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Xuất" header-align="center">
+            <template slot-scope="scope">
+              {{scope.row.afterPeriodOwed}}
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Tồn" header-align="center">
+            <template slot-scope="scope">
+              {{scope.row.afterPeriodTotal}}
+            </template>
+          </el-table-column>
+        </el-table-column>
       </el-table>
     </div>
     <div class="block" style="margin-top: 30px; text-align: right">
@@ -171,94 +175,44 @@
 </template>
 
 <script>
+import { CUSTOMER_URL } from '@/constants/endpoints'
+
 export default {
   data () {
     return {
+      customer_list: [],
+      total: null,
+      statistic: {},
       from_date: '',
       to_date: '',
-      tableData: [
-        {
-          name: 'longdt',
-          account: 'Tom',
-          phone: '0123456789',
-          address: {
-            name: 'Ha Nội',
-            description: '126 Nguyễn Trãi, Thanh Xuân'
-          },
-          group: 'truyền hình',
-          note: 'hihihihihihihihihihihihihih',
-          unpaid: '123123123',
-          before: {
-            admission: '123123123',
-            paid: '123123123',
-            total: '123123123'
-          },
-          mid: {
-            admission: '123123123',
-            paid: '123123123',
-            total: '123123123'
-          },
-          behind: {
-            admission: '123123123',
-            paid: '123123123',
-            total: '123123123'
-          }
-        },
-        {
-          name: 'longdt',
-          account: 'Tom',
-          phone: '0123456789',
-          address: {
-            name: 'Ha Nội',
-            description: '126 Nguyễn Trãi, Thanh Xuân'
-          },
-          group: 'truyền hình',
-          note: 'hihihihihihihihihihihihihih',
-          unpaid: '123123123',
-          before: {
-            admission: '123123123',
-            paid: '123123123',
-            total: '123123123'
-          },
-          mid: {
-            admission: '123123123',
-            paid: '123123123',
-            total: '123123123'
-          },
-          behind: {
-            admission: '123123123',
-            paid: '123123123',
-            total: '123123123'
-          }
-        },
-        {
-          name: 'longdt',
-          account: 'Tom',
-          phone: '0123456789',
-          address: {
-            name: 'Ha Nội',
-            description: '126 Nguyễn Trãi, Thanh Xuân'
-          },
-          group: 'truyền hình',
-          note: 'hihihihihihihihihihihihihih',
-          unpaid: '123123123',
-          before: {
-            admission: '123123123',
-            paid: '123123123',
-            total: '123123123'
-          },
-          mid: {
-            admission: '123123123',
-            paid: '123123123',
-            total: '123123123'
-          },
-          behind: {
-            admission: '123123123',
-            paid: '123123123',
-            total: '123123123'
-          }
-        }
-      ]
+      pagination: {
+        page: 1,
+        per_page: 10
+      },
+      loading: false
+    }
+  },
+  methods: {
+    async search () {
+      console.log('search')
+      if (this.loading) return
+      this.loading = true
+      if (this.from_date === '' || this.to_date === '') {
+        this.$message.error('Vui lòng chọn ng')
+        return
+      }
+      const data = {
+        'fromDate': this.from_date,
+        'toDate': this.to_date
+      }
+      const response = await this.$services.do_request('get', CUSTOMER_URL, data)
+      this.loading = false
+      console.log('response', response)
+      if (response.data.data) {
+        this.customer_list = response.data.data.data.content
+        this.total = response.data.data.totalElements
+        this.statistic = response.data.data.statistic
+      }
     }
   }
 }

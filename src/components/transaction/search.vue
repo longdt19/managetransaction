@@ -13,7 +13,8 @@
             v-for="item in $parent.bank.list"
             :key="item.id"
             :label="item.bankName"
-            :value="item.accountNumber">
+            :value="item.id"
+            :name="item.bankAccount">
             <span style="float: left">{{ item.bankName }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.userName }}</span>
           </el-option>
@@ -28,7 +29,8 @@
             v-for="item in $parent.product.list"
             :key="item.id"
             :label="item.name"
-            :value="item.type">
+            :value="item.id"
+            :name="item.type">
           </el-option>
         </el-select>
       </div>
@@ -41,7 +43,8 @@
             v-for="item in $parent.customer.list"
             :key="item.id"
             :label="item.name"
-            :value="item.name">
+            :value="item.id"
+            :name="item.name">
             <span style="float: left">{{ item.name }}</span>
             <span style="float: right; color: #8492a6; font-size: 13px">{{ item.azAccount }}</span>
           </el-option>
@@ -59,32 +62,55 @@
 </template>
 
 <script>
+import { TRANSACTION_URL } from '@/constants/endpoints'
+
 export default {
   data () {
     return {
-      input_bank: '',
-      input_product: '',
-      input_customer: '',
-      from_date: {
-        day: null,
-        month: null,
-        year: null
-      },
-      to_date: {
-        day: null,
-        month: null,
-        year: null
-      }
+      input_bank: null,
+      input_product: null,
+      input_customer: null
     }
   },
   methods: {
-    search () {
-      console.log(this.$parent.from_date)
-      console.log(this.$parent.from_date.getTime())
+    async search () {
+      console.log('this.$parent.transaction', this.$parent)
+      if (this.$parent.transaction.loading) return
+      this.$parent.transaction.loading = true
 
-      if (this.input_bank === '' && this.input_product === '' && this.input_customer === '') {
-        this.$message.error('Vui lòng chọn trường tìm kiếm')
-        return ''
+      let bank_id = this.input_bank
+      let product_id = this.input_product
+      let customer_id = this.input_customer
+
+      if (this.input_bank === '') {
+        bank_id = 0
+      }
+      if (this.input_product === '') {
+        product_id = 0
+      }
+      if (this.input_customer === '') {
+        customer_id = 0
+      }
+      const data = {
+        search: {
+          'productId': bank_id,
+          'bankAccountId': product_id,
+          'customerId': customer_id,
+          'fromDate': this.$parent.from_date,
+          'toDate': this.$parent.to_date
+        },
+        size: 10,
+        page: 0
+      }
+
+      const response = await this.$services.do_request('get', TRANSACTION_URL, data)
+      this.$parent.transaction.loading = false
+      console.log('response', response)
+      if (response.data.data) {
+        this.$parent.transaction.list = response.data.data.data.content
+        this.$parent.statistic = response.data.data.statistic
+      } else {
+        this.$router.push('/e-500')
       }
     }
   },

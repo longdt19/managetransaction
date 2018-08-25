@@ -7,7 +7,7 @@
       </div></el-col>
       <el-col :xs="12" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
         <!-- <el-button>Thêm mới giao dịch</el-button> -->
-        <add-transaction-component></add-transaction-component>
+        <add-transaction-component ref='add_transaction'></add-transaction-component>
       </div></el-col>
       <el-col :xs="12" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
         <el-button>Xuất Excel</el-button>
@@ -22,6 +22,7 @@
           <el-date-picker
             v-model="from_date"
             type="date"
+            value-format="dd-MM-yyyy"
           >
           </el-date-picker>
         </div></el-col>
@@ -30,6 +31,7 @@
           <el-date-picker
             v-model="to_date"
             type="date"
+            value-format="dd-MM-yyyy"
           >
           </el-date-picker>
         </div></el-col>
@@ -39,10 +41,10 @@
     <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
       <el-row >
         <el-col :span="8"><div class="grid-content bg-purple">
-          <span>Có: {{statistic.owed}}</span>
+          <span>Có: {{statistic.paid}}</span>
         </div></el-col>
         <el-col :span="8"><div class="grid-content bg-purple-light">
-          <span>Nợ: {{statistic.paid}}</span>
+          <span>Nợ: {{statistic.owed}}</span>
         </div></el-col>
         <el-col :span="8"><div class="grid-content bg-purple-light">
           <span>Tổng: {{statistic.total}} </span>
@@ -81,10 +83,13 @@
   </div> -->
 
   <el-table
-    :data="tableData"
-    style="width: 100%">
+    :data="transaction.list"
+    style="width: 100%"
+    v-loading="transaction.loading"
+  >
 
-    <el-table-column type="index" label="STT" width="50"></el-table-column>
+    <el-table-column type="index" label="STT" width="50">
+    </el-table-column>
 
     <!-- ***********************************************************************
     ************************   Thông tin    ************************************
@@ -93,23 +98,29 @@
       label="Thông tin"
       header-align="center">
 
-      <el-table-column prop="date" label="Ngày tạo" header-align="center" >
-        <!-- <template slot-scope="scope">
-          {{scope.row.product.created}}
-        </template> -->
+      <el-table-column label="Ngày tạo" header-align="center" >
+        <template slot-scope="scope">
+          {{scope.row.created}}
+        </template>
       </el-table-column>
 
-      <el-table-column  prop="code" label="Mã giao dịch" header-align="center">
-        <!-- <template slot-scope="scope">
-          {{scope.row.product.code}}
-        </template> -->
+      <el-table-column  label="Mã giao dịch" header-align="center">
+        <template slot-scope="scope">
+          {{scope.row.code}}
+        </template>
       </el-table-column>
 
-      <el-table-column prop="status" label="Trạng thái" header-align="center">
+      <el-table-column label="Trạng thái" header-align="center">
+        <template slot-scope="scope">
+          {{scope.row.status}}
+        </template>
       </el-table-column>
 
       <!-- chọn đúng tên trong danh sách khách hàng có sẵn. nếu không có phải sang tạo mới -->
-      <el-table-column prop="owner" label="Người giao dịch" header-align="center">
+      <el-table-column label="Người giao dịch" header-align="center">
+        <template slot-scope="scope">
+          {{scope.row.customer.name}}
+        </template>
       </el-table-column>
 
     </el-table-column>
@@ -121,24 +132,39 @@
     <el-table-column label="Đơn hàng" header-align="center">
 
       <!-- chọn từ sheep Sản phẩm -->
-      <el-table-column prop="product" label="Sản phẩm" header-align="center">
+      <el-table-column label="Sản phẩm" header-align="center">
+        <template slot-scope="scope">
+          {{scope.row.product.name}}
+        </template>
       </el-table-column>
 
       <!-- số tiền mình đã nạp cho sản phẩm đó -->
-      <el-table-column prop="price" label="Số tiền" header-align="center">
+      <el-table-column label="Số tiền" header-align="center">
+        <template slot-scope="scope">
+          {{scope.row.cost}}
+        </template>
       </el-table-column>
 
-      <el-table-column prop="extract" label="Chiết suất(%)" header-align="center">
+      <el-table-column label="Chiết suất(%)" header-align="center">
+        <template slot-scope="scope">
+          {{scope.row.extracts}}
+        </template>
       </el-table-column>
 
       <!-- khi khách hàng chuyển tiền có thể thêm bớt số lẻ
       cái này dùng để ghi chi tiết khách hàng thêm hay bớt bao nhiêu
       để hiểu đc thực tế mình chỉ nhận được ngân hàng nào để khớp với số dư trong ngân hàng đó -->
-      <el-table-column prop="discount" label="Bớt tiền" header-align="center">
+      <el-table-column label="Bớt tiền" header-align="center">
+        <template slot-scope="scope">
+          {{scope.row.discount}}
+        </template>
       </el-table-column>
 
       <!-- tổng thành tiền thực tế phải thu khách hàng -->
-      <el-table-column prop="total" label="Tổng" header-align="center">
+      <el-table-column label="Tổng" header-align="center">
+        <template slot-scope="scope">
+          {{scope.row.total}}
+        </template>
       </el-table-column>
 
     </el-table-column>
@@ -150,21 +176,36 @@
     <el-table-column label="Thanh toán" header-align="center">
 
       <!-- ngân hàng khách hàng dùng để thanh toán -->
-      <el-table-column prop="bank" label="Ngân hàng" header-align="center">
+      <el-table-column label="Ngân hàng" header-align="center">
+        <template slot-scope="scope">
+          {{scope.row.bankAccount.bankName}}
+        </template>
       </el-table-column>
 
-      <el-table-column prop="paid" label="Đã thanh toán" header-align="center">
+      <el-table-column label="Đã thanh toán" header-align="center">
+        <template slot-scope="scope">
+          {{scope.row.paid}}
+        </template>
       </el-table-column>
 
-      <el-table-column prop="unpaid" label="Còn nợ" header-align="center">
+      <el-table-column label="Còn nợ" header-align="center">
+        <template slot-scope="scope">
+          {{scope.row.owed}}
+        </template>
       </el-table-column>
 
     </el-table-column>
 
-    <el-table-column prop="note" label="Ghi chú" header-align="center">
+    <el-table-column label="Ghi ch" header-align="center">
+      <template slot-scope="scope">
+        <span>hihihihi</span>
+      </template>
     </el-table-column>
 
-    <el-table-column prop="performer" label="Người tạo" header-align="center">
+    <el-table-column label="Người tạo" header-align="center">
+      <template slot-scope="scope">
+        {{scope.row.creator}}
+      </template>
     </el-table-column>
 
   </el-table>
@@ -178,7 +219,7 @@
 </template>
 
 <script>
-import { BANK_LIST_URL, CUSTOMER_LIST_URL, PRODUCT_LIST_URL, TRANSACTION_LIST_URL } from '@/constants/endpoints'
+import { BANK_LIST_URL, CUSTOMER_LIST_URL, PRODUCT_LIST_URL, TRANSACTION_URL } from '@/constants/endpoints'
 
 import SearchComponent from '@/components/transaction/search'
 import AddTransactionComponent from './add_transaction'
@@ -216,42 +257,6 @@ export default {
         'category': 'Loại giao dịch',
         'customer': 'Khách hàng'
       },
-      tableData: [
-        {
-          code: '123465',
-          owner: 'longdt',
-          product: 'Nạp tiền AZ',
-          bank: 'Vietcombank',
-          price: '1500000',
-          extract: '10%',
-          discount: '50000',
-          total: '1300000',
-          paid: '1000000',
-          unpaid: '300000',
-          performer: 'longdt',
-          date: '22/23/2012',
-          status: 'Trạng Thái',
-          action: 'Tác động',
-          note: 'hihihihihihihihihihi'
-        },
-        {
-          code: '123465',
-          owner: 'longdt',
-          product: 'Nạp tiền AZ',
-          bank: 'Vietcombank',
-          price: '1500000',
-          extract: '10%',
-          discount: '50000',
-          total: '1300000',
-          paid: '1000000',
-          unpaid: '300000',
-          performer: 'longdt',
-          date: '22/23/2012',
-          status: 'Trạng Thái',
-          action: 'Tác động',
-          note: 'hihihihihihihihihihi'
-        }
-      ],
       pagination: {
         page: 1,
         per_page: 10,
@@ -280,27 +285,26 @@ export default {
   methods: {
     async load_transaction_list () {
       if (this.transaction.loading) return
-
       this.transaction.loading = true
 
-      // let parrams = {}
-      // console.log('param', encodeURI(parrams))
       const data = {
         search: {},
-        size: 10,
+        size: 20,
         page: 0
       }
-      const response = await this.$services.do_request('get', TRANSACTION_LIST_URL, data)
-      console.log('response', response)
+      const response = await this.$services.do_request('get', TRANSACTION_URL, data)
+      console.log('response traen', response.data.data.statistic)
       this.transaction.loading = false
 
       if (response.data.data) {
-        this.transaction.list = response.data.data.content
+        this.transaction.list = response.data.data.data.content
+        // console.log('data2', this.transaction.list)
+        // console.log('123', response.data.data.content)
         this.statistic = response.data.data.statistic
-        console.log('123123', this.statistic)
       } else {
         this.$router.push('/e-500')
       }
+      // console.log('data', this.transaction.list)
     },
     async load_bank_list () {
       if (this.bank.loading) return
@@ -308,9 +312,9 @@ export default {
       this.bank.loading = true
       const response = await this.$services.do_request('get', BANK_LIST_URL)
       this.bank.loading = false
-
       if (response.data.data) {
         this.bank.list = response.data.data
+        this.$refs.add_transaction.load_bank_data(response.data.data)
       } else {
         this.$router.push('/e-500')
       }
@@ -324,6 +328,7 @@ export default {
 
       if (response.data.data) {
         this.customer.list = response.data.data
+        this.$refs.add_transaction.load_customer_data(response.data.data)
       } else {
         this.$router.push('/e-500')
       }
@@ -337,6 +342,7 @@ export default {
 
       if (response.data.data) {
         this.product.list = response.data.data
+        this.$refs.add_transaction.load_product_data(response.data.data)
       } else {
         this.$router.push('/e-500')
       }

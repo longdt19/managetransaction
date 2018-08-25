@@ -13,21 +13,26 @@
     <el-row>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
         <el-row :gutter="5">
-          <el-col :xs="24" :md="12"><div class="grid-content bg-purple" style="margin-left: 12px">
+          <el-col :xs="24" :md="10"><div class="grid-content bg-purple" style="margin-left: 12px">
             <span>Từ ngày:</span>
             <el-date-picker
               v-model="from_date"
               type="date"
+              value-format="dd-MM-yyyy"
             >
             </el-date-picker>
           </div></el-col>
-          <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
+          <el-col :xs="24" :md="10"><div class="grid-content bg-purple-light">
             <span>Đến ngày:</span>
             <el-date-picker
               v-model="to_date"
               type="date"
+              value-format="dd-MM-yyyy"
               >
             </el-date-picker>
+          </div></el-col>
+          <el-col :xs="24" :md="4"><div class="grid-content bg-purple-light">
+            <el-button slot="append" icon="el-icon-search" @click.native="search"></el-button>
           </div></el-col>
         </el-row>
       </div></el-col>
@@ -35,13 +40,13 @@
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
         <el-row>
           <el-col :span="8"><div class="grid-content bg-purple">
-            <span>Có: 165413216543</span>
+            <span>Có: {{statistic.paid}}</span>
           </div></el-col>
           <el-col :span="8"><div class="grid-content bg-purple-light">
-            <span>Nợ: 34653214654</span>
+            <span>Nợ: {{statistic.owed}}</span>
           </div></el-col>
           <el-col :span="8"><div class="grid-content bg-purple-light">
-            <span>Tổng: 65486431</span>
+            <span>Tổng: {{statistic.total}}</span>
           </div></el-col>
         </el-row>
       </div></el-col>
@@ -49,40 +54,59 @@
 
     <div class="" style="margin-top: 15px;">
       <el-table
-        :data="tableData"
+        :data="bank_list"
         style="width: 100%"
+        v-loading="loading"
       >
+        <el-table-column type="index" label="STT" width="50">
+        </el-table-column>
+
         <el-table-column prop="bank_name" label="Ngân hàng" header-align="center">
+          <template slot-scope="scope">
+            {{scope.row.bankName}}
+          </template>
         </el-table-column>
 
         <el-table-column prop="account_number" label="Số tài khoản" header-align="center">
+          <template slot-scope="scope">
+            {{scope.row.accountNumber}}
+          </template>
         </el-table-column>
 
         <el-table-column prop="owner" label="Chủ tài khoản" header-align="center">
+          <template slot-scope="scope">
+            {{scope.row.userName}}
+          </template>
         </el-table-column>
 
         <el-table-column prop="branch" label="Chi nhánh" header-align="center">
+          <template slot-scope="scope">
+            {{scope.row.branch}}
+          </template>
         </el-table-column>
 
-        <el-table-column prop="balance" label="Số dư" header-align="center">
+        <el-table-column label="Số dư" header-align="center">
+          <!-- <template slot-scope="scope">
+            {{scope.row.created}}
+          </template> -->
         </el-table-column>
 
         <el-table-column label="Đầu kỳ" header-align="center">
           <el-table-column label="Có" header-align="center">
-            <template slot-scope="scope" header-align="center">
-              <span style="font-size: 10px">100000000</span>
+            <template slot-scope="scope">
+              {{scope.row.beforePeriodPaid}}
             </template>
           </el-table-column>
 
           <el-table-column label="Nợ" header-align="center">
             <template slot-scope="scope">
-              <span style="font-size: 10px">100000000</span>
+              {{scope.row.beforePeriodOwed}}
             </template>
           </el-table-column>
 
           <el-table-column label="Tổng" header-align="center">
             <template slot-scope="scope">
-              <span style="font-size: 10px">100000000</span>
+              {{scope.row.beforePeriodTotal}}
             </template>
           </el-table-column>
         </el-table-column>
@@ -90,19 +114,19 @@
         <el-table-column label="Giữa kỳ" header-align="center" border>
           <el-table-column label="Có" header-align="center">
             <template slot-scope="scope">
-              <span style="font-size: 10px">100000000</span>
+              {{scope.row.inPeriodPaid}}
             </template>
           </el-table-column>
 
           <el-table-column label="Nợ" header-align="center">
             <template slot-scope="scope">
-              <span style="font-size: 10px">100000000</span>
+              {{scope.row.inPeriodOwed}}
             </template>
           </el-table-column>
 
           <el-table-column label="Tổng" header-align="center">
             <template slot-scope="scope">
-              <span style="font-size: 10px">100000000</span>
+              {{scope.row.inPeriodTotal}}
             </template>
           </el-table-column>
         </el-table-column>
@@ -110,19 +134,19 @@
         <el-table-column label="Cuối kỳ" header-align="center">
           <el-table-column label="Có" header-align="center">
             <template slot-scope="scope">
-              <span style="font-size: 10px">100000000</span>
+              {{scope.row.afterPeriodPaid}}
             </template>
           </el-table-column>
 
           <el-table-column label="Nợ" header-align="center">
             <template slot-scope="scope">
-              <span style="font-size: 10px">100000000</span>
+              {{scope.row.afterPeriodOwed}}
             </template>
           </el-table-column>
 
           <el-table-column label="Tổng" header-align="center">
             <template slot-scope="scope">
-              <span style="font-size: 10px">100000000</span>
+              {{scope.row.afterPeriodTotal}}
             </template>
           </el-table-column>
         </el-table-column>
@@ -138,38 +162,47 @@
 </template>
 
 <script>
+import { BANK_URL } from '@/constants/endpoints'
 
 export default {
   data () {
     return {
       from_date: '',
       to_date: '',
-      tableData: [
-        {
-          bank_name: 'Vietcombank',
-          account_number: '123123123',
-          owner: 'ddawngj tung long',
-          branch: 'HN',
-          balance: '123123',
-          sub_total: '222222',
-          unpaid: '3232323',
-          total: '12398745'
-        },
-        {
-          bank_name: 'Vietcombank',
-          account_number: '123123123',
-          owner: 'ddawngj tung long',
-          branch: 'HN',
-          balance: '123123',
-          sub_total: '222222',
-          unpaid: '3232323',
-          total: '12398745'
-        }
-      ],
+      bank_list: [],
+      total: null,
+      statistic: {},
       note_input_search: {
         'bank': 'Nhập tên ngân hàng',
         'category': 'Nhập loại giao dịch',
         'customer': 'Nhập khách hàng'
+      },
+      pagination: {
+        page: 1,
+        per_page: 10
+      },
+      loading: false
+    }
+  },
+  methods: {
+    async search () {
+      if (this.loading) return
+      this.loading = true
+      if (this.from_date === '' || this.to_date === '') {
+        this.$message.error('Vui lòng chọn ng')
+        return
+      }
+      const data = {
+        'fromDate': this.from_date,
+        'toDate': this.to_date
+      }
+      const response = await this.$services.do_request('get', BANK_URL, data)
+      this.loading = false
+      console.log('response', response)
+      if (response.data.data) {
+        this.bank_list = response.data.data.data.content
+        this.total = response.data.data.totalElements
+        this.statistic = response.data.data.statistic
       }
     }
   }

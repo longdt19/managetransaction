@@ -16,15 +16,43 @@
           </el-form-item>
 
           <el-form-item label="Sản phẩm" label-width="110px">
-            <el-input placeholder="Mời nhập" v-model="product_input"></el-input>
+            <el-select v-model="input_product" filterable placeholder="Chọn sản phẩm" clearable>
+              <el-option
+                v-for="item in product_list"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+                :name="item.type">
+              </el-option>
+            </el-select>
           </el-form-item>
 
           <el-form-item label="Người giao dịch" label-width="110px">
-            <el-input placeholder="Mời nhập" v-model="owner_input"></el-input>
+            <el-select v-model="input_customer" placeholder="Chọn khách hàng" filterable clearable>
+              <el-option
+                v-for="item in customer_list"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+                :name="item.name">
+                <span style="float: left">{{ item.name }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.azAccount }}</span>
+              </el-option>
+            </el-select>
           </el-form-item>
 
           <el-form-item label="Ngân hàng" label-width="110px">
-            <el-input placeholder="Mời nhập" v-model="bank_input"></el-input>
+            <el-select v-model="input_bank" placeholder="Chọn ngân hàng" filterable clearable>
+              <el-option
+                v-for="item in bank_list"
+                :key="item.id"
+                :label="item.bankName"
+                :value="item.id"
+                :name="item.bankAccount">
+                <span style="float: left">{{ item.bankName }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.userName }}</span>
+              </el-option>
+            </el-select>
           </el-form-item>
 
           <el-form-item label="Ghi chú" label-width="110px">
@@ -67,7 +95,7 @@
     </el-row>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">Hủy bỏ</el-button>
-      <el-button type="primary" @click="dialogVisible = false">Tạo mới</el-button>
+      <el-button type="primary" @click="create">Tạo mới</el-button>
     </span>
   </el-dialog>
 </section>
@@ -75,13 +103,18 @@
 
 <script>
 import { NUMBER_VALIDATOR } from '@/constants'
+import { TRANSACTION_URL } from '@/constants/endpoints'
 
 export default {
   data () {
     return {
+      input_customer: '',
+      input_product: '',
+      input_bank: '',
+      bank_list: [],
+      product_list: [],
+      customer_list: [],
       code_input: '',
-      product_input: '',
-      owner_input: '',
       bank_input: '',
       note_input: '',
       price_input: '',
@@ -94,6 +127,39 @@ export default {
     }
   },
   methods: {
+    async create () {
+      let formData = {
+        'bankAccount': {'id': this.input_bank},
+        'customer': {'id': this.input_customer},
+        'product': {'id': this.input_product},
+        'code': this.code_input,
+        'cost': this.price_input,
+        'extracts': this.extract_input,
+        'discount': this.discount_input,
+        'total': this.total_input,
+        'paid': this.paid_input,
+        'owed': this.unpaid_input
+      }
+      const response = this.$services.do_request('post', TRANSACTION_URL, formData)
+      response.then(success => {
+        this.$message.success('Tạo mới giao dịch thành công')
+        this.dialogVisible = false
+        this.$parent.load_transaction_list()
+      }, error => {
+        this.$message.error('Tạo mới giao dịch thất bại')
+      })
+    },
+    load_bank_data (bank) {
+      console.log('loadbank')
+      this.bank_list = bank
+      console.log('loaded', this.bank)
+    },
+    load_product_data (product) {
+      this.product_list = product
+    },
+    load_customer_data (customer) {
+      this.customer_list = customer
+    },
     is_number (input) {
       if (input.length === 0) return true
       return NUMBER_VALIDATOR.test(input)

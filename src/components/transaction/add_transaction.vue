@@ -5,7 +5,7 @@
   <el-dialog
     title="Tạo mới giao dịch"
     :visible.sync="dialogVisible"
-    width="60%"
+    width="700px"
     :before-close="handleClose"
   >
     <el-row style="margin-top: 20px">
@@ -176,6 +176,9 @@ export default {
 </script>
 <style scoped="">
 .el-input, el-input__inner {
-  width: 100%;
+  width: 218px;
+}
+.el-input--suffix .el-input__inner {
+  width: 200px
 }
 </style>

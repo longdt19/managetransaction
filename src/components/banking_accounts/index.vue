@@ -52,6 +52,20 @@
       </div></el-col>
     </el-row>
 
+    <div class="" style="text-align: right" v-if="pagination.totalPage">
+      <el-row>
+        <span>Hiển thị: </span>
+        <el-select v-model="pagination.per_page" style="width: 80px">
+          <el-option
+          v-for="item in pagination.list"
+          :key="item"
+          :label="item"
+          :value="item">
+        </el-option>
+      </el-select>
+      </el-row>
+    </div>
+
     <div class="" style="margin-top: 15px;">
       <el-table
         :data="bank_list"
@@ -155,14 +169,19 @@
     <div class="block" style="margin-top: 30px; text-align: right">
       <el-pagination
         layout="prev, pager, next"
-        :total="50">
+        :page-count="pagination.totalPage"
+        :current-page.sync="pagination.page"
+        @current-change="change_page"
+        @prev-click="prev_page"
+        @next-click="next_page"
+      >
       </el-pagination>
     </div>
   </section>
 </template>
 
 <script>
-import { BANK_URL } from '@/constants/endpoints'
+import { BANK_STATISTIC_URL } from '@/constants/endpoints'
 
 export default {
   data () {
@@ -170,7 +189,6 @@ export default {
       from_date: '',
       to_date: '',
       bank_list: [],
-      total: null,
       statistic: {},
       note_input_search: {
         'bank': 'Nhập tên ngân hàng',
@@ -178,31 +196,66 @@ export default {
         'customer': 'Nhập khách hàng'
       },
       pagination: {
+        totalPage: null,
+        totalElement: null,
         page: 1,
-        per_page: 10
+        per_page: 2,
+        list: [10, 20, 30]
       },
       loading: false
     }
   },
+  watch: {
+    'pagination.per_page' (val) {
+      this.load_transaction_list()
+    },
+    'pagination.page' (val) {
+      this.load_transaction_list()
+    }
+  },
   methods: {
+    prev_page () {
+      if (this.pagination.page === 1) return
+
+      this.pagination.page = this.pagination.page - 1
+    },
+    next_page () {
+      if (this.pagination.page === this.total_page) return
+      this.pagination.page = this.pagination.page + 1
+    },
+    change_page (val) {
+      this.pagination.page = val
+    },
     async search () {
       if (this.loading) return
       this.loading = true
       if (this.from_date === '' || this.to_date === '') {
-        this.$message.error('Vui lòng chọn ng')
+        this.$message.error('Vui lòng chọn ngày')
         return
       }
-      const data = {
-        'fromDate': this.from_date,
-        'toDate': this.to_date
+
+      if (this.pagination.per_page > this.pagination.totalElement) {
+        this.pagination.page = 1
       }
-      const response = await this.$services.do_request('get', BANK_URL, data)
-      this.loading = false
+
+      const data = {
+        fromDate: this.from_date,
+        toDate: this.to_date,
+        size: this.pagination.per_page,
+        page: this.pagination.page - 1
+      }
+
+      const response = await this.$services.do_request('get', BANK_STATISTIC_URL, data)
       console.log('response', response)
+      this.loading = false
+
       if (response.data.data) {
         this.bank_list = response.data.data.data.content
-        this.total = response.data.data.totalElements
+        this.pagination.totalElement = response.data.data.data.totalElements
+        this.pagination.totalPage = response.data.data.data.totalPages
         this.statistic = response.data.data.statistic
+      } else {
+        this.$router.push('/e-500')
       }
     }
   }

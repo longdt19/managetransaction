@@ -63,12 +63,12 @@
         <span>Hiển thị: </span>
         <el-select v-model="pagination.per_page" style="width: 80px">
           <el-option
-          v-for="item in pagination.list"
-          :key="item"
-          :label="item"
-          :value="item">
-        </el-option>
-      </el-select>
+            v-for="item in pagination.list"
+            :key="item"
+            :label="item"
+            :value="item">
+          </el-option>
+        </el-select>
       </el-row>
     </div>
   </div>
@@ -212,7 +212,12 @@
   <div class="block" style="margin-top: 30px; text-align: right">
     <el-pagination
       layout="prev, pager, next"
-      :total="50">
+      :page-count="pagination.totalPage"
+      :current-page.sync="pagination.page"
+      @current-change="change_page"
+      @prev-click="prev_page"
+      @next-click="next_page"
+    >
     </el-pagination>
   </div>
 </section>
@@ -228,22 +233,6 @@ export default {
   components: { SearchComponent, AddTransactionComponent },
   data () {
     return {
-      options: [{
-        value: 'Option1',
-        label: 'Option1'
-      }, {
-        value: 'Option2',
-        label: 'Option2'
-      }, {
-        value: 'Option3',
-        label: 'Option3'
-      }, {
-        value: 'Option4',
-        label: 'Option4'
-      }, {
-        value: 'Option5',
-        label: 'Option5'
-      }],
       value: '',
       from_date: '',
       to_date: '',
@@ -258,6 +247,8 @@ export default {
         'customer': 'Khách hàng'
       },
       pagination: {
+        totalPage: null,
+        totalElement: null,
         page: 1,
         per_page: 10,
         list: [10, 20, 30]
@@ -282,33 +273,54 @@ export default {
       }
     }
   },
+  watch: {
+    'pagination.per_page' (val) {
+      this.load_transaction_list()
+    },
+    'pagination.page' (val) {
+      this.load_transaction_list()
+    }
+  },
   methods: {
+    prev_page () {
+      if (this.pagination.page === 1) return
+
+      this.pagination.page = this.pagination.page - 1
+    },
+    next_page () {
+      if (this.pagination.page === this.total_page) return
+      this.pagination.page = this.pagination.page + 1
+    },
+    change_page (val) {
+      this.pagination.page = val
+    },
     async load_transaction_list () {
       if (this.transaction.loading) return
       this.transaction.loading = true
 
+      if (this.pagination.per_page > this.pagination.totalElement) {
+        this.pagination.page = 1
+      }
+
       const data = {
         search: {},
-        size: 20,
-        page: 0
+        size: this.pagination.per_page,
+        page: this.pagination.page - 1
       }
       const response = await this.$services.do_request('get', TRANSACTION_URL, data)
-      console.log('response traen', response.data.data.statistic)
       this.transaction.loading = false
 
       if (response.data.data) {
         this.transaction.list = response.data.data.data.content
-        // console.log('data2', this.transaction.list)
-        // console.log('123', response.data.data.content)
+        this.pagination.totalElement = response.data.data.data.totalElements
+        this.pagination.totalPage = response.data.data.data.totalPages
         this.statistic = response.data.data.statistic
       } else {
         this.$router.push('/e-500')
       }
-      // console.log('data', this.transaction.list)
     },
     async load_bank_list () {
       if (this.bank.loading) return
-
       this.bank.loading = true
       const response = await this.$services.do_request('get', BANK_LIST_URL)
       this.bank.loading = false
@@ -349,10 +361,12 @@ export default {
     }
   },
   created () {
-    this.load_bank_list()
-    this.load_customer_list()
-    this.load_product_list()
-    this.load_transaction_list()
+    // Đợi giáo sư fix server. Địt mẹ GS
+
+    // this.load_bank_list()
+    // this.load_customer_list()
+    // this.load_product_list()
+    // this.load_transaction_list()
   }
 }
 </script>
@@ -360,7 +374,9 @@ export default {
 .el-input, el-input__inner {
   width: 150px;
 }
-
+.el-loading-spinner {
+  top: 50%
+}
 </style>
 <style>
 </style>

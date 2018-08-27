@@ -5,6 +5,12 @@
 ## Build Setup
 
 ``` bash
+
+module.exports = {
+  BACKEND_URL: '"http://35.185.169.189:8080"',
+  FRONTEND_URL: '"http://localhost:8080"'
+}
+
 # install dependencies
 npm install
 

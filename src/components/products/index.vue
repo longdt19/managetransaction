@@ -150,7 +150,7 @@
 </template>
 
 <script>
-import { PRODUCT_URL } from '@/constants/endpoints'
+import { PRODUCT_STATISTIC_URL } from '@/constants/endpoints'
 
 export default {
   data () {
@@ -193,7 +193,7 @@ export default {
         'fromDate': this.from_date,
         'toDate': this.to_date
       }
-      const response = await this.$services.do_request('get', PRODUCT_URL, data)
+      const response = await this.$services.do_request('get', PRODUCT_STATISTIC_URL, data)
       this.loading = false
       console.log('response', response)
       if (response.data.data) {

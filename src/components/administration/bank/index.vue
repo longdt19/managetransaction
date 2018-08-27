@@ -97,6 +97,8 @@ import AddBankComponent from './add'
 import EditBankComponent from './edit'
 import DeleteBankComponent from './delete'
 
+import converseTime from '@/utils/time'
+
 export default {
   components: { AddBankComponent, EditBankComponent, DeleteBankComponent },
   data () {
@@ -143,6 +145,7 @@ export default {
     }
   },
   methods: {
+    converseTime,
     prev_page () {
       if (this.pagination.page === 1) return
 
@@ -171,6 +174,8 @@ export default {
     bank_deleted () {
       console.log('refresh')
     }
+  },
+  created () {
   }
 }
 </script>

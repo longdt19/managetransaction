@@ -39,18 +39,26 @@
         <span>Sản phẩm</span>
       </el-menu-item>
 
+      <el-menu-item-group title="Quản trị">
+      </el-menu-item-group>
+
       <el-submenu index="1">
         <template slot="title">
           <i class="el-icon-setting"></i>
-          <span>Quản trị</span>
+          <span>Danh mục</span>
         </template>
         <el-menu-item index="1-1" @click.native="go_to('bank-admin')">Ngân hàng</el-menu-item>
         <el-menu-item index="1-2" @click.native="go_to('customer-admin')">Khách hàng</el-menu-item>
         <el-menu-item index="1-3" @click.native="go_to('product-admin')">Sản phẩm</el-menu-item>
-        <el-menu-item-group title="Quản trị người dùng">
-          <el-menu-item index="1-4">Quyền hạn</el-menu-item>
-          <el-menu-item index="1-5">Người dùng</el-menu-item>
-        </el-menu-item-group>
+      </el-submenu>
+
+      <el-submenu index="2">
+        <template slot="title">
+          <i class="el-icon-setting"></i>
+          <span>Người dùng</span>
+        </template>
+        <el-menu-item index="1-4">Quyền hạn</el-menu-item>
+        <el-menu-item index="1-5">Người dùng</el-menu-item>
       </el-submenu>
 
     </el-menu>

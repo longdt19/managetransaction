@@ -17,13 +17,15 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">Hủy bỏ</el-button>
-      <el-button type="primary" @click="dialogFormVisible = false">Xác nhận</el-button>
+      <el-button type="primary" @click="add" :loading="loading">Xác nhận</el-button>
     </span>
   </el-dialog>
 </section>
 </template>
 
 <script>
+import { PRODUCT_URL } from '@/constants/endpoints'
+
 export default {
   data () {
     return {
@@ -31,13 +33,41 @@ export default {
       code: '',
       type: '',
       formLabelWidth: '120px',
-      dialogFormVisible: false
+      dialogFormVisible: false,
+      loading: false
     }
   },
   methods: {
     open () {
-      console.log(' open')
       this.dialogFormVisible = true
+    },
+    async add () {
+      if (this.name === '' || this.code === '' || this.type === '') {
+        this.$message.error('Các trường không được để trống')
+        return
+      }
+
+      if (this.loading) return
+      this.loading = true
+
+      let data = {
+        name: this.name,
+        code: this.code,
+        type: this.type
+      }
+
+      const response = await this.$services.do_request('post', PRODUCT_URL, data)
+      this.loading = false
+
+      if (response.data.message === 'Success') {
+        this.$parent.load_product_list()
+        this.$message.success('Thêm mới ngân hàng thành công')
+        this.dialogFormVisible = false
+      } else if (response.status === 400) {
+        console.log('Bad request')
+      } else {
+        this.$router.push('/e-500')
+      }
     }
   }
 }

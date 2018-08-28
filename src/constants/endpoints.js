@@ -11,3 +11,5 @@ export const CUSTOMER_STATISTIC_URL = '/transaction-mngt/api/az/mngt/customers/s
 export const PRODUCT_STATISTIC_URL = '/transaction-mngt/api/az/mngt/products/statistic'
 
 export const BANK_URL = '/transaction-mngt/api/az/mngt/banks'
+export const CUSTOMER_URL = '/transaction-mngt/api/az/mngt/customers'
+export const PRODUCT_URL = '/transaction-mngt/api/az/mngt/products'

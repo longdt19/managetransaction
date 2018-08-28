@@ -13,6 +13,9 @@
       <el-form-item label="Số điện thoại" :label-width="formLabelWidth">
         <el-input v-model="phone" auto-complete="off"></el-input>
       </el-form-item>
+      <el-form-item v-if="validate_phone(phone) === false" style="text-align: left; margin-top: -20px" label-width="110px">
+        <span style="color: #dc3545!important">* Số điện thoại không hợp lệ</span>
+      </el-form-item>
 
       <el-form-item label="Địa chỉ" :label-width="formLabelWidth">
         <el-input v-model="address" auto-complete="off"></el-input>
@@ -21,13 +24,16 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">Hủy bỏ</el-button>
-      <el-button type="primary" @click="edit">Xác nhận</el-button>
+      <el-button type="primary" @click="edit" :loading="loading">Xác nhận</el-button>
     </span>
   </el-dialog>
 </section>
 </template>
 
 <script>
+import { PHONE_VALIDATOR } from '@/constants'
+import { CUSTOMER_URL } from '@/constants/endpoints'
+
 export default {
   data () {
     return {
@@ -37,10 +43,15 @@ export default {
       address: '',
       formLabelWidth: '120px',
       dialogFormVisible: false,
-      customer: {}
+      customer: {},
+      loading: false
     }
   },
   methods: {
+    validate_phone (phone) {
+      if (phone === '') return null
+      return PHONE_VALIDATOR.test(phone.trim())
+    },
     open (customer) {
       this.name = customer.name
       this.azAccount = customer.azAccount
@@ -49,13 +60,46 @@ export default {
       this.customer = customer
       this.dialogFormVisible = true
     },
-    edit () {
-      this.customer.name = this.name
-      this.customer.azAccount = this.azAccount
-      this.customer.phone = this.phone
-      this.customer.address = this.address
-      this.$emit('customer_edited', this.customer)
-      this.dialogFormVisible = false
+    async edit () {
+      if (this.name === '' || this.azAccount === '' || this.phone === '' || this.address === '') {
+        this.$message.error('Các trường không được để trống')
+        return
+      }
+
+      if (this.validate_phone(this.phone) === false) {
+        this.$message.error('Số điện thoại không hợp lệ')
+        return
+      }
+
+      if (this.loading) return
+      this.loading = true
+
+      let data = {
+        id: this.customer.id,
+        name: this.name,
+        azAccount: this.azAccount,
+        phone: this.phone,
+        address: this.address
+      }
+
+      const response = await this.$services.do_request('put', CUSTOMER_URL, data)
+      console.log('response', response)
+      this.loading = false
+
+      if (response.data.message === 'Success') {
+        this.customer.name = this.name
+        this.customer.azAccount = this.azAccount
+        this.customer.phone = this.phone
+        this.customer.address = this.address
+
+        this.$emit('customer_edited', this.customer)
+        this.$message.success('Cập nhật khách hàng thành công')
+        this.dialogFormVisible = false
+      } else if (response.status === 400) {
+        console.log('Bad request')
+      } else {
+        this.$router.push('/e-500')
+      }
     }
   }
 }

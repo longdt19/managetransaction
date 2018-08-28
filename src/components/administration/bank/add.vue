@@ -13,6 +13,9 @@
       <el-form-item label="Số tài khoản" :label-width="formLabelWidth">
         <el-input v-model="accountNumber" auto-complete="off"></el-input>
       </el-form-item>
+      <el-form-item v-if="validate_number(accountNumber) === false" style="text-align: left; margin-top: -20px" label-width="110px">
+        <span style="color: #dc3545!important">* Số tài khoản không hợp lệ</span>
+      </el-form-item>
 
       <el-form-item label="Chi nhánh" :label-width="formLabelWidth">
         <el-input v-model="branch" auto-complete="off"></el-input>
@@ -21,13 +24,16 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">Hủy bỏ</el-button>
-      <el-button type="primary" @click="dialogFormVisible = false">Xác nhận</el-button>
+      <el-button type="primary" @click="add" :loading="loading">Xác nhận</el-button>
     </span>
   </el-dialog>
 </section>
 </template>
 
 <script>
+import { NUMBER_VALIDATOR } from '@/constants'
+import { BANK_URL } from '@/constants/endpoints'
+
 export default {
   data () {
     return {
@@ -36,13 +42,51 @@ export default {
       accountNumber: '',
       branch: '',
       formLabelWidth: '120px',
-      dialogFormVisible: false
+      dialogFormVisible: false,
+      loading: false
     }
   },
   methods: {
+    validate_number (number) {
+      if (number === '') return null
+      return NUMBER_VALIDATOR.test(number.trim())
+    },
     open () {
-      console.log('bank open')
       this.dialogFormVisible = true
+    },
+    async add () {
+      if (this.userName === '' || this.bankName === '' || this.accountNumber === '' || this.branch === '') {
+        this.$message.error('Các trường không được để trống')
+        return
+      }
+
+      if (this.validate_number(this.accountNumber) === false) {
+        this.$message.error('Số tài khoản không hợp lệ')
+        return
+      }
+
+      if (this.loading) return
+      this.loading = true
+
+      let data = {
+        userName: this.userName,
+        bankName: this.bankName,
+        accountNumber: this.accountNumber,
+        branch: this.branch
+      }
+
+      const response = await this.$services.do_request('post', BANK_URL, data)
+      this.loading = false
+
+      if (response.data.message === 'Success') {
+        this.$parent.load_bank_list()
+        this.$message.success('Thêm mới ngân hàng thành công')
+        this.dialogFormVisible = false
+      } else if (response.status === 400) {
+        console.log('Bad request')
+      } else {
+        this.$router.push('/e-500')
+      }
     }
   }
 }

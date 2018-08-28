@@ -26,13 +26,15 @@
   <el-table
     :data="dataTable"
     style="width: 100%"
+    v-loading="loading"
+    border
   >
     <el-table-column type="index" label="STT" width="50">
     </el-table-column>
 
     <el-table-column label="Ngày tạo" header-align="center" align="center">
       <template slot-scope="scope">
-        {{scope.row.created}}
+        {{converseTime(scope.row.created)}}
       </template>
     </el-table-column>
 
@@ -93,6 +95,8 @@
 </template>
 
 <script>
+import { BANK_URL } from '@/constants/endpoints'
+
 import AddBankComponent from './add'
 import EditBankComponent from './edit'
 import DeleteBankComponent from './delete'
@@ -103,49 +107,53 @@ export default {
   components: { AddBankComponent, EditBankComponent, DeleteBankComponent },
   data () {
     return {
-      dataTable: [
-        {
-          'id': 1,
-          'userName': 'Vũ Văn Công',
-          'bankName': 'Vietcombank',
-          'accountNumber': '123456789',
-          'branch': 'Cầu Giấy',
-          'creator': 'admin',
-          'created': 1534404854000,
-          'modifier': null,
-          'modified': null
-        },
-        {
-          'id': 2,
-          'userName': 'Vũ Văn Công2',
-          'bankName': 'Vietcombank2',
-          'accountNumber': '1234567892',
-          'branch': 'Cầu Giấy2',
-          'creator': 'admin2',
-          'created': 15344048540002,
-          'modifier': null,
-          'modified': null
-        }
-      ],
+      dataTable: [],
       pagination: {
-        totalPage: 5,
-        totalElement: 10,
+        totalPage: null,
+        totalElement: null,
         page: 1,
         per_page: 10,
         list: [10, 20, 30]
-      }
+      },
+      loading: false
     }
   },
   watch: {
     'pagination.per_page' (val) {
-      // load
+      this.load_bank_list()
     },
     'pagination.page' (val) {
-      // load
+      this.load_bank_list()
     }
   },
   methods: {
     converseTime,
+    async load_bank_list () {
+      if (this.loading) return
+      this.loading = true
+
+      if (this.pagination.per_page > this.pagination.totalElement) {
+        this.pagination.page = 1
+      }
+
+      let data = {
+        size: this.pagination.per_page,
+        page: this.pagination.page - 1
+      }
+
+      const response = await this.$services.do_request('get', BANK_URL, data)
+      this.loading = false
+
+      if (response.data.data.content) {
+        this.pagination.totalPage = response.data.data.totalPages
+        this.pagination.totalElement = response.data.data.totalElements
+        this.dataTable = response.data.data.content
+      } else if (response.status === 400) {
+        console.log('Bad resquest')
+      } else {
+        this.$router.push('/e-500')
+      }
+    },
     prev_page () {
       if (this.pagination.page === 1) return
 
@@ -176,9 +184,13 @@ export default {
     }
   },
   created () {
+    this.load_bank_list()
   }
 }
 </script>
 
-<style lang="css">
+<style scoped="">
+.el-loading-spinner {
+  top: 50%
+}
 </style>

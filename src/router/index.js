@@ -15,6 +15,8 @@ import Products from '@/components/products'
 import ProductAD from '@/components/administration/product'
 import CustomerAD from '@/components/administration/customer'
 import BankAD from '@/components/administration/bank'
+import RoleAD from '@/components/administration/role'
+import UserAD from '@/components/administration/user'
 
 import E500 from '@/components/errors/e500'
 
@@ -73,6 +75,16 @@ export default new Router({
           path: 'customer-admin',
           name: 'customer-admin',
           component: CustomerAD
+        },
+        {
+          path: 'role-admin',
+          name: 'role-admin',
+          component: RoleAD
+        },
+        {
+          path: 'user-admin',
+          name: 'user-admin',
+          component: UserAD
         }
       ]
     }

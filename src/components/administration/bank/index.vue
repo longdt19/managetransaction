@@ -11,7 +11,7 @@
     </el-row>
   </div>
 
-  <div class="" style="text-align: right">
+  <div class="" style="text-align: right; margin-bottom: 20px">
     <span>Hiển thị: </span>
     <el-select v-model="pagination.per_page" style="width: 80px">
       <el-option
@@ -27,7 +27,6 @@
     :data="dataTable"
     style="width: 100%"
     v-loading="loading"
-    border
   >
     <el-table-column type="index" label="STT" width="50">
     </el-table-column>
@@ -53,6 +52,12 @@
     <el-table-column label="Số tài khoản" header-align="center" align="center">
       <template slot-scope="scope">
         {{scope.row.accountNumber}}
+      </template>
+    </el-table-column>
+
+    <el-table-column label="Số dư" header-align="center" align="center">
+      <template slot-scope="scope">
+        {{scope.row.balance}}
       </template>
     </el-table-column>
 
@@ -142,6 +147,7 @@ export default {
       }
 
       const response = await this.$services.do_request('get', BANK_URL, data)
+      console.log('reswp', response)
       this.loading = false
 
       if (response.data.data.content) {

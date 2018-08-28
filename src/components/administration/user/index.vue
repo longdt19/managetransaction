@@ -3,10 +3,10 @@
   <div class="" style="margin-bottom: 20px">
     <el-row>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
-        <span style="font-size: 24px; margin-bottom: 50px">Danh sách sản phẩm</span>
+        <span style="font-size: 24px; margin-bottom: 50px">Danh sách người dùng</span>
       </div></el-col>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-        <el-button @click.native="open_add">Thêm mới</el-button>
+        <el-button>Thêm mới</el-button>
       </div></el-col>
     </el-row>
   </div>
@@ -37,34 +37,28 @@
       </template>
     </el-table-column>
 
-    <el-table-column label="Mã sản phẩm" header-align="center" align="center">
+    <el-table-column label="Username" header-align="center" align="center">
       <template slot-scope="scope">
-        {{scope.row.code}}
+        {{scope.row.username}}
       </template>
     </el-table-column>
 
-    <el-table-column label="Tên sản phẩm" header-align="center" align="center">
+    <el-table-column label="Quyền hạn" header-align="center" align="center">
       <template slot-scope="scope">
-        {{scope.row.name}}
+        {{scope.row.role.name}}
       </template>
     </el-table-column>
 
-    <el-table-column label="Loại sản phẩm" header-align="center" align="center">
+    <el-table-column label="Email" header-align="center" align="center">
       <template slot-scope="scope">
-        {{scope.row.type}}
-      </template>
-    </el-table-column>
-
-    <el-table-column label="Người tạo" header-align="center" align="center">
-      <template slot-scope="scope">
-        {{scope.row.creator}}
+        {{scope.row.email}}
       </template>
     </el-table-column>
 
     <el-table-column label="Thao tác" header-align="center" align="center">
       <template slot-scope="scope">
-          <el-button size="mini" @click="open_edit(scope.row)">Sửa</el-button>
-          <el-button size="mini" type="danger" @click="open_delete(scope.row)">Xóa</el-button>
+          <el-button size="mini">Sửa</el-button>
+          <el-button size="mini" type="danger">Xóa</el-button>
         </template>
     </el-table-column>
   </el-table>
@@ -80,24 +74,15 @@
     >
     </el-pagination>
   </div>
-
-  <add-product-component ref='add_product' />
-  <edit-product-component ref='edit_product' @product_edited="product_edited"/>
-  <delete-product-component ref='delete_product' @product_deleted="product_deleted" />
 </section>
 </template>
 
 <script>
-import { PRODUCT_URL } from '@/constants/endpoints'
-
-import AddProductComponent from './add'
-import EditProductComponent from './edit'
-import DeleteProductComponent from './delete'
-
 import converseTime from '@/utils/time'
 
+import { USER_URL } from '@/constants/endpoints'
+
 export default {
-  components: { AddProductComponent, EditProductComponent, DeleteProductComponent },
   data () {
     return {
       dataTable: [],
@@ -113,40 +98,14 @@ export default {
   },
   watch: {
     'pagination.per_page' (val) {
-      this.load_product_list()
+      this.load_user_list()
     },
     'pagination.page' (val) {
-      this.load_product_list()
+      this.load_user_list()
     }
   },
   methods: {
     converseTime,
-    async load_product_list () {
-      if (this.loading) return
-      this.loading = true
-
-      if (this.pagination.per_page > this.pagination.totalElement) {
-        this.pagination.page = 1
-      }
-
-      let data = {
-        size: this.pagination.per_page,
-        page: this.pagination.page - 1
-      }
-
-      const response = await this.$services.do_request('get', PRODUCT_URL, data)
-      this.loading = false
-
-      if (response.data.data.content) {
-        this.pagination.totalPage = response.data.data.totalPages
-        this.pagination.totalElement = response.data.data.totalElements
-        this.dataTable = response.data.data.content
-      } else if (response.status === 400) {
-        console.log('Bad resquest')
-      } else {
-        this.$router.push('/e-500')
-      }
-    },
     prev_page () {
       if (this.pagination.page === 1) return
 
@@ -159,32 +118,30 @@ export default {
     change_page (val) {
       this.pagination.page = val
     },
-    open_add () {
-      this.$refs.add_product.open()
-    },
-    open_edit (product) {
-      this.$refs.edit_product.open(product)
-    },
-    open_delete (product) {
-      this.$refs.delete_product.open(product)
-    },
-    product_edited (product) {
-      const product_index = this.dataTable.findIndex(item => item.id === product.id)
-      Object.assign(this.dataTable[product_index], product)
-    },
-    product_deleted () {
-      console.log('refresh')
-      this.load_product_list()
+    async load_user_list () {
+      if (this.loading) return
+      this.loading = true
+
+      const response = await this.$services.do_request('get', USER_URL)
+      this.loading = false
+      console.log('response', response)
+
+      if (response.data.data.content) {
+        this.pagination.totalPage = response.data.data.totalPages
+        this.pagination.totalElement = response.data.data.totalElements
+        this.dataTable = response.data.data.content
+      } else if (response.status === 400) {
+        console.log('Bad resquest')
+      } else {
+        this.$router.push('/e-500')
+      }
     }
   },
   created () {
-    this.load_product_list()
+    this.load_user_list()
   }
 }
 </script>
 
-<style scoped="">
-.el-loading-spinner {
-  top: 50%
-}
+<style lang="css">
 </style>

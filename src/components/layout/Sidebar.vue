@@ -57,8 +57,8 @@
           <i class="el-icon-setting"></i>
           <span>Người dùng</span>
         </template>
-        <el-menu-item index="1-4">Quyền hạn</el-menu-item>
-        <el-menu-item index="1-5">Người dùng</el-menu-item>
+        <el-menu-item index="1-4" @click.native="go_to('role-admin')">Quyền hạn</el-menu-item>
+        <el-menu-item index="1-5" @click.native="go_to('user-admin')">Người dùng</el-menu-item>
       </el-submenu>
 
     </el-menu>
@@ -97,4 +97,6 @@ export default {
   #app .hideSidebar .el-submenu > .el-submenu__title {
     text-align: right;
   }
+</style>
+<style scoped="">
 </style>

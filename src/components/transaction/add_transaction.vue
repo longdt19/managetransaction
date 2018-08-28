@@ -11,11 +11,11 @@
     <el-row style="margin-top: 20px">
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
         <el-form>
-          <el-form-item label="Mã giao dịch" label-width="110px">
+          <el-form-item label="Mã giao dịch(*)" label-width="110px">
             <el-input placeholder="Mời nhập" v-model="code_input"></el-input>
           </el-form-item>
 
-          <el-form-item label="Sản phẩm" label-width="110px">
+          <el-form-item label="Sản phẩm(*)" label-width="110px">
             <el-select v-model="input_product" filterable placeholder="Chọn sản phẩm" clearable>
               <el-option
                 v-for="item in product_list"
@@ -27,7 +27,7 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="Người giao dịch" label-width="110px">
+          <el-form-item label="Người giao dịch(*)" label-width="110px">
             <el-select v-model="input_customer" placeholder="Chọn khách hàng" filterable clearable>
               <el-option
                 v-for="item in customer_list"
@@ -41,7 +41,7 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="Ngân hàng" label-width="110px">
+          <el-form-item label="Ngân hàng(*)" label-width="110px">
             <el-select v-model="input_bank" placeholder="Chọn ngân hàng" filterable clearable>
               <el-option
                 v-for="item in bank_list"
@@ -58,11 +58,24 @@
           <el-form-item label="Ghi chú" label-width="110px">
             <el-input placeholder="Mời nhập" v-model="note_input"></el-input>
           </el-form-item>
+
+          <el-form-item label="Trạng thái(*)" label-width="110px">
+            <el-select v-model="input_status.input" filterable placeholder="Chọn trạng thái" clearable>
+              <el-option
+                v-for="item in input_status.select"
+                :key="item.id"
+                :label="item.label"
+                :value="item.id"
+                :name="item.label">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
         </el-form>
       </div></el-col>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
         <el-form>
-          <el-form-item label="Số tiền" label-width="110px">
+          <el-form-item label="Số tiền(*)" label-width="110px">
             <el-input placeholder="Mời nhập" v-model="price_input"></el-input>
             <span v-if="is_number(price_input) === false" style="color: #dc3545!important">*Số tiền nhập vào không hợp lệ</span>
           </el-form-item>
@@ -76,17 +89,17 @@
             <span v-if="is_number(discount_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
           </el-form-item>
 
-          <el-form-item label="Tổng" label-width="110px">
+          <el-form-item label="Tổng(*)" label-width="110px">
             <el-input placeholder="Mời nhập" v-model="total_input"></el-input>
             <span v-if="is_number(total_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
           </el-form-item>
 
-          <el-form-item label="Đã thanh toán" label-width="110px">
+          <el-form-item label="Đã thanh toán(*)" label-width="110px">
             <el-input placeholder="Mời nhập" v-model="paid_input"></el-input>
             <span v-if="is_number(paid_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
           </el-form-item>
 
-          <el-form-item label="Còn nợ" label-width="110px">
+          <el-form-item label="Còn nợ(*)" label-width="110px">
             <el-input placeholder="Mời nhập" v-model="unpaid_input"></el-input>
             <span v-if="is_number(unpaid_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
           </el-form-item>
@@ -95,7 +108,7 @@
     </el-row>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">Hủy bỏ</el-button>
-      <el-button type="primary" @click="create">Tạo mới</el-button>
+      <el-button type="primary" @click="create" :loading="loading">Tạo mới</el-button>
     </span>
   </el-dialog>
 </section>
@@ -123,11 +136,32 @@ export default {
       total_input: '',
       paid_input: '',
       unpaid_input: '',
-      dialogVisible: false
+      input_status: {
+        input: null,
+        select: [
+          {
+            id: 1,
+            label: 'Xuất'
+          },
+          {
+            id: 2,
+            label: 'Nhập'
+          },
+          {
+            id: 3,
+            label: 'Tồn'
+          }
+        ]
+      },
+      dialogVisible: false,
+      loading: false
     }
   },
   methods: {
     async create () {
+      if (this.loading) return
+      this.loading = true
+
       let formData = {
         'bankAccount': {'id': this.input_bank},
         'customer': {'id': this.input_customer},
@@ -138,21 +172,24 @@ export default {
         'discount': this.discount_input,
         'total': this.total_input,
         'paid': this.paid_input,
-        'owed': this.unpaid_input
+        'owed': this.unpaid_input,
+        'status': this.input_status.input
       }
-      const response = this.$services.do_request('post', TRANSACTION_URL, formData)
-      response.then(success => {
+      const response = await this.$services.do_request('post', TRANSACTION_URL, formData)
+      this.loading = false
+
+      if (response.data.message === 'Success') {
         this.$message.success('Tạo mới giao dịch thành công')
+        this.$emit('transaction_added')
         this.dialogVisible = false
-        this.$parent.load_transaction_list()
-      }, error => {
-        this.$message.error('Tạo mới giao dịch thất bại')
-      })
+      } else if (response.status === 400) {
+        console.log('Bad request')
+      } else {
+        this.$router.push('/e-500')
+      }
     },
     load_bank_data (bank) {
-      console.log('loadbank')
       this.bank_list = bank
-      console.log('loaded', this.bank)
     },
     load_product_data (product) {
       this.product_list = product

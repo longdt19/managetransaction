@@ -11,7 +11,7 @@
     </el-row>
   </div>
 
-  <div class="" style="text-align: right">
+  <div class="" style="text-align: right; margin-bottom: 20px">
     <span>Hiển thị: </span>
     <el-select v-model="pagination.per_page" style="width: 80px">
       <el-option
@@ -43,6 +43,12 @@
       </template>
     </el-table-column>
 
+    <el-table-column label="Nhóm khách hàng" header-align="center" align="center">
+      <template slot-scope="scope">
+        {{scope.row.customerGroup}}
+      </template>
+    </el-table-column>
+
     <el-table-column label="Tài khoản" header-align="center" align="center">
       <template slot-scope="scope">
         {{scope.row.azAccount}}
@@ -57,13 +63,27 @@
 
     <el-table-column label="Địa chỉ" header-align="center" align="center">
       <template slot-scope="scope">
-        {{scope.row.address}}
+        <el-tooltip :content="scope.row.address" placement="top">
+          <span style="font-size: 10px">{{scope.row.province}}</span>
+        </el-tooltip>
       </template>
     </el-table-column>
 
     <el-table-column label="Người tạo" header-align="center" align="center">
       <template slot-scope="scope">
         {{scope.row.creator}}
+      </template>
+    </el-table-column>
+
+    <el-table-column label="Nợ trước" header-align="center" align="center">
+      <template slot-scope="scope">
+        {{scope.row.debtBefore}}
+      </template>
+    </el-table-column>
+
+    <el-table-column label="Ghi chú" header-align="center" align="center">
+      <template slot-scope="scope">
+        {{scope.row.note}}
       </template>
     </el-table-column>
 
@@ -94,6 +114,7 @@
 </template>
 
 <script>
+import { NUMBER_VALIDATOR } from '@/constants'
 import { CUSTOMER_URL } from '@/constants/endpoints'
 
 import EditCustomerComponent from './edit'
@@ -127,6 +148,10 @@ export default {
   },
   methods: {
     converseTime,
+    validate_number (number) {
+      if (number === '') return null
+      return NUMBER_VALIDATOR.test(number.trim())
+    },
     async loading_customer_list () {
       if (this.loading) return
       this.loading = true
@@ -175,11 +200,9 @@ export default {
       this.$refs.delete_customer.open(bank)
     },
     customer_edited (customer) {
-      console.log('edited', customer)
-      const customer_index = this.dataTable.findIndex(item => item.id === customer.id)
-      console.log('customer_index', customer_index)
-      Object.assign(this.dataTable[customer_index], customer)
-      console.log('this.data', this.dataTable)
+      // const customer_index = this.dataTable.findIndex(item => item.id === customer.id)
+      // Object.assign(this.dataTable[customer_index], customer)
+      this.loading_customer_list()
     },
     customer_deleted () {
       console.log('refresh')

@@ -82,7 +82,7 @@
         <el-table-column prop="address" label="Địa chỉ" header-align="center">
           <template slot-scope="scope">
             <el-tooltip :content="scope.row.address" placement="top">
-              <span style="font-size: 10px">{{scope.row.address}}</span>
+              <span style="font-size: 10px">{{scope.row.province}}</span>
             </el-tooltip>
           </template>
         </el-table-column>

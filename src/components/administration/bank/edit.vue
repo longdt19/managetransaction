@@ -41,6 +41,7 @@ export default {
       bankName: '',
       accountNumber: '',
       branch: '',
+      balance: null,
       formLabelWidth: '120px',
       dialogFormVisible: false,
       bank: {},
@@ -56,6 +57,7 @@ export default {
       this.userName = bank.userName
       this.bankName = bank.bankName
       this.accountNumber = bank.accountNumber
+      this.balance = bank.balance
       this.branch = bank.branch
       this.bank = bank
       this.dialogFormVisible = true
@@ -79,7 +81,8 @@ export default {
         userName: this.userName,
         bankName: this.bankName,
         accountNumber: this.accountNumber,
-        branch: this.branch
+        branch: this.branch,
+        balance: this.balance
       }
 
       const response = await this.$services.do_request('put', BANK_URL, data)
@@ -89,8 +92,8 @@ export default {
         this.bank.userName = this.userName
         this.bank.bankName = this.bankName
         this.bank.accountNumber = this.accountNumber
-
         this.bank.branch = this.branch
+        this.bank.balance = this.balance
         this.$emit('bank_edited', this.bank)
         this.$message.success('Cập nhật ngân hàng thành công')
         this.dialogFormVisible = false

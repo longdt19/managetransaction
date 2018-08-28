@@ -17,8 +17,16 @@
         <span style="color: #dc3545!important">* Số điện thoại không hợp lệ</span>
       </el-form-item>
 
+      <el-form-item label="Tỉnh" :label-width="formLabelWidth">
+        <el-input v-model="province" auto-complete="off"></el-input>
+      </el-form-item>
+
       <el-form-item label="Địa chỉ" :label-width="formLabelWidth">
         <el-input v-model="address" auto-complete="off"></el-input>
+      </el-form-item>
+
+      <el-form-item label="Nhóm khách hàng" :label-width="formLabelWidth">
+        <el-input v-model="group" auto-complete="off"></el-input>
       </el-form-item>
 
     </el-form>
@@ -41,6 +49,8 @@ export default {
       azAccount: '',
       phone: '',
       address: '',
+      group: '',
+      province: '',
       formLabelWidth: '120px',
       dialogFormVisible: false,
       loading: false
@@ -72,7 +82,9 @@ export default {
         name: this.name,
         azAccount: this.azAccount,
         phone: this.phone,
-        address: this.address
+        address: this.address,
+        customerGroup: this.group,
+        province: this.province
       }
 
       const response = await this.$services.do_request('post', CUSTOMER_URL, data)

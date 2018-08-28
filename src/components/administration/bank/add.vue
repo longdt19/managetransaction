@@ -17,6 +17,10 @@
         <span style="color: #dc3545!important">* Số tài khoản không hợp lệ</span>
       </el-form-item>
 
+      <el-form-item label="Số dư" :label-width="formLabelWidth">
+        <el-input v-model="balance" auto-complete="off"></el-input>
+      </el-form-item>
+
       <el-form-item label="Chi nhánh" :label-width="formLabelWidth">
         <el-input v-model="branch" auto-complete="off"></el-input>
       </el-form-item>
@@ -41,6 +45,7 @@ export default {
       bankName: '',
       accountNumber: '',
       branch: '',
+      balance: null,
       formLabelWidth: '120px',
       dialogFormVisible: false,
       loading: false
@@ -72,7 +77,8 @@ export default {
         userName: this.userName,
         bankName: this.bankName,
         accountNumber: this.accountNumber,
-        branch: this.branch
+        branch: this.branch,
+        balance: this.balance
       }
 
       const response = await this.$services.do_request('post', BANK_URL, data)

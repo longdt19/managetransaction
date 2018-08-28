@@ -1,7 +1,7 @@
 <template>
 <section>
   <el-row :butter="10">
-    <el-col :xs="24" :md="2"><div class="grid-content bg-purple">
+    <el-col :xs="24" :md="3"><div class="grid-content bg-purple">
       <div class="group">
         <span>Tìm kiếm:</span>
       </div>

@@ -21,6 +21,22 @@
         <el-input v-model="address" auto-complete="off"></el-input>
       </el-form-item>
 
+      <el-form-item label="Tỉnh" :label-width="formLabelWidth">
+        <el-input v-model="province" auto-complete="off"></el-input>
+      </el-form-item>
+
+      <el-form-item label="Ghi chú" :label-width="formLabelWidth">
+        <el-input v-model="note" auto-complete="off"></el-input>
+      </el-form-item>
+
+      <el-form-item label="Nợ trước" :label-width="formLabelWidth">
+        <el-input v-model="debtBefore" auto-complete="off"></el-input>
+      </el-form-item>
+
+      <el-form-item label="Nhóm" :label-width="formLabelWidth">
+        <el-input v-model="group" auto-complete="off"></el-input>
+      </el-form-item>
+
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">Hủy bỏ</el-button>
@@ -41,6 +57,10 @@ export default {
       azAccount: '',
       phone: '',
       address: '',
+      province: '',
+      note: '',
+      debtBefore: '',
+      group: '',
       formLabelWidth: '120px',
       dialogFormVisible: false,
       customer: {},
@@ -57,6 +77,10 @@ export default {
       this.azAccount = customer.azAccount
       this.phone = customer.phone
       this.address = customer.address
+      this.province = customer.province
+      this.debtBefore = customer.debtBefore
+      this.group = customer.customerGroup
+      this.note = customer.note
       this.customer = customer
       this.dialogFormVisible = true
     },
@@ -75,11 +99,15 @@ export default {
       this.loading = true
 
       let data = {
-        id: this.customer.id,
-        name: this.name,
-        azAccount: this.azAccount,
-        phone: this.phone,
-        address: this.address
+        'id': this.customer.id,
+        'name': this.name,
+        'azAccount': this.azAccount,
+        'phone': this.phone,
+        'address': this.address,
+        'province': this.province,
+        'debtBefore': this.debtBefore,
+        'customerGroup': this.group,
+        'note': this.note
       }
 
       const response = await this.$services.do_request('put', CUSTOMER_URL, data)
@@ -87,11 +115,14 @@ export default {
       this.loading = false
 
       if (response.data.message === 'Success') {
-        this.customer.name = this.name
-        this.customer.azAccount = this.azAccount
-        this.customer.phone = this.phone
-        this.customer.address = this.address
-
+        // this.customer.name = this.name
+        // this.customer.azAccount = this.azAccount
+        // this.customer.phone = this.phone
+        // this.customer.address = this.address
+        // this.customer.customerGroup = this.group
+        // this.customer.debtBefore = this.debtBefore
+        // this.customer.note = this.note
+        //
         this.$emit('customer_edited', this.customer)
         this.$message.success('Cập nhật khách hàng thành công')
         this.dialogFormVisible = false

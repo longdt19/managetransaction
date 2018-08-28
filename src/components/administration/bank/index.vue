@@ -188,9 +188,3 @@ export default {
   }
 }
 </script>
-
-<style scoped="">
-.el-loading-spinner {
-  top: 50%
-}
-</style>

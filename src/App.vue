@@ -21,3 +21,8 @@ export default {
   left: -10px
 }
 </style>
+<style media="screen">
+  .el-loading-spinner {
+    top: 50%
+  }
+</style>

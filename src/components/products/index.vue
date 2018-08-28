@@ -82,19 +82,19 @@
         <el-table-column label="Đầu kỳ" header-align="center">
           <el-table-column label="Có" header-align="center">
             <template slot-scope="scope">
-              {{scope.row.beforePeriodPaid}}
+              {{formatNumber(scope.row.beforePeriodPaid)}}
             </template>
           </el-table-column>
 
           <el-table-column label="Nợ" header-align="center">
             <template slot-scope="scope">
-              {{scope.row.beforePeriodOwed}}
+              {{formatNumber(scope.row.beforePeriodOwed)}}
             </template>
           </el-table-column>
 
           <el-table-column label="Tổng" header-align="center">
             <template slot-scope="scope">
-              {{scope.row.beforePeriodTotal}}
+              {{formatNumber(scope.row.beforePeriodTotal)}}
             </template>
           </el-table-column>
         </el-table-column>
@@ -102,19 +102,19 @@
         <el-table-column label="Giữa kỳ" header-align="center" border>
           <el-table-column label="Có" header-align="center">
             <template slot-scope="scope">
-              {{scope.row.inPeriodPaid}}
+              {{formatNumber(scope.row.inPeriodPaid)}}
             </template>
           </el-table-column>
 
           <el-table-column label="Nợ" header-align="center">
             <template slot-scope="scope">
-              {{scope.row.inPeriodOwed}}
+              {{formatNumber(scope.row.inPeriodOwed)}}
             </template>
           </el-table-column>
 
           <el-table-column label="Tổng" header-align="center">
             <template slot-scope="scope">
-              {{scope.row.inPeriodTotal}}
+              {{formatNumber(scope.row.inPeriodTotal)}}
             </template>
           </el-table-column>
         </el-table-column>
@@ -122,19 +122,19 @@
         <el-table-column label="Cuối kỳ" header-align="center">
           <el-table-column label="Có" header-align="center">
             <template slot-scope="scope">
-              {{scope.row.afterPeriodPaid}}
+              {{formatNumber(scope.row.afterPeriodPaid)}}
             </template>
           </el-table-column>
 
           <el-table-column label="Nợ" header-align="center">
             <template slot-scope="scope">
-              {{scope.row.afterPeriodOwed}}
+              {{formatNumber(scope.row.afterPeriodOwed)}}
             </template>
           </el-table-column>
 
           <el-table-column label="Tổng" header-align="center">
             <template slot-scope="scope">
-              {{scope.row.afterPeriodTotal}}
+              {{formatNumber(scope.row.afterPeriodTotal)}}
             </template>
           </el-table-column>
         </el-table-column>
@@ -150,6 +150,8 @@
 </template>
 
 <script>
+import formatNumber from '@/utils/numeric'
+
 import { PRODUCT_STATISTIC_URL } from '@/constants/endpoints'
 
 export default {
@@ -182,6 +184,7 @@ export default {
     }
   },
   methods: {
+    formatNumber,
     async search () {
       if (this.loading) return
       this.loading = true

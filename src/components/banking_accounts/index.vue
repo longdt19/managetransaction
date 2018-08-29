@@ -199,8 +199,8 @@ export default {
       pagination: {
         totalPage: null,
         totalElement: null,
-        page: 10,
-        per_page: 2,
+        page: 1,
+        per_page: 10,
         list: [10, 20, 30]
       },
       loading: false

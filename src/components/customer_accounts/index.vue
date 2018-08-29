@@ -52,6 +52,20 @@
       </div></el-col>
     </el-row>
 
+    <div class="" style="text-align: right" v-if="pagination.totalPage">
+      <el-row>
+        <span>Hiển thị: </span>
+        <el-select v-model="pagination.per_page" style="width: 80px">
+          <el-option
+          v-for="item in pagination.list"
+          :key="item"
+          :label="item"
+          :value="item">
+        </el-option>
+      </el-select>
+      </el-row>
+    </div>
+
     <div class="" style="margin-top: 15px;">
       <el-table
         :data="customer_list"
@@ -199,7 +213,7 @@ export default {
         totalPage: null,
         totalElement: null,
         page: 1,
-        per_page: 2,
+        per_page: 10,
         list: [10, 20, 30]
       },
       loading: false

@@ -32,7 +32,7 @@
             </el-date-picker>
           </div></el-col>
           <el-col :xs="24" :md="4"><div class="grid-content bg-purple-light">
-            <el-button slot="append" icon="el-icon-search" @click.native="search"></el-button>
+            <el-button slot="append" icon="el-icon-search" @click.native="search_product"></el-button>
           </div></el-col>
         </el-row>
       </div></el-col>
@@ -51,6 +51,20 @@
         </el-row>
       </div></el-col>
     </el-row>
+
+    <div class="" style="text-align: right" v-if="pagination.totalPage">
+      <el-row>
+        <span>Hiển thị: </span>
+        <el-select v-model="pagination.per_page" style="width: 80px">
+          <el-option
+          v-for="item in pagination.list"
+          :key="item"
+          :label="item"
+          :value="item">
+        </el-option>
+      </el-select>
+      </el-row>
+    </div>
 
     <div class="" style="margin-top: 15px;">
       <el-table
@@ -146,7 +160,12 @@
     <div class="block" style="margin-top: 30px; text-align: right">
       <el-pagination
         layout="prev, pager, next"
-        :total="50">
+        :page-count="pagination.totalPage"
+        :current-page.sync="pagination.page"
+        @current-change="change_page"
+        @prev-click="prev_page"
+        @next-click="next_page"
+      >
       </el-pagination>
     </div>
   </section>
@@ -163,30 +182,53 @@ export default {
       from_date: '',
       to_date: '',
       product_list: [],
-      total: null,
       statistic: {},
-      loading: false
+      loading: false,
+      pagination: {
+        totalPage: null,
+        totalElement: null,
+        page: 1,
+        per_page: 10,
+        list: [10, 20, 30]
+      }
+    }
+  },
+  watch: {
+    'pagination.per_page' (val) {
+      this.search_product()
+    },
+    'pagination.page' (val) {
+      this.search_product()
     }
   },
   methods: {
     formatNumber,
-    async search () {
+    async search_product () {
       if (this.loading) return
       this.loading = true
       if (this.from_date === '' || this.to_date === '') {
         this.$message.error('Vui lòng chọn ng')
         return
       }
+      if (this.pagination.per_page > this.pagination.totalElement) {
+        this.pagination.page = 1
+      }
+
       const data = {
         'fromDate': this.from_date,
-        'toDate': this.to_date
+        'toDate': this.to_date,
+        'size': this.pagination.per_page,
+        'page': this.pagination.page - 1
       }
+
       const response = await this.$services.do_request('get', PRODUCT_STATISTIC_URL, data)
       this.loading = false
       if (response.data.data) {
         this.product_list = response.data.data.data.content
         this.total = response.data.data.totalElements
         this.statistic = response.data.data.statistic
+        this.pagination.totalElement = response.data.data.data.totalElements
+        this.pagination.totalPage = response.data.data.data.totalPages
       }
     }
   }

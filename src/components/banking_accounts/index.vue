@@ -32,7 +32,7 @@
             </el-date-picker>
           </div></el-col>
           <el-col :xs="24" :md="4"><div class="grid-content bg-purple-light">
-            <el-button slot="append" icon="el-icon-search" @click.native="search"></el-button>
+            <el-button slot="append" icon="el-icon-search" @click.native="search_bank"></el-button>
           </div></el-col>
         </el-row>
       </div></el-col>
@@ -72,73 +72,73 @@
         style="width: 100%"
         v-loading="loading"
       >
-        <el-table-column type="index" label="STT" width="50">
+        <el-table-column type="index" label="STT" width="50" align="center">
         </el-table-column>
 
-        <el-table-column prop="bank_name" label="Ngân hàng" header-align="center">
+        <el-table-column prop="bank_name" label="Ngân hàng" header-align="center" align="center">
           <template slot-scope="scope">
             {{scope.row.bankName}}
           </template>
         </el-table-column>
 
-        <el-table-column prop="account_number" label="Số tài khoản" header-align="center">
+        <el-table-column prop="account_number" label="Số tài khoản" header-align="center" align="center">
           <template slot-scope="scope">
             {{scope.row.accountNumber}}
           </template>
         </el-table-column>
 
-        <el-table-column prop="owner" label="Chủ tài khoản" header-align="center">
+        <el-table-column prop="owner" label="Chủ tài khoản" header-align="center" align="center">
           <template slot-scope="scope">
             {{scope.row.userName}}
           </template>
         </el-table-column>
 
-        <el-table-column prop="branch" label="Chi nhánh" header-align="center">
+        <el-table-column prop="branch" label="Chi nhánh" header-align="center" align="center">
           <template slot-scope="scope">
             {{scope.row.branch}}
           </template>
         </el-table-column>
 
-        <el-table-column label="Số dư" header-align="center">
+        <el-table-column label="Số dư" header-align="center" align="center">
           <!-- <template slot-scope="scope">
             {{scope.row.created}}
           </template> -->
         </el-table-column>
 
         <el-table-column label="Đầu kỳ" header-align="center">
-          <el-table-column label="Có" header-align="center">
+          <el-table-column label="Có" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.beforePeriodPaid)}}
             </template>
           </el-table-column>
 
-          <el-table-column label="Nợ" header-align="center">
+          <el-table-column label="Nợ" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.beforePeriodOwed)}}
             </template>
           </el-table-column>
 
-          <el-table-column label="Tổng" header-align="center">
+          <el-table-column label="Tổng" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.beforePeriodTotal)}}
             </template>
           </el-table-column>
         </el-table-column>
 
-        <el-table-column label="Giữa kỳ" header-align="center" border>
-          <el-table-column label="Có" header-align="center">
+        <el-table-column label="Giữa kỳ" header-align="center"  align="center">
+          <el-table-column label="Có" header-align="center"  align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.inPeriodPaid)}}
             </template>
           </el-table-column>
 
-          <el-table-column label="Nợ" header-align="center">
+          <el-table-column label="Nợ" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.inPeriodOwed)}}
             </template>
           </el-table-column>
 
-          <el-table-column label="Tổng" header-align="center">
+          <el-table-column label="Tổng" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.inPeriodTotal)}}
             </template>
@@ -146,19 +146,19 @@
         </el-table-column>
 
         <el-table-column label="Cuối kỳ" header-align="center">
-          <el-table-column label="Có" header-align="center">
+          <el-table-column label="Có" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.afterPeriodPaid)}}
             </template>
           </el-table-column>
 
-          <el-table-column label="Nợ" header-align="center">
+          <el-table-column label="Nợ" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.afterPeriodOwed)}}
             </template>
           </el-table-column>
 
-          <el-table-column label="Tổng" header-align="center">
+          <el-table-column label="Tổng" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.afterPeriodTotal)}}
             </template>
@@ -199,7 +199,7 @@ export default {
       pagination: {
         totalPage: null,
         totalElement: null,
-        page: 1,
+        page: 10,
         per_page: 2,
         list: [10, 20, 30]
       },
@@ -208,10 +208,10 @@ export default {
   },
   watch: {
     'pagination.per_page' (val) {
-      this.load_transaction_list()
+      this.search_bank()
     },
     'pagination.page' (val) {
-      this.load_transaction_list()
+      this.search_bank()
     }
   },
   methods: {
@@ -228,7 +228,7 @@ export default {
     change_page (val) {
       this.pagination.page = val
     },
-    async search () {
+    async search_bank () {
       if (this.loading) return
       this.loading = true
       if (this.from_date === '' || this.to_date === '') {
@@ -248,7 +248,6 @@ export default {
       }
 
       const response = await this.$services.do_request('get', BANK_STATISTIC_URL, data)
-      console.log('response', response)
       this.loading = false
 
       if (response.data.data) {

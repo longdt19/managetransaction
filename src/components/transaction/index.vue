@@ -41,13 +41,13 @@
     <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
       <el-row >
         <el-col :span="8"><div class="grid-content bg-purple">
-          <span>Có: {{statistic.paid}}</span>
+          <span>Có: {{formatNumber(statistic.paid)}}</span>
         </div></el-col>
         <el-col :span="8"><div class="grid-content bg-purple-light">
-          <span>Nợ: {{statistic.owed}}</span>
+          <span>Nợ: {{formatNumber(statistic.owed)}}</span>
         </div></el-col>
         <el-col :span="8"><div class="grid-content bg-purple-light">
-          <span>Tổng: {{statistic.total}} </span>
+          <span>Tổng: {{formatNumber(statistic.total)}} </span>
         </div></el-col>
       </el-row>
     </div></el-col>
@@ -88,7 +88,7 @@
     v-loading="transaction.loading"
   >
 
-    <el-table-column type="index" label="STT" width="50">
+    <el-table-column type="index" label="STT" width="50" align="center">
     </el-table-column>
 
     <!-- ***********************************************************************
@@ -100,7 +100,7 @@
 
       <el-table-column label="Ngày tạo" header-align="center" align="center">
         <template slot-scope="scope">
-          {{scope.row.created}}
+          {{formatDate(scope.row.created)}}
         </template>
       </el-table-column>
 
@@ -230,6 +230,7 @@
 import { BANK_LIST_URL, CUSTOMER_LIST_URL, PRODUCT_LIST_URL, TRANSACTION_URL } from '@/constants/endpoints'
 
 import formatNumber from '@/utils/numeric'
+import formatDate from '@/utils/time'
 
 import SearchComponent from '@/components/transaction/search'
 import AddTransactionComponent from './add_transaction'
@@ -288,6 +289,7 @@ export default {
   },
   methods: {
     formatNumber,
+    formatDate,
     type_of_status (status) {
       // 1: Xuất
       // 2: Nhập
@@ -299,11 +301,11 @@ export default {
         type = 'success'
         label = 'Xuất'
       } else if (status === 2) {
-        type = 'info'
+        type = 'warning'
         label = 'Nhập'
       } else if (status === 3) {
-        type = 'warning'
-        label = 'Hoàn t'
+        type = 'danger'
+        label = 'Hoàn tiền'
       }
       return {
         type: type,

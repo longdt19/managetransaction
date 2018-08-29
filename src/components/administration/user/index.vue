@@ -28,7 +28,7 @@
     style="width: 100%"
     v-loading="loading"
   >
-    <el-table-column type="index" label="STT" width="50">
+    <el-table-column type="index" label="STT" width="50" align="center">
     </el-table-column>
 
     <el-table-column label="Ngày tạo" header-align="center" align="center">

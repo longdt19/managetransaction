@@ -43,6 +43,7 @@ export default {
       formData.append('password', this.password)
 
       const response = await this.$services.do_request('post', LOGIN_URL, formData)
+      console.log('response login', response)
       this.loading = false
 
       if (response.data.data) {

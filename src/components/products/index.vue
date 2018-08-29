@@ -58,61 +58,61 @@
         style="width: 100%"
         v-loading="loading"
       >
-        <el-table-column type="index" label="STT" width="50">
+        <el-table-column type="index" label="STT" width="50" align="center">
         </el-table-column>
 
-        <el-table-column prop="code" label="Mã sản phẩm" header-align="center">
+        <el-table-column prop="code" label="Mã sản phẩm" header-align="center" align="center">
           <template slot-scope="scope">
             {{scope.row.code}}
           </template>
         </el-table-column>
 
-        <el-table-column prop="name" label="Tên sản phẩm"  header-align="center">
+        <el-table-column prop="name" label="Tên sản phẩm"  header-align="center" align="center">
           <template slot-scope="scope">
             {{scope.row.name}}
           </template>
         </el-table-column>
 
-        <el-table-column label="Số dư" header-align="center">
-          <!-- <template slot-scope="scope">
-            {{scope.row.bankName}}
-          </template> -->
+        <el-table-column label="Số dư" header-align="center" align="center">
+          <template slot-scope="scope">
+            {{scope.row.balance}}
+          </template>
         </el-table-column>
 
         <el-table-column label="Đầu kỳ" header-align="center">
-          <el-table-column label="Có" header-align="center">
+          <el-table-column label="Nhập" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.beforePeriodPaid)}}
             </template>
           </el-table-column>
 
-          <el-table-column label="Nợ" header-align="center">
+          <el-table-column label="Xuất" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.beforePeriodOwed)}}
             </template>
           </el-table-column>
 
-          <el-table-column label="Tổng" header-align="center">
+          <el-table-column label="Tồn" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.beforePeriodTotal)}}
             </template>
           </el-table-column>
         </el-table-column>
 
-        <el-table-column label="Giữa kỳ" header-align="center" border>
-          <el-table-column label="Có" header-align="center">
+        <el-table-column label="Giữa kỳ" header-align="center">
+          <el-table-column label="Nhập" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.inPeriodPaid)}}
             </template>
           </el-table-column>
 
-          <el-table-column label="Nợ" header-align="center">
+          <el-table-column label="Xuất" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.inPeriodOwed)}}
             </template>
           </el-table-column>
 
-          <el-table-column label="Tổng" header-align="center">
+          <el-table-column label="Tồn" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.inPeriodTotal)}}
             </template>
@@ -120,23 +120,26 @@
         </el-table-column>
 
         <el-table-column label="Cuối kỳ" header-align="center">
-          <el-table-column label="Có" header-align="center">
+          <el-table-column label="Nhập" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.afterPeriodPaid)}}
             </template>
           </el-table-column>
 
-          <el-table-column label="Nợ" header-align="center">
+          <el-table-column label="Xuất" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.afterPeriodOwed)}}
             </template>
           </el-table-column>
 
-          <el-table-column label="Tổng" header-align="center">
+          <el-table-column label="Tồn" header-align="center" align="center">
             <template slot-scope="scope">
               {{formatNumber(scope.row.afterPeriodTotal)}}
             </template>
           </el-table-column>
+        </el-table-column>
+
+        <el-table-column label="Tổng" header-align="center" align="center">
         </el-table-column>
       </el-table>
     </div>
@@ -162,25 +165,7 @@ export default {
       product_list: [],
       total: null,
       statistic: {},
-      loading: false,
-      tableData: [
-        {
-          code: '123123',
-          name: 'nạp tiền AZ',
-          balance: '23423423423',
-          sub_total: '222222',
-          unpaid: '3232323',
-          total: '12398745'
-        },
-        {
-          code: '123123',
-          name: 'nạp tiền AZ',
-          balance: '123123123',
-          sub_total: '222222',
-          unpaid: '3232323',
-          total: '12398745'
-        }
-      ]
+      loading: false
     }
   },
   methods: {
@@ -198,7 +183,6 @@ export default {
       }
       const response = await this.$services.do_request('get', PRODUCT_STATISTIC_URL, data)
       this.loading = false
-      console.log('response', response)
       if (response.data.data) {
         this.product_list = response.data.data.data.content
         this.total = response.data.data.totalElements

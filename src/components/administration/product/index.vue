@@ -6,7 +6,7 @@
         <span style="font-size: 24px; margin-bottom: 50px">Danh sách sản phẩm</span>
       </div></el-col>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-        <el-button @click.native="open_add">Thêm mới</el-button>
+        <el-button @click.native="open_add" type="primary"><i class="el-icon-plus" style="margin-right: 10px" />Thêm mới</el-button>
       </div></el-col>
     </el-row>
   </div>
@@ -65,7 +65,7 @@
     <el-table-column label="Thao tác" header-align="center" align="center">
       <template slot-scope="scope">
           <el-button size="mini" @click="open_edit(scope.row)">Sửa</el-button>
-          <el-button size="mini" type="danger" @click="open_delete(scope.row)">Xóa</el-button>
+          <el-button size="mini" type="danger" @click="open_delete(scope.row)" circle>Xóa</el-button>
         </template>
     </el-table-column>
   </el-table>

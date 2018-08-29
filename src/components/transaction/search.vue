@@ -74,7 +74,11 @@ export default {
   },
   methods: {
     async search () {
-      console.log('this.$parent.transaction', this.$parent)
+      if (this.$parent.from_date > this.$parent.to_date) {
+        this.$message.error('Vui lòng nhập lại ngày thống kê')
+        return
+      }
+
       if (this.$parent.transaction.loading) return
       this.$parent.transaction.loading = true
 

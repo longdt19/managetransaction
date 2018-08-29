@@ -6,7 +6,7 @@
           <span style="font-size: 24px; margin-bottom: 50px">Thống kê theo tài khoản khách hàng</span>
         </div></el-col>
         <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-          <el-button>Xuất Excel</el-button>
+          <el-button><i class="el-icon-download" style="margin-right: 10px"></i>Xuất Excel</el-button>
         </div></el-col>
       </el-row>
     </div>
@@ -38,15 +38,26 @@
       </div></el-col>
 
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
-        <el-row>
+        <el-row >
           <el-col :span="8"><div class="grid-content bg-purple">
-            <span>Có: {{statistic.owed}}</span>
+              <span style="font-size: 15px;">Có:</span>
+              <el-tag type="success" v-if="statistic.paid">
+                <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.paid)}}</span>
+              </el-tag>
           </div></el-col>
+
           <el-col :span="8"><div class="grid-content bg-purple-light">
-            <span>Nợ: {{statistic.paid}}</span>
+            <span style="font-size: 15px;">Nợ:</span>
+            <el-tag type="danger" v-if="statistic.owed">
+              <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.owed)}}</span>
+            </el-tag>
           </div></el-col>
+
           <el-col :span="8"><div class="grid-content bg-purple-light">
-            <span>Tổng: {{statistic.total}}</span>
+            <span style="font-size: 15px;">Tổng:</span>
+            <el-tag v-if="statistic.total">
+              <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.total)}}</span>
+            </el-tag>
           </div></el-col>
         </el-row>
       </div></el-col>
@@ -244,6 +255,11 @@ export default {
     async search_customer () {
       if (this.from_date === '' || this.to_date === '') {
         this.$message.error('Trường tìm kiếm không được để trống')
+        return
+      }
+
+      if (this.from_date > this.to_date) {
+        this.$message.error('Vui lòng nhập lại ngày thống kê')
         return
       }
 

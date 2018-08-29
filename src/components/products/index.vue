@@ -6,7 +6,7 @@
           <span style="font-size: 24px; margin-bottom: 50px">Thống kê chi tiết các sản phẩm</span>
         </div></el-col>
         <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-          <el-button>Xuất Excel</el-button>
+          <el-button><i class="el-icon-download" style="margin-right: 10px"></i>Xuất Excel</el-button>
         </div></el-col>
       </el-row>
     </div>
@@ -38,15 +38,26 @@
       </div></el-col>
 
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
-        <el-row>
+        <el-row >
           <el-col :span="8"><div class="grid-content bg-purple">
-            <span>Có: {{statistic.paid}}</span>
+              <span style="font-size: 15px;">Có:</span>
+              <el-tag type="success" v-if="statistic.paid">
+                <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.paid)}}</span>
+              </el-tag>
           </div></el-col>
+
           <el-col :span="8"><div class="grid-content bg-purple-light">
-            <span>Nợ:  {{statistic.owed}}</span>
+            <span style="font-size: 15px;">Nợ:</span>
+            <el-tag type="danger" v-if="statistic.owed">
+              <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.owed)}}</span>
+            </el-tag>
           </div></el-col>
+
           <el-col :span="8"><div class="grid-content bg-purple-light">
-            <span>Tổng:  {{statistic.total}}</span>
+            <span style="font-size: 15px;">Tổng:</span>
+            <el-tag v-if="statistic.total">
+              <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.total)}}</span>
+            </el-tag>
           </div></el-col>
         </el-row>
       </div></el-col>
@@ -203,13 +214,31 @@ export default {
   },
   methods: {
     formatNumber,
+    prev_page () {
+      if (this.pagination.page === 1) return
+
+      this.pagination.page = this.pagination.page - 1
+    },
+    next_page () {
+      if (this.pagination.page === this.total_page) return
+      this.pagination.page = this.pagination.page + 1
+    },
+    change_page (val) {
+      this.pagination.page = val
+    },
     async search_product () {
-      if (this.loading) return
-      this.loading = true
       if (this.from_date === '' || this.to_date === '') {
-        this.$message.error('Vui lòng chọn ng')
+        this.$message.error('Vui lòng chọn ngày')
         return
       }
+
+      if (this.from_date > this.to_date) {
+        this.$message.error('Vui lòng nhập lại ngày thống kê')
+        return
+      }
+
+      if (this.loading) return
+      this.loading = true
       if (this.pagination.per_page > this.pagination.totalElement) {
         this.pagination.page = 1
       }

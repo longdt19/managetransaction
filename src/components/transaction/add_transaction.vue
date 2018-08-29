@@ -1,6 +1,6 @@
 <template lang="html">
 <section style="text-align: left">
-  <el-button @click="dialogVisible = true">Thêm mới giao dịch</el-button>
+  <el-button @click="dialogVisible = true" type="primary"><i class="el-icon-plus" style="margin-right: 10px" />Thêm mới giao dịch</el-button>
 
   <el-dialog
     title="Tạo mới giao dịch"
@@ -82,6 +82,7 @@
 
           <el-form-item label="Chiết suất (%)" label-width="110px">
             <el-input placeholder="Mời nhập" v-model="extract_input"></el-input>
+            <span v-if="is_number(extract_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
           </el-form-item>
 
           <el-form-item label="Bớt tiền" label-width="110px">
@@ -158,7 +159,33 @@ export default {
     }
   },
   methods: {
+    validate_number_before_create () {
+      if (this.is_number(this.price_input) === false) {
+        this.$message.error('Số tiền nhập vào không hợp lệ')
+        return false
+      } else if (this.is_number(this.extract_input) === false) {
+        this.$message.error('Chiết suất nhập vào không hợp lệ')
+        return false
+      } else if (this.is_number(this.discount_input) === false) {
+        this.$message.error('Bớt tiền nhập vào không hợp lệ')
+        return false
+      } else if (this.is_number(this.total_input) === false) {
+        this.$message.error('Tổng nhập vào không hợp lệ')
+        return false
+      } else if (this.is_number(this.paid_input) === false) {
+        this.$message.error('Đã thanh toán nhập vào không hợp lệ')
+        return false
+      } else if (this.is_number(this.unpaid_input) === false) {
+        this.$message.error('Còn nợ nhập vào không hợp lệ')
+      }
+
+      return true
+    },
     async create () {
+      if (this.validate_number_before_create() === false) {
+        return
+      }
+
       if (this.loading) return
       this.loading = true
 

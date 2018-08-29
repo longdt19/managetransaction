@@ -1,5 +1,5 @@
-<template lang="html">
-  <h1>Loi he thong</h1>
+<template>
+  <img src="/static/img/500.svg" width="100%" height="700px"/>
 </template>
 
 <script>

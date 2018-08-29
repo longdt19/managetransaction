@@ -10,7 +10,7 @@
         <add-transaction-component ref='add_transaction' @transaction_added="transaction_added"></add-transaction-component>
       </div></el-col>
       <el-col :xs="12" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
-        <el-button>Xuất Excel</el-button>
+        <el-button><i class="el-icon-download" style="margin-right: 10px"></i>Xuất Excel</el-button>
       </div></el-col>
     </el-row>
   </div>
@@ -41,13 +41,24 @@
     <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
       <el-row >
         <el-col :span="8"><div class="grid-content bg-purple">
-          <span>Có: {{formatNumber(statistic.paid)}}</span>
+            <span style="font-size: 15px;">Có:</span>
+            <el-tag type="success" v-if="statistic.paid">
+              <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.paid)}}</span>
+            </el-tag>
         </div></el-col>
+
         <el-col :span="8"><div class="grid-content bg-purple-light">
-          <span>Nợ: {{formatNumber(statistic.owed)}}</span>
+          <span style="font-size: 15px;">Nợ:</span>
+          <el-tag type="danger" v-if="statistic.owed">
+            <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.owed)}}</span>
+          </el-tag>
         </div></el-col>
+
         <el-col :span="8"><div class="grid-content bg-purple-light">
-          <span>Tổng: {{formatNumber(statistic.total)}} </span>
+          <span style="font-size: 15px;">Tổng:</span>
+          <el-tag v-if="statistic.total">
+            <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.total)}}</span>
+          </el-tag>
         </div></el-col>
       </el-row>
     </div></el-col>
@@ -86,6 +97,7 @@
     :data="transaction.list"
     style="width: 100%"
     v-loading="transaction.loading"
+    highlight-current-row
   >
 
     <el-table-column type="index" label="STT" width="50" align="center">
@@ -207,7 +219,8 @@
 
     <el-table-column label="Người tạo" header-align="center" align="center">
       <template slot-scope="scope">
-        {{scope.row.creator}}
+        <span style="color: #dc3545!important">{{scope.row.creator}}</span>
+
       </template>
     </el-table-column>
 
@@ -410,6 +423,4 @@ export default {
 .el-loading-spinner {
   top: 50%
 }
-</style>
-<style>
 </style>

@@ -6,7 +6,7 @@
         <span style="font-size: 24px; margin-bottom: 50px">Danh sách ngân hàng</span>
       </div></el-col>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-        <el-button @click.native="open_add">Thêm mới</el-button>
+        <el-button @click.native="open_add" type="primary"><i class="el-icon-plus" style="margin-right: 10px" />Thêm mới</el-button>
       </div></el-col>
     </el-row>
   </div>

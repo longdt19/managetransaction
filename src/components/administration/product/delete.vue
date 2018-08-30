@@ -25,14 +25,15 @@ import { PRODUCT_URL } from '@/constants/endpoints'
 export default {
   data () {
     return {
-      ids: [],
+      ids: null,
       centerDialogVisible: false,
       loading: false
     }
   },
   methods: {
     open (product) {
-      this.ids.push(product.id)
+      this.ids = null
+      this.ids = product.id
       console.log('ids', this.ids)
       this.centerDialogVisible = true
     },
@@ -40,13 +41,19 @@ export default {
       if (this.loading) return
       this.loading = true
 
-      let data = {
-        ids: this.ids
-      }
-      console.log('data', data)
-      const response = await this.$services.do_request('delete', PRODUCT_URL, data)
+      const response = await this.$services.do_request('delete', PRODUCT_URL + '/' + this.ids)
       this.loading = false
-      console.log('response', response)
+
+      if (response.data.message === 'Success') {
+        this.$message.success('Xóa sản phẩm thành công')
+        this.$emit('product_deleted')
+        this.centerDialogVisible = false
+      } else if (response.status === 400) {
+        console.log('Bad resquest')
+        this.$message.error('Xóa sản phẩm thất bại')
+      } else {
+        this.$router.push('/e-500')
+      }
     }
   }
 }

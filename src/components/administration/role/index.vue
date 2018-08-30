@@ -68,12 +68,14 @@
 
       <el-table-column label="Thao tác" header-align="center" align="center">
         <template slot-scope="scope">
-            <el-button size="mini" >Sửa</el-button>
+            <el-button size="mini" @click="open_edit(scope.row)">Sửa</el-button>
             <el-button size="mini" type="danger">Xóa</el-button>
           </template>
       </el-table-column>
 
     </el-table>
+
+    <edit-role-component ref='edit_role' />
   </section>
 </template>
 
@@ -81,8 +83,10 @@
 import formatDate from '@/utils/time'
 
 import { ROLE_URL } from '@/constants/endpoints'
+import EditRoleComponent from './edit'
 
 export default {
+  components: { EditRoleComponent },
   data () {
     return {
       role_list: [],
@@ -96,11 +100,19 @@ export default {
       this.loading = true
 
       const response = await this.$services.do_request('get', ROLE_URL)
+      console.log('response', response)
       this.loading = false
 
       if (response.data.message === 'Success') {
         this.role_list = response.data.data.content
+      } else if (response.status === 400) {
+        console.log('Bad resquest')
+      } else {
+        this.$router.push('/e-500')
       }
+    },
+    open_edit (role) {
+      this.$refs.edit_role.open(role)
     }
   },
   created () {

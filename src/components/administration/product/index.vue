@@ -174,7 +174,6 @@ export default {
       Object.assign(this.dataTable[product_index], product)
     },
     product_deleted () {
-      console.log('refresh')
       this.load_product_list()
     }
   },

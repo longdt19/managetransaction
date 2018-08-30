@@ -61,10 +61,11 @@ export default {
 
       if (response.data.message === 'Success') {
         this.$parent.load_product_list()
-        this.$message.success('Thêm mới ngân hàng thành công')
+        this.$message.success('Thêm mới sản phẩm thành công')
         this.dialogFormVisible = false
       } else if (response.status === 400) {
         console.log('Bad request')
+        this.$message.error('Thêm mới sản phẩm thành công')
       } else {
         this.$router.push('/e-500')
       }

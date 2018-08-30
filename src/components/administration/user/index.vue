@@ -6,7 +6,7 @@
         <span style="font-size: 24px; margin-bottom: 50px">Danh sách người dùng</span>
       </div></el-col>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-        <el-button>Thêm mới</el-button>
+        <el-button @click="open_add_user">Thêm mới</el-button>
       </div></el-col>
     </el-row>
   </div>
@@ -45,7 +45,19 @@
 
     <el-table-column label="Quyền hạn" header-align="center" align="center">
       <template slot-scope="scope">
-        {{scope.row.role.name}}
+        <el-dropdown :hide-on-click="false">
+        <el-button type="success" :loading="loading_btn">{{scope.row.role.name}}</el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item
+              v-for="item in role_list"
+              :key="item.id"
+              @click.native="update_role(scope.row, item)"
+              :disabled="scope.row.id === 1 && item.id === 1"
+            >
+              {{item.code}}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </template>
     </el-table-column>
 
@@ -57,8 +69,7 @@
 
     <el-table-column label="Thao tác" header-align="center" align="center">
       <template slot-scope="scope">
-          <el-button size="mini">Sửa</el-button>
-          <el-button size="mini" type="danger">Xóa</el-button>
+          <el-button size="mini" type="danger" disabled>Xóa</el-button>
         </template>
     </el-table-column>
   </el-table>
@@ -74,15 +85,19 @@
     >
     </el-pagination>
   </div>
+  <add-user-component ref='add_user' @user_created="user_created"/>
 </section>
 </template>
 
 <script>
 import converseTime from '@/utils/time'
 
-import { USER_URL } from '@/constants/endpoints'
+import { USER_URL, ROLE_URL } from '@/constants/endpoints'
+
+import AddUserComponent from './add'
 
 export default {
+  components: { AddUserComponent },
   data () {
     return {
       dataTable: [],
@@ -93,7 +108,9 @@ export default {
         per_page: 10,
         list: [10, 20, 30]
       },
-      loading: false
+      loading: false,
+      loading_btn: false,
+      role_list: []
     }
   },
   watch: {
@@ -106,6 +123,59 @@ export default {
   },
   methods: {
     converseTime,
+    async update_role (user, role) {
+      if (user.id === 1 && role.id === 1) {
+        this.$message.error('Cập nhật quyền hạn thất bại')
+        return
+      }
+      if (this.loading_btn) return
+      this.loading_btn = true
+
+      const data = {
+        id: user.id,
+        role: {
+          id: role.id
+        }
+      }
+      const response = await this.$services.do_request('put', USER_URL, data)
+      this.loading_btn = false
+
+      if (response.data.message === 'Success') {
+        this.dataTable.forEach(item => {
+          if (item.id === user.id) {
+            item.role.name = role.code
+          }
+        })
+        this.$message.success('Cập nhật quyền hạn thành công')
+      } else if (response.status === 400) {
+        this.$message.error('Cập nhật quyền hạn thất bại')
+        console.log('Bad resquest')
+      } else {
+        this.$router.push('/e-500')
+      }
+    },
+    async load_role_list () {
+      if (this.loading_btn) return
+      this.loading_btn = true
+
+      const response = await this.$services.do_request('get', ROLE_URL)
+      this.loading_btn = false
+
+      if (response.data.message === 'Success') {
+        this.role_list = response.data.data.content
+        this.role_list.forEach(item => {
+          item.code = this.converseRole(item.code)
+        })
+      } else if (response.status === 400) {
+        console.log('Bad resquest')
+        this.$message.error('Tải danh sách thất bại')
+      } else {
+        this.$router.push('/e-500')
+      }
+    },
+    open_add_user () {
+      this.$refs.add_user.open(this.role_list)
+    },
     prev_page () {
       if (this.pagination.page === 1) return
 
@@ -124,17 +194,24 @@ export default {
 
       const response = await this.$services.do_request('get', USER_URL)
       this.loading = false
-      console.log('response', response)
 
       if (response.data.data.content) {
         this.pagination.totalPage = response.data.data.totalPages
         this.pagination.totalElement = response.data.data.totalElements
         this.dataTable = response.data.data.content
+        this.load_role_list()
       } else if (response.status === 400) {
         console.log('Bad resquest')
       } else {
         this.$router.push('/e-500')
       }
+    },
+    user_created () {
+      this.load_user_list()
+    },
+    converseRole (role) {
+      if (role === 'ROLE_ADMIN') return 'Admin'
+      return 'Nhân viên'
     }
   },
   created () {
@@ -143,5 +220,8 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style scoped="">
+.el-button--medium {
+  width: 120px
+}
 </style>

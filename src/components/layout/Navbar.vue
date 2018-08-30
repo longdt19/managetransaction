@@ -20,7 +20,7 @@
 
               </el-dropdown-item>
               <el-dropdown-item>
-                <el-button type="text" @click="dialogLogout = true">Đăng xuất</el-button>
+                <el-button type="text" @click="dialogLogout = true" @click.native="logout">Đăng xuất</el-button>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -91,6 +91,9 @@ export default {
     }
   },
   methods: {
+    logout () {
+      this.$router.push('/login')
+    },
     check_change_pass (pass1, pass2) {
       if (pass1.length === 0 || pass2.length === 0) return null
       if (pass1.length !== 0 && pass2.length !== 0) return pass1 === pass2

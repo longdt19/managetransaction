@@ -1,4 +1,4 @@
-const BASE = '/transaction-mngt'
+const BASE = ''
 
 export const LOGIN_URL = BASE + '/api/az/mngt/auth/login'
 
@@ -16,4 +16,5 @@ export const BANK_URL = BASE + '/api/az/mngt/banks'
 export const CUSTOMER_URL = BASE + '/api/az/mngt/customers'
 export const PRODUCT_URL = BASE + '/api/az/mngt/products'
 export const ROLE_URL = BASE + '/api/az/mngt/roles'
+export const ROLE_NAVIGATION_URL = BASE + '/api/az/mngt/roles/update-navigation'
 export const USER_URL = BASE + '/api/az/mngt/users'

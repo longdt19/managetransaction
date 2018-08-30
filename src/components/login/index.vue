@@ -56,6 +56,9 @@ export default {
         this.$message.error('Lỗi hệ thống! Đăng nhập thất bại')
       }
     }
+  },
+  created () {
+    this.$store.commit('Common/tokenLoaded', null)
   }
 }
 </script>

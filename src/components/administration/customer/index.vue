@@ -78,7 +78,7 @@
 
     <el-table-column label="Nợ trước" header-align="center" align="center">
       <template slot-scope="scope">
-        {{scope.row.debtBefore}}
+        {{formatNumber(scope.row.debtBefore)}}
       </template>
     </el-table-column>
 
@@ -118,11 +118,12 @@
 import { NUMBER_VALIDATOR } from '@/constants'
 import { CUSTOMER_URL } from '@/constants/endpoints'
 
+import converseTime from '@/utils/time'
+import formatNumber from '@/utils/numeric'
+
 import EditCustomerComponent from './edit'
 import AddCustomerComponent from './add'
 import DeleteCustomerComponent from './delete'
-
-import converseTime from '@/utils/time'
 
 export default {
   components: { EditCustomerComponent, AddCustomerComponent, DeleteCustomerComponent },
@@ -149,6 +150,7 @@ export default {
   },
   methods: {
     converseTime,
+    formatNumber,
     validate_number (number) {
       if (number === '') return null
       return NUMBER_VALIDATOR.test(number.trim())

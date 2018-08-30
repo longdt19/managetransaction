@@ -111,9 +111,9 @@
         </el-table-column>
 
         <el-table-column label="Số dư" header-align="center" align="center">
-          <!-- <template slot-scope="scope">
-            {{scope.row.created}}
-          </template> -->
+          <template slot-scope="scope">
+            {{formatNumber(scope.row.balance)}}
+          </template>
         </el-table-column>
 
         <el-table-column label="Đầu kỳ" header-align="center">
@@ -266,6 +266,7 @@ export default {
       }
 
       const response = await this.$services.do_request('get', BANK_STATISTIC_URL, data)
+      console.log('response', response)
       this.loading = false
 
       if (response.data.data) {

@@ -58,7 +58,7 @@
 
     <el-table-column label="Số dư" header-align="center" align="center">
       <template slot-scope="scope">
-        {{scope.row.balance}}
+        {{formatNumber(scope.row.balance)}}
       </template>
     </el-table-column>
 
@@ -103,11 +103,12 @@
 <script>
 import { BANK_URL } from '@/constants/endpoints'
 
+import formatNumber from '@/utils/numeric'
+import converseTime from '@/utils/time'
+
 import AddBankComponent from './add'
 import EditBankComponent from './edit'
 import DeleteBankComponent from './delete'
-
-import converseTime from '@/utils/time'
 
 export default {
   components: { AddBankComponent, EditBankComponent, DeleteBankComponent },
@@ -134,6 +135,7 @@ export default {
   },
   methods: {
     converseTime,
+    formatNumber,
     async load_bank_list () {
       if (this.loading) return
       this.loading = true

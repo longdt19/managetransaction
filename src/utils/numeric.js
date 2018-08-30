@@ -1,5 +1,7 @@
 export default function formatNumber (number) {
-  if (number) {
+  if (number === 0) {
+    return ''
+  } else if (number) {
     let str = number.toString()
     let new_str = ''
     let i

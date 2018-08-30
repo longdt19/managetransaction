@@ -100,7 +100,7 @@
 
         <el-table-column label="Số dư" header-align="center" align="center">
           <template slot-scope="scope">
-            {{scope.row.balance}}
+            {{formatNumber(scope.row.balance)}}
           </template>
         </el-table-column>
 
@@ -251,6 +251,7 @@ export default {
       }
 
       const response = await this.$services.do_request('get', PRODUCT_STATISTIC_URL, data)
+      console.log('response', response)
       this.loading = false
       if (response.data.data) {
         this.product_list = response.data.data.data.content

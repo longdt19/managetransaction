@@ -10,7 +10,10 @@
         <add-transaction-component ref='add_transaction' @transaction_added="transaction_added"></add-transaction-component>
       </div></el-col>
       <el-col :xs="12" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
-        <el-button><i class="el-icon-download" style="margin-right: 10px"></i>Xuất Excel</el-button>
+        <el-button style="background-color: black">
+          <img src="../../assets/icon/download.svg" style="height: 15px" />
+          <span style="margin-left: 5px">Xuất Excel</span>
+        </el-button>
       </div></el-col>
     </el-row>
   </div>
@@ -100,7 +103,7 @@
     highlight-current-row
   >
 
-    <el-table-column type="index" label="STT" width="50" align="center">
+    <el-table-column type="index" label="STT" align="center">
     </el-table-column>
 
     <!-- ***********************************************************************
@@ -126,8 +129,8 @@
       2: Nhập
       3: Hoàn tiền -->
       <el-table-column label="Trạng thái" header-align="center" align="center">
-        <template slot-scope="scope">
-          <el-tag :type="type_of_status(scope.row.status).type">{{type_of_status(scope.row.status).label}}</el-tag>
+        <template slot-scope="scope" >
+          <el-tag v-if="scope.row.status" :type="type_of_status(scope.row.status).type">{{type_of_status(scope.row.status).label}}</el-tag>
         </template>
       </el-table-column>
 

@@ -159,29 +159,11 @@ export default {
     }
   },
   methods: {
-    validate_number_before_create () {
-      if (this.is_number(this.price_input) === false) {
-        this.$message.error('Số tiền nhập vào không hợp lệ')
-        return false
-      } else if (this.is_number(this.extract_input) === false) {
-        this.$message.error('Chiết suất nhập vào không hợp lệ')
-        return false
-      } else if (this.is_number(this.discount_input) === false) {
-        this.$message.error('Bớt tiền nhập vào không hợp lệ')
-        return false
-      } else if (this.is_number(this.total_input) === false) {
-        this.$message.error('Tổng nhập vào không hợp lệ')
-        return false
-      } else if (this.is_number(this.paid_input) === false) {
-        this.$message.error('Đã thanh toán nhập vào không hợp lệ')
-        return false
-      } else if (this.is_number(this.unpaid_input) === false) {
-        this.$message.error('Còn nợ nhập vào không hợp lệ')
+    async create () {
+      if (this.check_null_before_create() === false) {
+        return
       }
 
-      return true
-    },
-    async create () {
       if (this.validate_number_before_create() === false) {
         return
       }
@@ -227,6 +209,60 @@ export default {
     is_number (input) {
       if (input.length === 0) return true
       return NUMBER_VALIDATOR.test(input)
+    },
+    validate_number_before_create () {
+      if (this.is_number(this.price_input) === false) {
+        this.$message.error('Số tiền nhập vào không hợp lệ')
+        return false
+      } else if (this.is_number(this.extract_input) === false) {
+        this.$message.error('Chiết suất nhập vào không hợp lệ')
+        return false
+      } else if (this.is_number(this.discount_input) === false) {
+        this.$message.error('Bớt tiền nhập vào không hợp lệ')
+        return false
+      } else if (this.is_number(this.total_input) === false) {
+        this.$message.error('Tổng nhập vào không hợp lệ')
+        return false
+      } else if (this.is_number(this.paid_input) === false) {
+        this.$message.error('Đã thanh toán nhập vào không hợp lệ')
+        return false
+      } else if (this.is_number(this.unpaid_input) === false) {
+        this.$message.error('Còn nợ nhập vào không hợp lệ')
+      } else {
+        return true
+      }
+    },
+    check_null_before_create () {
+      if (this.code_input === '') {
+        this.$message.error('Mã giao dịch không được để trống')
+        return false
+      } else if (this.input_product === '') {
+        this.$message.error('Sản phẩm không được để trống')
+        return false
+      } else if (this.input_customer === '') {
+        this.$message.error('Người giao dịch không được để trống')
+        return false
+      } else if (this.input_bank === '') {
+        this.$message.error('Ngân hàng không được để trống')
+        return false
+      } else if (this.input_status === '') {
+        this.$message.error('Trạng thái không được để trống')
+        return false
+      } else if (this.price_input === '') {
+        this.$message.error('Số tiền không được để trống')
+        return false
+      } else if (this.total === '') {
+        this.$message.error('Tổng không được để trống')
+        return false
+      } else if (this.paid_input === '') {
+        this.$message.error('Đã thanh toán không được để trống')
+        return false
+      } else if (this.unpaid_input === '') {
+        this.$message.error('Còn nợ không được để trống')
+        return false
+      } else {
+        return true
+      }
     },
     handleClose (done) {
       this.$confirm('Bạn muốn hủy bỏ việc tạo mới giao dịch ?')

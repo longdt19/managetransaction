@@ -13,38 +13,38 @@
 
       <el-menu-item index="transaction" @click.native="go_to('transaction')">
         <el-tooltip class="item" effect="dark" content="Thống kê chung" placement="right">
-          <i class="el-icon-setting"></i>
+          <img src="../../assets/icon/dashboard.svg" style="width: 30px" />
         </el-tooltip>
         <span>Chi tiết</span>
       </el-menu-item>
 
       <el-menu-item index="banking-accounts" @click.native="go_to('banking-accounts')">
         <el-tooltip class="item" effect="dark" content="Thống kê chi tiết tài khoản ngân hàng" placement="right">
-          <i class="el-icon-setting"></i>
+          <img src="../../assets/icon/bank.svg" style="width: 30px" />
         </el-tooltip>
         <span>Ngân hàng</span>
       </el-menu-item>
 
       <el-menu-item index="customer-accounts" @click.native="go_to('customer-accounts')">
         <el-tooltip class="item" effect="dark" content="Thống kê chi tiết tài khoản khách hàng" placement="right">
-          <i class="el-icon-setting"></i>
+          <img src="../../assets/icon/customer.svg" style="width: 30px" />
         </el-tooltip>
         <span>Khách hàng</span>
       </el-menu-item>
 
       <el-menu-item index="products" @click.native="go_to('products')">
         <el-tooltip class="item" effect="dark" content="Thống kê chi tiết các sản phẩm" placement="right">
-          <i class="el-icon-setting"></i>
+          <img src="../../assets/icon/product.svg" style="width: 30px" />
         </el-tooltip>
         <span>Sản phẩm</span>
       </el-menu-item>
 
-      <el-menu-item-group title="Quản trị">
+      <el-menu-item-group title="Quản trị" style="margin-left: -10px; margin-top: 10px; margin-bottom: 10px">
       </el-menu-item-group>
 
       <el-submenu index="1">
         <template slot="title">
-          <i class="el-icon-setting"></i>
+          <img src="../../assets/icon/category.svg" style="width: 30px" />
           <span>Danh mục</span>
         </template>
         <el-menu-item index="1-1" @click.native="go_to('bank-admin')">Ngân hàng</el-menu-item>
@@ -54,7 +54,7 @@
 
       <el-submenu index="2">
         <template slot="title">
-          <i class="el-icon-setting"></i>
+          <img src="../../assets/icon/user.svg" style="width: 30px" />
           <span>Người dùng</span>
         </template>
         <el-menu-item index="1-4" @click.native="go_to('role-admin')">Quyền hạn</el-menu-item>

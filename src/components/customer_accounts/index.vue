@@ -6,7 +6,10 @@
           <span style="font-size: 24px; margin-bottom: 50px">Thống kê theo tài khoản khách hàng</span>
         </div></el-col>
         <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-          <el-button><i class="el-icon-download" style="margin-right: 10px"></i>Xuất Excel</el-button>
+          <el-button type="warning">
+            <img src="../../assets/icon/download.svg" style="height: 15px" />
+            <span style="margin-left: 5px">Xuất Excel</span>
+          </el-button>
         </div></el-col>
       </el-row>
     </div>

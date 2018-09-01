@@ -6,9 +6,9 @@
           <span style="font-size: 24px; margin-bottom: 50px">Thống kê chi tiết các sản phẩm</span>
         </div></el-col>
         <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-          <el-button type="warning">
+          <el-button style="background-color: #2e7d32">
             <img src="../../assets/icon/download.svg" style="height: 15px" />
-            <span style="margin-left: 5px">Xuất Excel</span>
+            <span style="margin-left: 5px; color: white">Xuất Excel</span>
           </el-button>
         </div></el-col>
       </el-row>

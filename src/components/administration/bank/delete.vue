@@ -13,22 +13,46 @@
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="centerDialogVisible = false">Hủy bỏ</el-button>
-      <el-button type="primary" @click="centerDialogVisible = false">Xác nhận</el-button>
+      <el-button type="primary" @click="delete_bank" :loading="loading">Xác nhận</el-button>
     </span>
   </el-dialog>
 </section>
 </template>
 
 <script>
+import { BANK_URL } from '@/constants/endpoints'
+
 export default {
   data () {
     return {
-      centerDialogVisible: false
+      ids: null,
+      centerDialogVisible: false,
+      loading: false
     }
   },
   methods: {
     open (bank) {
+      this.ids = null
+      this.ids = bank.id
       this.centerDialogVisible = true
+    },
+    async delete_bank () {
+      if (this.loading) return
+      this.loading = true
+
+      const response = await this.$services.do_request('delete', BANK_URL + '/' + this.ids)
+      this.loading = false
+
+      if (response.data.message === 'Success') {
+        this.$message.success('Xóa ngân hàng thành công')
+        this.$emit('bank_deleted')
+        this.centerDialogVisible = false
+      } else if (response.status === 400) {
+        console.log('Bad resquest')
+        this.$message.error('Xóa ngân hàng thất bại')
+      } else {
+        this.$router.push('/e-500')
+      }
     }
   }
 }

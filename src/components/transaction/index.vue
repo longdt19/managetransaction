@@ -10,9 +10,9 @@
         <add-transaction-component ref='add_transaction' @transaction_added="transaction_added"></add-transaction-component>
       </div></el-col>
       <el-col :xs="12" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
-        <el-button style="background-color: black">
+        <el-button style="background-color: #2e7d32">
           <img src="../../assets/icon/download.svg" style="height: 15px" />
-          <span style="margin-left: 5px">Xuất Excel</span>
+          <span style="margin-left: 5px; color: white">Xuất Excel</span>
         </el-button>
       </div></el-col>
     </el-row>

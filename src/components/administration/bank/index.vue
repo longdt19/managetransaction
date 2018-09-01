@@ -189,7 +189,7 @@ export default {
       Object.assign(this.dataTable[bank_index], bank)
     },
     bank_deleted () {
-      console.log('refresh')
+      this.load_bank_list()
     }
   },
   created () {

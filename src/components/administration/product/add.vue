@@ -2,16 +2,19 @@
 <section>
   <el-dialog title="Tạo mới sản phẩm" :visible.sync="dialogFormVisible" width="500px">
     <el-form>
-      <el-form-item label="Tên sản phẩm" :label-width="formLabelWidth">
+      <el-form-item label="Tên sản phẩm(*)" :label-width="formLabelWidth">
         <el-input v-model="name" auto-complete="off"></el-input>
       </el-form-item>
 
-      <el-form-item label="Mã sản phẩm" :label-width="formLabelWidth">
+      <el-form-item label="Mã sản phẩm(*)" :label-width="formLabelWidth">
         <el-input v-model="code" auto-complete="off"></el-input>
       </el-form-item>
 
-      <el-form-item label="Loại sản phẩm" :label-width="formLabelWidth">
-        <el-input v-model="type" auto-complete="off"></el-input>
+      <el-form-item label="Số dư" :label-width="formLabelWidth">
+        <el-input v-model="balance" auto-complete="off"></el-input>
+      </el-form-item>
+      <el-form-item v-if="validate_number(balance) === false" style="text-align: left; margin-top: -20px" label-width="110px">
+        <span style="color: #dc3545!important">* Số dư không hợp lệ</span>
       </el-form-item>
 
     </el-form>
@@ -24,6 +27,8 @@
 </template>
 
 <script>
+import { NUMBER_VALIDATOR } from '@/constants'
+
 import { PRODUCT_URL } from '@/constants/endpoints'
 
 export default {
@@ -31,7 +36,7 @@ export default {
     return {
       name: '',
       code: '',
-      type: '',
+      balance: '',
       formLabelWidth: '120px',
       dialogFormVisible: false,
       loading: false
@@ -42,8 +47,7 @@ export default {
       this.dialogFormVisible = true
     },
     async add () {
-      if (this.name === '' || this.code === '' || this.type === '') {
-        this.$message.error('Các trường không được để trống')
+      if (this.validate_input() === false) {
         return
       }
 
@@ -53,7 +57,7 @@ export default {
       let data = {
         name: this.name,
         code: this.code,
-        type: this.type
+        balance: this.balance
       }
 
       const response = await this.$services.do_request('post', PRODUCT_URL, data)
@@ -69,6 +73,26 @@ export default {
       } else {
         this.$router.push('/e-500')
       }
+    },
+    validate_input () {
+      if (this.validate_number(this.balance) === false) {
+        this.$message.error('Số dư không hợp lệ')
+        return false
+      }
+      if (this.name === '') {
+        this.$message.error('Tên sản phẩm không được để trống')
+        return false
+      }
+      if (this.code === '') {
+        this.$message.error('Mã sản phẩm không được để trống')
+        return false
+      }
+
+      return true
+    },
+    validate_number (number) {
+      if (number === '') return null
+      return NUMBER_VALIDATOR.test(number.trim())
     }
   }
 }

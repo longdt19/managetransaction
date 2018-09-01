@@ -25,24 +25,34 @@ import { CUSTOMER_URL } from '@/constants/endpoints'
 export default {
   data () {
     return {
-      ids: [],
+      ids: null,
       centerDialogVisible: false,
       loading: false
     }
   },
   methods: {
     open (customer) {
-      this.ids = []
-      this.ids.push(customer.id)
+      this.ids = null
+      this.ids = customer.id
       this.centerDialogVisible = true
     },
     async delete_customer () {
       if (this.loading) return
       this.loading = true
 
-      const response = await this.$services.do_request('delete', CUSTOMER_URL, this.ids)
+      const response = await this.$services.do_request('delete', CUSTOMER_URL + '/' + this.ids)
       this.loading = false
-      console.log('response', response)
+
+      if (response.data.message === 'Success') {
+        this.$message.success('Xóa khách hàng thành công')
+        this.$emit('customer_deleted')
+        this.centerDialogVisible = false
+      } else if (response.status === 400) {
+        console.log('Bad resquest')
+        this.$message.error('Xóa khách hàng thất bại')
+      } else {
+        this.$router.push('/e-500')
+      }
     }
   }
 }

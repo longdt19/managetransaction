@@ -2,19 +2,26 @@
 <section>
   <el-dialog title="Sửa thông tin ngân hàng" :visible.sync="dialogFormVisible" width="500px">
     <el-form>
-      <el-form-item label="Tên tài khoản" :label-width="formLabelWidth">
+      <el-form-item label="Tên tài khoản(*)" :label-width="formLabelWidth">
         <el-input v-model="userName" auto-complete="off"></el-input>
       </el-form-item>
 
-      <el-form-item label="Ngân hàng" :label-width="formLabelWidth">
+      <el-form-item label="Ngân hàng(*)" :label-width="formLabelWidth">
         <el-input v-model="bankName" auto-complete="off"></el-input>
       </el-form-item>
 
-      <el-form-item label="Số tài khoản" :label-width="formLabelWidth">
+      <el-form-item label="Số tài khoản(*)" :label-width="formLabelWidth">
         <el-input v-model="accountNumber" auto-complete="off"></el-input>
       </el-form-item>
       <el-form-item v-if="validate_number(accountNumber) === false" style="text-align: left; margin-top: -20px" label-width="110px">
         <span style="color: #dc3545!important">* Số tài khoản không hợp lệ</span>
+      </el-form-item>
+
+      <el-form-item label="Số dư" :label-width="formLabelWidth">
+        <el-input v-model="balance" auto-complete="off"></el-input>
+      </el-form-item>
+      <el-form-item v-if="validate_number(balance) === false" style="text-align: left; margin-top: -20px" label-width="110px">
+        <span style="color: #dc3545!important">* Số dư không hợp lệ</span>
       </el-form-item>
 
       <el-form-item label="Chi nhánh" :label-width="formLabelWidth">
@@ -41,7 +48,7 @@ export default {
       bankName: '',
       accountNumber: '',
       branch: '',
-      balance: null,
+      balance: '',
       formLabelWidth: '120px',
       dialogFormVisible: false,
       bank: {},
@@ -50,8 +57,7 @@ export default {
   },
   methods: {
     validate_number (number) {
-      if (number === '') return null
-      return NUMBER_VALIDATOR.test(number.trim())
+      return NUMBER_VALIDATOR.test(number)
     },
     open (bank) {
       this.userName = bank.userName
@@ -63,13 +69,7 @@ export default {
       this.dialogFormVisible = true
     },
     async edit () {
-      if (this.userName === '' || this.bankName === '' || this.accountNumber === '' || this.branch === '') {
-        this.$message.error('Các trường không được để trống')
-        return
-      }
-
-      if (this.validate_number(this.accountNumber) === false) {
-        this.$message.error('Số tài khoản không hợp lệ')
+      if (this.validate_input() === false) {
         return
       }
 
@@ -102,6 +102,30 @@ export default {
       } else {
         this.$router.push('/e-500')
       }
+    },
+    validate_input () {
+      if (this.userName === '') {
+        this.$message.error('Tên tài khoản không được để trống')
+        return false
+      }
+      if (this.bankName === '') {
+        this.$message.error('Tên ngân hàng không được để trống')
+        return false
+      }
+      if (this.accountNumber === '') {
+        this.$message.error('Số tài khoản không được để trống')
+        return false
+      }
+      if (this.validate_number(this.accountNumber) === false) {
+        this.$message.error('Số tài khoản không hợp lệ')
+        return false
+      }
+      if (this.validate_number(this.balance) === false) {
+        this.$message.error('Số dư không hợp lệ')
+        return false
+      }
+
+      return true
     }
   }
 }

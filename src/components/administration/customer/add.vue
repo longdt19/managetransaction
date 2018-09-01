@@ -1,12 +1,12 @@
 <template>
 <section>
-  <el-dialog title="Tạo mới ngân hàng" :visible.sync="dialogFormVisible" width="500px">
+  <el-dialog title="Tạo mới khách hàng" :visible.sync="dialogFormVisible" width="500px">
     <el-form>
-      <el-form-item label="Tên khách hàng" :label-width="formLabelWidth">
+      <el-form-item label="Tên khách hàng(*)" :label-width="formLabelWidth">
         <el-input v-model="name" auto-complete="off"></el-input>
       </el-form-item>
 
-      <el-form-item label="Tên tài khoản" :label-width="formLabelWidth">
+      <el-form-item label="Tên tài khoản(*)" :label-width="formLabelWidth">
         <el-input v-model="azAccount" auto-complete="off"></el-input>
       </el-form-item>
 
@@ -29,6 +29,17 @@
         <el-input v-model="group" auto-complete="off"></el-input>
       </el-form-item>
 
+      <el-form-item label="Nợ trước" :label-width="formLabelWidth">
+        <el-input v-model="debtBefore" auto-complete="off"></el-input>
+      </el-form-item>
+      <el-form-item v-if="validate_number(debtBefore) === false" style="text-align: left; margin-top: -20px" label-width="110px">
+        <span style="color: #dc3545!important">* Nợ trước không hợp lệ</span>
+      </el-form-item>
+
+      <el-form-item label="Ghi chú" :label-width="formLabelWidth">
+        <el-input type="textarea" v-model="note" auto-complete="off"></el-input>
+      </el-form-item>
+
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">Hủy bỏ</el-button>
@@ -39,7 +50,7 @@
 </template>
 
 <script>
-import { PHONE_VALIDATOR } from '@/constants'
+import { PHONE_VALIDATOR, NUMBER_VALIDATOR } from '@/constants'
 import { CUSTOMER_URL } from '@/constants/endpoints'
 
 export default {
@@ -51,7 +62,9 @@ export default {
       address: '',
       group: '',
       province: '',
-      formLabelWidth: '120px',
+      note: '',
+      debtBefore: '',
+      formLabelWidth: '150px',
       dialogFormVisible: false,
       loading: false
     }
@@ -61,17 +74,15 @@ export default {
       if (phone === '') return null
       return PHONE_VALIDATOR.test(phone.trim())
     },
+    validate_number (number) {
+      if (number === '') return null
+      return NUMBER_VALIDATOR.test(number.trim())
+    },
     open () {
       this.dialogFormVisible = true
     },
     async add () {
-      if (this.name === '' || this.azAccount === '' || this.phone === '' || this.address === '') {
-        this.$message.error('Các trường không được để trống')
-        return
-      }
-
-      if (this.validate_phone(this.phone) === false) {
-        this.$message.error('Số điện thoại không hợp lệ')
+      if (this.validate_input() === false) {
         return
       }
 
@@ -99,6 +110,27 @@ export default {
       } else {
         this.$router.push('/e-500')
       }
+    },
+    validate_input () {
+      if (this.name === '') {
+        this.$message.error('Tên khách hàng không được để trống')
+        return false
+      }
+      if (this.azAccount === '') {
+        this.$message.error('Tên tài khoản không được để trống')
+        return false
+      }
+
+      if (this.validate_phone(this.phone) === false) {
+        this.$message.error('Số điện thoại không hợp lệ')
+        return false
+      }
+
+      if (this.validate_number(this.debtBefore) === false) {
+        this.$message.error('Nợ trước không hợp lệ')
+        return false
+      }
+      return true
     }
   }
 }

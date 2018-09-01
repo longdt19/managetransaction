@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { ROLE_NAVIGATION_URL } from '@/constants/endpoints'
+import { ROLE_NAVIGATION_URL, BASE } from '@/constants/endpoints'
 
 export default {
   data () {
@@ -108,7 +108,7 @@ export default {
       if (this.loading) return
       this.loading = true
 
-      const URL = `/api/az/mngt/roles/${this.role.id}/navigations`
+      const URL = BASE + `/api/az/mngt/roles/${this.role.id}/navigations`
       const response = await this.$services.do_request('get', URL)
       this.loading = false
       console.log('rseponse', response)

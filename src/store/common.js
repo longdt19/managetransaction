@@ -5,7 +5,8 @@ const INIT_STATE = {
   transaction_category_list: [],
   customer_list: [],
   token: null,
-  constants_loaded: null
+  constants_loaded: null,
+  username: null
 }
 
 export default {
@@ -28,7 +29,10 @@ export default {
     },
     constants_loaded: (state, value) => {
       state.constants_loaded = value
-    }
+    },
+    username: (state, value) => new Promise(function(resolve, reject) {
+      state.username = value
+    })
   },
   actions: {},
   getters: {
@@ -37,6 +41,7 @@ export default {
     bank_list: state => state.bank_list,
     transaction_category_list: state => state.transaction_category_list,
     customer_list: state => state.customer_list,
-    constants_loaded: state => state.constants_loaded
+    constants_loaded: state => state.constants_loaded,
+    username: state => state.username
   }
 }

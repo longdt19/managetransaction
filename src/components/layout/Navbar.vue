@@ -9,7 +9,7 @@
       </div></el-col>
       <el-col :span="12">
         <div class="grid-content bg-purple-light" style="text-align: right; margin-right: 20px">
-          <span>longdt.19@gmail.com</span>
+          <span style="font-size: 20px; margin-right: 20px">{{common_data.username}}</span>
           <el-dropdown  trigger="click">
             <el-button  size="small">
               <i class="el-icon-arrow-down el-icon--right"></i>
@@ -20,7 +20,7 @@
 
               </el-dropdown-item>
               <el-dropdown-item>
-                <el-button type="text" @click="dialogLogout = true" @click.native="logout">Đăng xuất</el-button>
+                <el-button type="text" @click="dialogLogout = true">Đăng xuất</el-button>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -29,10 +29,10 @@
     </el-row>
   </el-menu>
 
-  <el-dialog title="Đổi mật khẩu" :visible.sync="dialogChangePass">
+  <el-dialog title="Đổi mật khẩu" :visible.sync="dialogChangePass" width="400px">
     <el-form>
       <el-form-item label="Mật khẩu cũ" label-width="120px">
-        <el-input type="password" auto-complete="off"></el-input>
+        <el-input type="password" auto-complete="off" v-model="old_pass"></el-input>
       </el-form-item>
 
       <el-form-item label="Mật khẩu mới" label-width="120px">
@@ -50,7 +50,14 @@
 
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogChangePass = false">Hủy bỏ</el-button>
-      <el-button type="primary" @click="dialogChangePass = false" :disabled="check_change_pass(new_pass1, new_pass2) !== true">Xác nhận</el-button>
+      <el-button
+        type="primary"
+        :disabled="check_change_pass(new_pass1, new_pass2) !== true"
+        @click="change_pass"
+        :loading="loading"
+      >
+        Xác nhận
+      </el-button>
     </span>
   </el-dialog>
 
@@ -62,7 +69,7 @@
     <span>Bạn có muốn tiếp tục đăng xuất ?</span>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogLogout = false">Hủy bỏ</el-button>
-      <el-button type="primary" @click="dialogLogout = false">Xác nhận</el-button>
+      <el-button type="primary" @click="logout">Xác nhận</el-button>
     </span>
   </el-dialog>
 </section>
@@ -70,6 +77,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+
+import { CHANGE_PASS_URL } from '@/constants/endpoints'
 
 export default {
   components: { },
@@ -87,10 +96,52 @@ export default {
       old_pass: '',
       new_pass1: '',
       new_pass2: '',
-      dialogLogout: false
+      dialogLogout: false,
+      loading: false
     }
   },
   methods: {
+    async change_pass () {
+      if (this.new_pass1 === '' || this.new_pass2 === '') {
+        this.$message.error('Mật khẩu tạo mới không để trống')
+        return
+      }
+
+      if (this.new_pass1.length !== 0 && this.new_pass2.length !== 0 && this.new_pass1 !== this.new_pass2) {
+        this.$message.error('Mật khẩu tạo mới không trùng khớp')
+        return
+      }
+
+      if (this.old_pass.length < 6 || this.new_pass1.length < 6 || this.new_pass2.length < 6) {
+        this.$message.error('Mật khẩu ít nhất 6 ký tự')
+        return
+      }
+
+      if (this.loading) return
+      this.loading = true
+
+      const data = {
+        'password': this.old_pass,
+        'newPassword': this.new_pass1,
+        'confirmPassword': this.new_pass2
+      }
+
+      const response = await this.$services.do_request('put', CHANGE_PASS_URL, data)
+      this.loading = false
+
+      if (response.data.message === 'Success') {
+        this.$message.success('Cập nhật thành công')
+        this.dialogChangePass = false
+        this.old_pass = ''
+        this.new_pass1 = ''
+        this.new_pass2 = ''
+      } else if (response.status === 400) {
+        console.log('Bad resquest')
+        this.$message.error('Cập nhật thất bại')
+      } else {
+        this.$router.push('/e-500')
+      }
+    },
     logout () {
       this.$router.push('/login')
     },

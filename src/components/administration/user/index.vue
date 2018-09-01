@@ -137,6 +137,7 @@ export default {
           id: role.id
         }
       }
+      console.log('dta', data)
       const response = await this.$services.do_request('put', USER_URL, data)
       this.loading_btn = false
 

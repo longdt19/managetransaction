@@ -50,9 +50,9 @@
       </template>
     </el-table-column>
 
-    <el-table-column label="Loại sản phẩm" header-align="center" align="center">
+    <el-table-column label="Số dư" header-align="center" align="center">
       <template slot-scope="scope">
-        {{scope.row.type}}
+        {{scope.row.balance}}
       </template>
     </el-table-column>
 

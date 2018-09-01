@@ -3,6 +3,9 @@ export default function formatNumber (number) {
     return 0
   } else if (number) {
     let str = number.toString()
+    if (str.startsWith('0')) {
+      str = str.replace('0', '')
+    }
     let new_str = ''
     let i
     let index = 0
@@ -14,6 +17,7 @@ export default function formatNumber (number) {
       new_str = str[i] + new_str
       index += 1
     }
+
     return new_str
   } else {
     return ''

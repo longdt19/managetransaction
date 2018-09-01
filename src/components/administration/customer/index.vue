@@ -65,7 +65,7 @@
     <el-table-column label="Địa chỉ" header-align="center" align="center">
       <template slot-scope="scope">
         <el-tooltip :content="scope.row.address" placement="top">
-          <span style="font-size: 10px">{{scope.row.province}}</span>
+          <span>{{scope.row.province}}</span>
         </el-tooltip>
       </template>
     </el-table-column>
@@ -84,7 +84,7 @@
 
     <el-table-column label="Ghi chú" header-align="center" align="center">
       <template slot-scope="scope">
-        {{scope.row.note}}
+        <span style="font-size: 10px">{{scope.row.note}}</span>
       </template>
     </el-table-column>
 
@@ -208,7 +208,7 @@ export default {
       this.loading_customer_list()
     },
     customer_deleted () {
-      console.log('refresh')
+      this.loading_customer_list()
     }
   },
   created () {

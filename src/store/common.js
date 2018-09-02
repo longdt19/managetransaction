@@ -6,7 +6,18 @@ const INIT_STATE = {
   customer_list: [],
   token: null,
   constants_loaded: null,
-  username: null
+  username: null,
+  navigation: {
+    'CAT_BANK': {},
+    'CAT_CUSTOMER': {},
+    'CAT_PRODUCT': {},
+    'TRANSACTION': {},
+    'AD_ROLE': {},
+    'AD_USER': {},
+    'STA_BANK': {},
+    'STA_CUSTOMER': {},
+    'STA_PRODUCT': {}
+  }
 }
 
 export default {
@@ -30,9 +41,27 @@ export default {
     constants_loaded: (state, value) => {
       state.constants_loaded = value
     },
-    username: (state, value) => new Promise(function(resolve, reject) {
+    username: (state, value) => {
       state.username = value
-    })
+    },
+    navigation: (state, value) => {
+      value.forEach(item => {
+        state.navigation[item.navigation.code] = item
+      })
+    },
+    restore_navigation: (state) => {
+      state.navigation = {
+        'CAT_BANK': {},
+        'CAT_CUSTOMER': {},
+        'CAT_PRODUCT': {},
+        'TRANSACTION': {},
+        'AD_ROLE': {},
+        'AD_USER': {},
+        'STA_BANK': {},
+        'STA_CUSTOMER': {},
+        'STA_PRODUCT': {}
+      }
+    }
   },
   actions: {},
   getters: {
@@ -42,6 +71,7 @@ export default {
     transaction_category_list: state => state.transaction_category_list,
     customer_list: state => state.customer_list,
     constants_loaded: state => state.constants_loaded,
-    username: state => state.username
+    username: state => state.username,
+    navigation: state => state.navigation
   }
 }

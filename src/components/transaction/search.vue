@@ -8,7 +8,7 @@
     </div></el-col>
     <el-col :xs="24" :sm="6" :md="6"><div class="grid-content bg-purple">
       <div class="group" v-loading="$parent.bank.loading" element-loading-spinner="el-icon-loading">
-        <el-select v-model="input_bank" placeholder="Chọn ngân hàng" filterable clearable>
+        <el-select v-model="input_bank" placeholder="Chọn ngân hàng" filterable clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0">
           <el-option
             v-for="item in $parent.bank.list"
             :key="item.id"
@@ -24,7 +24,7 @@
 
     <el-col :xs="24" :sm="6" :md="6"><div class="grid-content bg-purple-light">
       <div class="group" v-loading="$parent.product.loading" element-loading-spinner="el-icon-loading">
-        <el-select v-model="input_product" filterable placeholder="Chọn sản phẩm" clearable>
+        <el-select v-model="input_product" filterable placeholder="Chọn sản phẩm" clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0">
           <el-option
             v-for="item in $parent.product.list"
             :key="item.id"
@@ -38,7 +38,7 @@
 
     <el-col :xs="24" :sm="6" :md="6"><div class="grid-content bg-purple">
       <div class="group" v-loading="$parent.customer.loading" element-loading-spinner="el-icon-loading">
-        <el-select v-model="input_customer" placeholder="Chọn khách hàng" filterable clearable>
+        <el-select v-model="input_customer" placeholder="Chọn khách hàng" filterable clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0">
           <el-option
             v-for="item in $parent.customer.list"
             :key="item.id"
@@ -54,7 +54,7 @@
 
     <el-col :xs="24" :sm="2" :md="3"><div class="grid-content bg-purple" style="">
       <div class="group">
-        <el-button slot="append" icon="el-icon-search" @click.native="search"></el-button>
+        <el-button slot="append" icon="el-icon-search" @click.native="search" :disabled="common_data.navigation.TRANSACTION.getMethod === 0"></el-button>
       </div>
     </div></el-col>
   </el-row>
@@ -103,16 +103,17 @@ export default {
           'fromDate': this.$parent.from_date,
           'toDate': this.$parent.to_date
         },
-        size: 10,
-        page: 0
+        size: this.$parent.pagination.per_page,
+        page: this.$parent.pagination.page - 1
       }
 
       const response = await this.$services.do_request('get', TRANSACTION_URL, data)
       this.$parent.transaction.loading = false
-      console.log('response', response)
       if (response.data.data) {
         this.$parent.transaction.list = response.data.data.data.content
         this.$parent.statistic = response.data.data.statistic
+        this.$parent.pagination.totalElement = response.data.data.data.totalElements
+        this.$parent.pagination.totalPage = response.data.data.data.totalPages
       } else {
         this.$router.push('/e-500')
       }

@@ -79,7 +79,7 @@ export default {
           id: this.role_id
         }
       }
-
+      console.log('data', data)
       const response = await this.$services.do_request('post', USER_URL, data)
       this.loading = false
 

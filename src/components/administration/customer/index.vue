@@ -6,7 +6,10 @@
         <span style="font-size: 24px; margin-bottom: 50px">Danh sách khách hàng</span>
       </div></el-col>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-        <el-button @click.native="open_add" type="primary"><i class="el-icon-plus" style="margin-right: 10px" />Thêm mới</el-button>
+        <el-button @click.native="open_add" type="primary" :disabled="common_data.navigation.STA_CUSTOMER.postMethod === 0">
+          <i class="el-icon-plus" style="margin-right: 10px" />
+          Thêm mới
+        </el-button>
       </div></el-col>
     </el-row>
   </div>
@@ -131,8 +134,8 @@ export default {
     return {
       dataTable: [],
       pagination: {
-        totalPage: 5,
-        totalElement: 10,
+        totalPage: null,
+        totalElement: null,
         page: 1,
         per_page: 10,
         list: [10, 20, 30]
@@ -142,10 +145,14 @@ export default {
   },
   watch: {
     'pagination.per_page' (val) {
-      this.loading_customer_list()
+      if (common_data.navigation.STA_CUSTOMER.getMethod === 1) {
+        this.loading_customer_list()
+      }
     },
     'pagination.page' (val) {
-      this.loading_customer_list()
+      if (common_data.navigation.STA_CUSTOMER.getMethod === 1) {
+        this.loading_customer_list()
+      }
     }
   },
   methods: {
@@ -212,7 +219,9 @@ export default {
     }
   },
   created () {
-    this.loading_customer_list()
+    if (common_data.navigation.STA_CUSTOMER.getMethod === 1) {
+      this.loading_customer_list()
+    }
   }
 }
 </script>

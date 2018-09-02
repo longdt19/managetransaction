@@ -1,6 +1,9 @@
 <template lang="html">
 <section style="text-align: left">
-  <el-button @click="dialogVisible = true" type="primary"><i class="el-icon-plus" style="margin-right: 10px" />Thêm mới giao dịch</el-button>
+  <el-button @click="dialogVisible = true" type="primary"  :disabled="common_data.navigation.TRANSACTION.postMethod === 0">
+    <i class="el-icon-plus" style="margin-right: 10px" />
+    Thêm mới giao dịch
+  </el-button>
 
   <el-dialog
     title="Tạo mới giao dịch"

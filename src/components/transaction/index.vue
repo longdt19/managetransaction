@@ -10,7 +10,7 @@
         <add-transaction-component ref='add_transaction' @transaction_added="transaction_added"></add-transaction-component>
       </div></el-col>
       <el-col :xs="12" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
-        <el-button style="background-color: #2e7d32">
+        <el-button style="background-color: #2e7d32" :disabled="common_data.navigation.TRANSACTION.getMethod === 0">
           <img src="../../assets/icon/download.svg" style="height: 15px" />
           <span style="margin-left: 5px; color: white">Xuất Excel</span>
         </el-button>
@@ -26,6 +26,7 @@
             v-model="from_date"
             type="date"
             value-format="dd-MM-yyyy"
+            :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
           >
           </el-date-picker>
         </div></el-col>
@@ -35,6 +36,7 @@
             v-model="to_date"
             type="date"
             value-format="dd-MM-yyyy"
+            :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
           >
           </el-date-picker>
         </div></el-col>
@@ -411,11 +413,12 @@ export default {
   },
   created () {
     // Đợi giáo sư fix server. Địt mẹ GS
-
-    this.load_bank_list()
-    this.load_customer_list()
-    this.load_product_list()
-    this.load_transaction_list()
+    if (common_data.navigation.TRANSACTION.getMethod === 1) {
+      this.load_bank_list()
+      this.load_customer_list()
+      this.load_product_list()
+      this.load_transaction_list()
+    }
   }
 }
 </script>

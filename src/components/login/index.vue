@@ -38,11 +38,12 @@ export default {
 
       this.loading = true
 
-      let formData = new FormData()
-      formData.append('username', this.username)
-      formData.append('password', this.password)
+      const data = {
+        username: this.username,
+        password: this.password
+      }
 
-      const response = await this.$services.do_request('post', LOGIN_URL, formData)
+      const response = await this.$services.do_request('post', LOGIN_URL, data)
       console.log('response login', response)
       this.loading = false
 
@@ -51,6 +52,8 @@ export default {
         this.$store.commit('Common/tokenLoaded', token)
         const username = response.data.data.username
         this.$store.commit('Common/username', username)
+        const navigation = response.data.data.listRoleNavigation
+        this.$store.commit('Common/navigation', navigation)
         this.$router.push('/')
       } else if (response.data.code === 401) {
         this.$message.error('Tài khoản không đúng')
@@ -61,6 +64,7 @@ export default {
   },
   created () {
     this.$store.commit('Common/tokenLoaded', null)
+    this.$store.commit('Common/restore_navigation')
   }
 }
 </script>

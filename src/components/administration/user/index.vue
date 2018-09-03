@@ -6,7 +6,9 @@
         <span style="font-size: 24px; margin-bottom: 50px">Danh sách người dùng</span>
       </div></el-col>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-        <el-button @click="open_add_user">Thêm mới</el-button>
+        <el-button @click="open_add_user" :disabled="common_data.navigation.AD_USER.postMethod === 0">
+          Thêm mới
+        </el-button>
       </div></el-col>
     </el-row>
   </div>
@@ -52,7 +54,7 @@
               v-for="item in role_list"
               :key="item.id"
               @click.native="update_role(scope.row, item)"
-              :disabled="scope.row.id === 1 && item.id === 1"
+              :disabled="scope.row.id === 1 || common_data.navigation.AD_USER.putMethod === 0"
             >
               {{item.code}}
             </el-dropdown-item>
@@ -115,15 +117,23 @@ export default {
   },
   watch: {
     'pagination.per_page' (val) {
-      this.load_user_list()
+      if (this.common_data.navigation.AD_USER.getMethod === 1) {
+        this.load_user_list()
+      }
     },
     'pagination.page' (val) {
-      this.load_user_list()
+      if (this.common_data.navigation.AD_USER.getMethod === 1) {
+        this.load_user_list()
+      }
     }
   },
   methods: {
     converseTime,
     async update_role (user, role) {
+      if (this.common_data.navigation.AD_USER.putMethod === 0) {
+        return
+      }
+
       if (user.id === 1 && role.id === 1) {
         this.$message.error('Cập nhật quyền hạn thất bại')
         return
@@ -137,7 +147,7 @@ export default {
           id: role.id
         }
       }
-      console.log('dta', data)
+
       const response = await this.$services.do_request('put', USER_URL, data)
       this.loading_btn = false
 
@@ -216,7 +226,9 @@ export default {
     }
   },
   created () {
-    this.load_user_list()
+    if (this.common_data.navigation.AD_USER.getMethod === 1) {
+      this.load_user_list()
+    }
   }
 }
 </script>

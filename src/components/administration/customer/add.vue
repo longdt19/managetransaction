@@ -82,6 +82,10 @@ export default {
       this.dialogFormVisible = true
     },
     async add () {
+      if (this.common_data.navigation.STA_CUSTOMER.postMethod === 0) {
+        return
+      }
+
       if (this.validate_input() === false) {
         return
       }

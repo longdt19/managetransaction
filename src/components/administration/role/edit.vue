@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="Bảng phân quyền chức năng" :visible.sync="dialogTableVisible">
+  <el-dialog title="Bảng phân quyền chức năng" :visible.sync="dialogTableVisible" width="850px">
     <el-table :data="dataTable" v-loading="loading">
       <el-table-column label="Tên" header-align="center" align="center">
         <template slot-scope="scope">
@@ -65,6 +65,10 @@ export default {
   },
   methods: {
     async update (row) {
+      if (this.common_data.navigation.AD_ROLE.putMethod === 0) {
+        return
+      }
+
       if (this.loading_btn) return
       this.loading_btn = true
 
@@ -98,7 +102,6 @@ export default {
     },
     open (role) {
       this.role = role
-      console.log('role', this.role)
       this.dialogTableVisible = true
       if (this.role) {
         this.load_role()
@@ -111,7 +114,6 @@ export default {
       const URL = BASE + `/api/az/mngt/roles/${this.role.id}/navigations`
       const response = await this.$services.do_request('get', URL)
       this.loading = false
-      console.log('rseponse', response)
 
       if (response.data.message === 'Success') {
         this.dataTable = response.data.data
@@ -122,7 +124,6 @@ export default {
           item.deleteMethod = this.converse_method(item.deleteMethod)
           item.status = this.converse_method(item.status)
         })
-        console.log('table', this.dataTable)
       } else if (response.status === 400) {
         console.log('Bad request')
       } else {

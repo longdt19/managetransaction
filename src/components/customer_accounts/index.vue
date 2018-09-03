@@ -6,7 +6,7 @@
           <span style="font-size: 24px; margin-bottom: 50px">Thống kê theo tài khoản khách hàng</span>
         </div></el-col>
         <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-          <el-button style="background-color: #2e7d32" :disabled="common_data.navigation.CAT_CUSTOMER.getMethod === 0">
+          <el-button style="background-color: #2e7d32" :disabled="common_data.navigation.STA_CUSTOMER.getMethod === 0">
             <img src="../../assets/icon/download.svg" style="height: 15px" />
             <span style="margin-left: 5px; color: white">Xuất Excel</span>
           </el-button>
@@ -22,7 +22,7 @@
               v-model="from_date"
               type="date"
               value-format="dd-MM-yyyy"
-              :disabled="common_data.navigation.CAT_CUSTOMER.getMethod === 0"
+              :disabled="common_data.navigation.STA_CUSTOMER.getMethod === 0"
             >
             </el-date-picker>
           </div></el-col>
@@ -32,12 +32,12 @@
               v-model="to_date"
               type="date"
               value-format="dd-MM-yyyy"
-              :disabled="common_data.navigation.CAT_CUSTOMER.getMethod === 0"
+              :disabled="common_data.navigation.STA_CUSTOMER.getMethod === 0"
               >
             </el-date-picker>
           </div></el-col>
           <el-col :xs="24" :md="4"><div class="grid-content bg-purple-light">
-            <el-button slot="append" icon="el-icon-search" @click.native="search_customer" :disabled="common_data.navigation.CAT_CUSTOMER.getMethod === 0"></el-button>
+            <el-button slot="append" icon="el-icon-search" @click.native="search_customer" :disabled="common_data.navigation.STA_CUSTOMER.getMethod === 0"></el-button>
           </div></el-col>
         </el-row>
       </div></el-col>
@@ -53,7 +53,7 @@
 
           <el-col :span="8"><div class="grid-content bg-purple-light">
             <span style="font-size: 15px;">Nợ:</span>
-            <el-tag type="danger" v-if="statistic.owed">
+            <el-tag type="danger" v-if="statistic.owed">tinbank
               <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.owed)}}</span>
             </el-tag>
           </div></el-col>
@@ -198,7 +198,9 @@
         </el-table-column> -->
       </el-table>
     </div>
-    <div class="block" style="margin-top: 30px; text-align: right">
+    <div class="block" style="margin-top: 30px; text-align: right"
+      v-if="this.common_data.navigation.STA_CUSTOMER.getMethod === 1"
+    >
       <el-pagination
         layout="prev, pager, next"
         :page-count="pagination.totalPage"
@@ -237,10 +239,14 @@ export default {
   },
   watch: {
     'pagination.per_page' (val) {
-      this.search_customer()
+      if (this.common_data.navigation.STA_CUSTOMER.getMethod === 1) {
+        this.search_customer()
+      }
     },
     'pagination.page' (val) {
-      this.search_customer()
+      if (this.common_data.navigation.STA_CUSTOMER.getMethod === 1) {
+        this.search_customer()
+      }
     }
   },
   methods: {
@@ -258,6 +264,10 @@ export default {
       this.pagination.page = val
     },
     async search_customer () {
+      if (this.common_data.navigation.STA_CUSTOMER.getMethod === 0) {
+        return
+      }
+
       if (this.from_date === '' || this.to_date === '') {
         this.$message.error('Trường tìm kiếm không được để trống')
         return
@@ -284,7 +294,6 @@ export default {
 
       const response = await this.$services.do_request('get', CUSTOMER_STATISTIC_URL, data)
       this.loading = false
-      console.log('response', response)
       if (response.data.data) {
         this.customer_list = response.data.data.data.content
         this.total = response.data.data.totalElements

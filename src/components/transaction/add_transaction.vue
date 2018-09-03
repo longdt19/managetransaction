@@ -163,6 +163,9 @@ export default {
   },
   methods: {
     async create () {
+      if (this.common_data.navigation.TRANSACTION.getMethod === 0) {
+        return
+      }
       if (this.check_null_before_create() === false) {
         return
       }

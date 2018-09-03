@@ -63,6 +63,9 @@ export default {
       this.dialogFormVisible = true
     },
     async add () {
+      if (this.common_data.navigation.CAT_BANK.postMethod === 0) {
+        return
+      }
       if (this.validate_input() === false) {
         return
       }

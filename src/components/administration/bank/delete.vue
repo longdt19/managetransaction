@@ -37,6 +37,9 @@ export default {
       this.centerDialogVisible = true
     },
     async delete_bank () {
+      if (this.common_data.navigation.CAT_BANK.deleteMethod === 0) {
+        return
+      }
       if (this.loading) return
       this.loading = true
 

@@ -230,7 +230,9 @@
     </el-table-column>
 
   </el-table>
-  <div class="block" style="margin-top: 30px; text-align: right" align="center">
+  <div class="block" style="margin-top: 30px; text-align: right" align="center"
+    v-if="this.common_data.navigation.TRANSACTION.getMethod === 1"
+  >
     <el-pagination
       layout="prev, pager, next"
       :page-count="pagination.totalPage"
@@ -299,10 +301,14 @@ export default {
   },
   watch: {
     'pagination.per_page' (val) {
-      this.load_transaction_list()
+      if (this.common_data.navigation.TRANSACTION.getMethod === 1) {
+        this.load_transaction_list()
+      }
     },
     'pagination.page' (val) {
-      this.load_transaction_list()
+      if (this.common_data.navigation.TRANSACTION.getMethod === 1) {
+        this.load_transaction_list()
+      }
     }
   },
   methods: {
@@ -332,7 +338,6 @@ export default {
     },
     prev_page () {
       if (this.pagination.page === 1) return
-
       this.pagination.page = this.pagination.page - 1
     },
     next_page () {
@@ -343,6 +348,10 @@ export default {
       this.pagination.page = val
     },
     async load_transaction_list () {
+      if (this.common_data.navigation.TRANSACTION.getMethod === 0) {
+        return
+      }
+
       if (this.transaction.loading) return
       this.transaction.loading = true
 
@@ -368,6 +377,10 @@ export default {
       }
     },
     async load_bank_list () {
+      if (this.common_data.navigation.TRANSACTION.getMethod === 0) {
+        return
+      }
+
       if (this.bank.loading) return
       this.bank.loading = true
       const response = await this.$services.do_request('get', BANK_LIST_URL)
@@ -380,6 +393,10 @@ export default {
       }
     },
     async load_customer_list () {
+      if (this.common_data.navigation.TRANSACTION.getMethod === 0) {
+        return
+      }
+
       if (this.customer.loading) return
 
       this.customer.loading = true
@@ -394,6 +411,10 @@ export default {
       }
     },
     async load_product_list () {
+      if (this.common_data.navigation.TRANSACTION.getMethod === 0) {
+        return
+      }
+
       if (this.product.loading) return
 
       this.product.loading = true
@@ -413,7 +434,7 @@ export default {
   },
   created () {
     // Đợi giáo sư fix server. Địt mẹ GS
-    if (common_data.navigation.TRANSACTION.getMethod === 1) {
+    if (this.common_data.navigation.TRANSACTION.getMethod === 1) {
       this.load_bank_list()
       this.load_customer_list()
       this.load_product_list()

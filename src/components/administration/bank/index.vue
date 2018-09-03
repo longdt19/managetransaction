@@ -6,7 +6,10 @@
         <span style="font-size: 24px; margin-bottom: 50px">Danh sách ngân hàng</span>
       </div></el-col>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-        <el-button @click.native="open_add" type="primary"><i class="el-icon-plus" style="margin-right: 10px" />Thêm mới</el-button>
+        <el-button @click.native="open_add" type="primary" :disabled="common_data.navigation.CAT_BANK.postMethod === 0">
+          <i class="el-icon-plus" style="margin-right: 10px" />
+          Thêm mới
+        </el-button>
       </div></el-col>
     </el-row>
   </div>
@@ -76,13 +79,23 @@
 
     <el-table-column label="Thao tác" header-align="center" align="center">
       <template slot-scope="scope">
-          <el-button size="mini" @click="open_edit(scope.row)">Sửa</el-button>
-          <el-button size="mini" type="danger" @click="open_delete(scope.row)">Xóa</el-button>
+          <el-button size="mini" @click="open_edit(scope.row)"
+            :disabled="common_data.navigation.CAT_BANK.putMethod === 0"
+          >
+            Sửa
+          </el-button>
+          <el-button size="mini" type="danger" @click="open_delete(scope.row)"
+            :disabled="common_data.navigation.CAT_BANK.deleteMethod === 0"
+          >
+            Xóa
+          </el-button>
         </template>
     </el-table-column>
   </el-table>
 
-  <div class="block" style="margin-top: 30px; text-align: right">
+  <div class="block" style="margin-top: 30px; text-align: right"
+    v-if="this.common_data.navigation.CAT_BANK.getMethod === 1"
+  >
     <el-pagination
       layout="prev, pager, next"
       :page-count="pagination.totalPage"
@@ -127,16 +140,24 @@ export default {
   },
   watch: {
     'pagination.per_page' (val) {
-      this.load_bank_list()
+      if (this.common_data.navigation.CAT_BANK.getMethod === 1) {
+        this.load_bank_list()
+      }
     },
     'pagination.page' (val) {
-      this.load_bank_list()
+      if (this.common_data.navigation.CAT_BANK.getMethod === 1) {
+        this.load_bank_list()
+      }
     }
   },
   methods: {
     converseTime,
     formatNumber,
     async load_bank_list () {
+      if (this.common_data.navigation.CAT_BANK.getMethod === 0) {
+        return
+      }
+
       if (this.loading) return
       this.loading = true
 
@@ -150,7 +171,6 @@ export default {
       }
 
       const response = await this.$services.do_request('get', BANK_URL, data)
-      console.log('reswp', response)
       this.loading = false
 
       if (response.data.data.content) {
@@ -193,7 +213,9 @@ export default {
     }
   },
   created () {
-    this.load_bank_list()
+    if (this.common_data.navigation.CAT_BANK.getMethod === 1) {
+      this.load_bank_list()
+    }
   }
 }
 </script>

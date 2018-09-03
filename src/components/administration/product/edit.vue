@@ -47,6 +47,10 @@ export default {
       this.dialogFormVisible = true
     },
     async edit () {
+      if (this.common_data.navigation.STA_PRODUCT.putMethod === 0) {
+        return
+      }
+
       if (this.name === '' || this.code === '' || this.type === '') {
         this.$message.error('Các trường không được để trống')
         return

@@ -74,6 +74,9 @@ export default {
   },
   methods: {
     async search () {
+      if (this.common_data.navigation.TRANSACTION.getMethod === 0) {
+        return
+      }
       if (this.$parent.from_date > this.$parent.to_date) {
         this.$message.error('Vui lòng nhập lại ngày thống kê')
         return

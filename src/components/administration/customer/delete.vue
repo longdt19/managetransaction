@@ -37,6 +37,9 @@ export default {
       this.centerDialogVisible = true
     },
     async delete_customer () {
+      if (this.common_data.navigation.STA_CUSTOMER.deleteMethod === 0) {
+        return
+      }
       if (this.loading) return
       this.loading = true
 

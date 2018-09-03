@@ -69,6 +69,9 @@ export default {
       this.dialogFormVisible = true
     },
     async edit () {
+      if (this.common_data.navigation.CAT_BANK.putMethod === 0) {
+        return
+      }
       if (this.validate_input() === false) {
         return
       }

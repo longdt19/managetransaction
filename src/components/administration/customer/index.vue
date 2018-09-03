@@ -93,13 +93,23 @@
 
     <el-table-column label="Thao tác" header-align="center" align="center">
       <template slot-scope="scope">
-          <el-button size="mini" @click="open_edit(scope.row)">Sửa</el-button>
-          <el-button size="mini" type="danger" @click="open_delete(scope.row)">Xóa</el-button>
+          <el-button size="mini" @click="open_edit(scope.row)"
+            :disabled="common_data.navigation.STA_CUSTOMER.putMethod === 0"
+          >
+            Sửa
+          </el-button>
+          <el-button size="mini" type="danger" @click="open_delete(scope.row)"
+            :disabled="common_data.navigation.STA_CUSTOMER.deleteMethod === 0"
+          >
+            Xóa
+          </el-button>
         </template>
     </el-table-column>
   </el-table>
 
-  <div class="block" style="margin-top: 30px; text-align: right">
+  <div class="block" style="margin-top: 30px; text-align: right"
+    v-if="common_data.navigation.STA_CUSTOMER.getMethod === 1"
+  >
     <el-pagination
       layout="prev, pager, next"
       :page-count="pagination.totalPage"
@@ -145,12 +155,12 @@ export default {
   },
   watch: {
     'pagination.per_page' (val) {
-      if (common_data.navigation.STA_CUSTOMER.getMethod === 1) {
+      if (this.common_data.navigation.STA_CUSTOMER.getMethod === 1) {
         this.loading_customer_list()
       }
     },
     'pagination.page' (val) {
-      if (common_data.navigation.STA_CUSTOMER.getMethod === 1) {
+      if (this.common_data.navigation.STA_CUSTOMER.getMethod === 1) {
         this.loading_customer_list()
       }
     }
@@ -219,7 +229,7 @@ export default {
     }
   },
   created () {
-    if (common_data.navigation.STA_CUSTOMER.getMethod === 1) {
+    if (this.common_data.navigation.STA_CUSTOMER.getMethod === 1) {
       this.loading_customer_list()
     }
   }

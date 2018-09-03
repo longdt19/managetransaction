@@ -6,7 +6,7 @@
           <span style="font-size: 24px; margin-bottom: 50px">Thống kê chi tiết ngân hàng</span>
         </div></el-col>
         <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-          <el-button style="background-color: #2e7d32" :disabled="common_data.navigation.CAT_BANK.getMethod === 0">
+          <el-button style="background-color: #2e7d32" :disabled="common_data.navigation.STA_BANK.getMethod === 0">
             <img src="../../assets/icon/download.svg" style="height: 15px" />
             <span style="margin-left: 5px; color: white">Xuất Excel</span>
           </el-button>
@@ -22,7 +22,7 @@
               v-model="from_date"
               type="date"
               value-format="dd-MM-yyyy"
-              :disabled="common_data.navigation.CAT_BANK.getMethod === 0"
+              :disabled="common_data.navigation.STA_BANK.getMethod === 0"
             >
             </el-date-picker>
           </div></el-col>
@@ -32,12 +32,12 @@
               v-model="to_date"
               type="date"
               value-format="dd-MM-yyyy"
-              :disabled="common_data.navigation.CAT_BANK.getMethod === 0"
+              :disabled="common_data.navigation.STA_BANK.getMethod === 0"
               >
             </el-date-picker>
           </div></el-col>
           <el-col :xs="24" :md="4"><div class="grid-content bg-purple-light">
-            <el-button slot="append" icon="el-icon-search" @click.native="search_bank" :disabled="common_data.navigation.CAT_BANK.getMethod === 0"></el-button>
+            <el-button slot="append" icon="el-icon-search" @click.native="search_bank" :disabled="common_data.navigation.STA_BANK.getMethod === 0"></el-button>
           </div></el-col>
         </el-row>
       </div></el-col>
@@ -182,7 +182,9 @@
         </el-table-column>
       </el-table>
     </div>
-    <div class="block" style="margin-top: 30px; text-align: right">
+    <div class="block" style="margin-top: 30px; text-align: right"
+      v-if="common_data.navigation.STA_BANK.getMethod === 1"
+    >
       <el-pagination
         layout="prev, pager, next"
         :page-count="pagination.totalPage"
@@ -225,10 +227,15 @@ export default {
   },
   watch: {
     'pagination.per_page' (val) {
+      if (this.common_data.navigation.STA_BANK.getMethod === 1) {
+        this.search_customer()
+      }
       this.search_bank()
     },
     'pagination.page' (val) {
-      this.search_bank()
+      if (this.common_data.navigation.STA_BANK.getMethod === 1) {
+        this.search_customer()
+      }
     }
   },
   methods: {
@@ -246,6 +253,10 @@ export default {
       this.pagination.page = val
     },
     async search_bank () {
+      if (this.common_data.navigation.STA_BANK.getMethod === 0) {
+        return
+      }
+
       if (this.from_date === '' || this.to_date === '') {
         this.$message.error('Vui lòng chọn ngày')
         return
@@ -271,7 +282,6 @@ export default {
       }
 
       const response = await this.$services.do_request('get', BANK_STATISTIC_URL, data)
-      console.log('response', response)
       this.loading = false
 
       if (response.data.data) {

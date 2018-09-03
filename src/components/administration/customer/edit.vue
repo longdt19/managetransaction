@@ -85,6 +85,9 @@ export default {
       this.dialogFormVisible = true
     },
     async edit () {
+      if (this.common_data.navigation.STA_CUSTOMER.putMethod === 0) {
+        return
+      }
       if (this.name === '' || this.azAccount === '' || this.phone === '' || this.address === '') {
         this.$message.error('Các trường không được để trống')
         return

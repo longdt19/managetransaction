@@ -59,6 +59,10 @@ export default {
       this.dialogFormVisible = true
     },
     async create_user () {
+      if (this.common_data.navigation.AD_USER.postMethod === 0) {
+        return
+      }
+
       if (this.username === '' || this.password1 === '' || this.password2 === '' || this.role === '') {
         this.$message.error('Trường bắt buộc không được để trống')
         return
@@ -79,7 +83,6 @@ export default {
           id: this.role_id
         }
       }
-      console.log('data', data)
       const response = await this.$services.do_request('post', USER_URL, data)
       this.loading = false
 

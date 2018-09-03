@@ -68,8 +68,16 @@
 
       <el-table-column label="Thao tác" header-align="center" align="center">
         <template slot-scope="scope">
-            <el-button size="mini" @click="open_edit(scope.row)">Sửa</el-button>
-            <el-button size="mini" type="danger">Xóa</el-button>
+            <el-button size="mini" @click="open_edit(scope.row)"
+              :disabled="common_data.navigation.AD_ROLE.putMethod === 0"
+            >
+              Sửa
+            </el-button>
+            <el-button size="mini" type="danger"
+              :disabled="common_data.navigation.AD_ROLE.deleteMethod === 0"
+            >
+              Xóa
+            </el-button>
           </template>
       </el-table-column>
 
@@ -96,11 +104,14 @@ export default {
   methods: {
     formatDate,
     async load_role_list () {
+      if (this.common_data.navigation.AD_ROLE.getMethod === 0) {
+        return
+      }
+
       if (this.loading) return
       this.loading = true
 
       const response = await this.$services.do_request('get', ROLE_URL)
-      console.log('response', response)
       this.loading = false
 
       if (response.data.message === 'Success') {
@@ -116,7 +127,9 @@ export default {
     }
   },
   created () {
-    this.load_role_list()
+    if (this.common_data.navigation.AD_ROLE.getMethod === 1) {
+      this.load_role_list()
+    }
   }
 }
 </script>

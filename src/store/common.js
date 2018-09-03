@@ -16,7 +16,8 @@ const INIT_STATE = {
     'AD_USER': {},
     'STA_BANK': {},
     'STA_CUSTOMER': {},
-    'STA_PRODUCT': {}
+    'STA_PRODUCT': {},
+    'CAT_CUSTOMER_GR': {}
   }
 }
 
@@ -59,7 +60,8 @@ export default {
         'AD_USER': {},
         'STA_BANK': {},
         'STA_CUSTOMER': {},
-        'STA_PRODUCT': {}
+        'STA_PRODUCT': {},
+        'CAT_CUSTOMER_GR': {}
       }
     }
   },

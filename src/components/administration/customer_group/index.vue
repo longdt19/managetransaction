@@ -3,10 +3,10 @@
   <div class="" style="margin-bottom: 20px">
     <el-row>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
-        <span style="font-size: 24px; margin-bottom: 50px">Danh sách khách hàng</span>
+        <span style="font-size: 24px; margin-bottom: 50px">Danh sách ngân hàng</span>
       </div></el-col>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-        <el-button @click.native="open_add" type="primary" :disabled="common_data.navigation.STA_CUSTOMER.postMethod === 0">
+        <el-button @click.native="open_add" type="primary" :disabled="common_data.navigation.CAT_CUSTOMER_GR.postMethod === 0">
           <i class="el-icon-plus" style="margin-right: 10px" />
           Thêm mới
         </el-button>
@@ -41,38 +41,15 @@
       </template>
     </el-table-column>
 
-    <el-table-column label="Tên khách hàng" header-align="center" align="center">
+    <el-table-column label="Tên nhóm" header-align="center" align="center">
       <template slot-scope="scope">
         {{scope.row.name}}
       </template>
     </el-table-column>
 
-    <el-table-column label="Nhóm khách hàng" header-align="center" align="center">
+    <el-table-column label="Thông tin" header-align="center" align="center">
       <template slot-scope="scope">
-
-        <el-tooltip :content="scope.row.customerGroup.description" placement="top">
-          <span>{{scope.row.customerGroup.name}}</span>
-        </el-tooltip>
-      </template>
-    </el-table-column>
-
-    <el-table-column label="Tài khoản" header-align="center" align="center">
-      <template slot-scope="scope">
-        {{scope.row.azAccount}}
-      </template>
-    </el-table-column>
-
-    <el-table-column label="Số điện thoại" header-align="center" align="center">
-      <template slot-scope="scope">
-        {{scope.row.phone}}
-      </template>
-    </el-table-column>
-
-    <el-table-column label="Địa chỉ" header-align="center" align="center">
-      <template slot-scope="scope">
-        <el-tooltip :content="scope.row.address" placement="top">
-          <span>{{scope.row.province}}</span>
-        </el-tooltip>
+        {{scope.row.description}}
       </template>
     </el-table-column>
 
@@ -82,27 +59,15 @@
       </template>
     </el-table-column>
 
-    <el-table-column label="Nợ trước" header-align="center" align="center">
-      <template slot-scope="scope">
-        {{formatNumber(scope.row.debtBefore)}}
-      </template>
-    </el-table-column>
-
-    <el-table-column label="Ghi chú" header-align="center" align="center">
-      <template slot-scope="scope">
-        <span style="font-size: 10px">{{scope.row.note}}</span>
-      </template>
-    </el-table-column>
-
     <el-table-column label="Thao tác" header-align="center" align="center">
       <template slot-scope="scope">
           <el-button size="mini" @click="open_edit(scope.row)"
-            :disabled="common_data.navigation.STA_CUSTOMER.putMethod === 0"
+            :disabled="common_data.navigation.CAT_CUSTOMER_GR.puttMethod === 0"
           >
             Sửa
           </el-button>
           <el-button size="mini" type="danger" @click="open_delete(scope.row)"
-            :disabled="common_data.navigation.STA_CUSTOMER.deleteMethod === 0"
+            :disabled="common_data.navigation.CAT_CUSTOMER_GR.deleteMethod === 0"
           >
             Xóa
           </el-button>
@@ -111,7 +76,6 @@
   </el-table>
 
   <div class="block" style="margin-top: 30px; text-align: right"
-    v-if="common_data.navigation.STA_CUSTOMER.getMethod === 1"
   >
     <el-pagination
       layout="prev, pager, next"
@@ -124,25 +88,24 @@
     </el-pagination>
   </div>
 
-  <add-customer-component ref='add_customer' />
-  <edit-customer-component ref='edit_customer' @customer_edited="customer_edited"/>
-  <delete-customer-component ref='delete_customer' @customer_deleted="customer_deleted" />
+  <edit-group-component ref='edit_group' @group_edited="group_edited"/>
+  <add-group-component ref='add_group' />
+  <delete-group-component ref='delete_group' @group_deleted="group_deleted" />
 </section>
 </template>
 
 <script>
-import { NUMBER_VALIDATOR } from '@/constants'
-import { CUSTOMER_URL } from '@/constants/endpoints'
+import { CUSTOMER_GROUP_URL } from '@/constants/endpoints'
 
-import converseTime from '@/utils/time'
 import formatNumber from '@/utils/numeric'
+import converseTime from '@/utils/time'
 
-import EditCustomerComponent from './edit'
-import AddCustomerComponent from './add'
-import DeleteCustomerComponent from './delete'
+import EditGroupComponent from './edit'
+import AddGroupComponent from './add'
+import DeleteGroupComponent from './delete'
 
 export default {
-  components: { EditCustomerComponent, AddCustomerComponent, DeleteCustomerComponent },
+  components: { EditGroupComponent, AddGroupComponent, DeleteGroupComponent },
   data () {
     return {
       dataTable: [],
@@ -158,24 +121,23 @@ export default {
   },
   watch: {
     'pagination.per_page' (val) {
-      if (this.common_data.navigation.STA_CUSTOMER.getMethod === 1) {
-        this.loading_customer_list()
+      if (this.common_data.navigation.CAT_CUSTOMER_GR.postMethod === 1) {
+        this.load_customer_group_list()
       }
     },
     'pagination.page' (val) {
-      if (this.common_data.navigation.STA_CUSTOMER.getMethod === 1) {
-        this.loading_customer_list()
+      if (this.common_data.navigation.CAT_CUSTOMER_GR.postMethod === 1) {
+        this.load_customer_group_list()
       }
     }
   },
   methods: {
     converseTime,
     formatNumber,
-    validate_number (number) {
-      if (number === '') return null
-      return NUMBER_VALIDATOR.test(number.trim())
-    },
-    async loading_customer_list () {
+    async load_customer_group_list () {
+      if (this.common_data.navigation.CAT_CUSTOMER_GR.getMethod === 0) {
+        return
+      }
       if (this.loading) return
       this.loading = true
 
@@ -188,7 +150,7 @@ export default {
         page: this.pagination.page - 1
       }
 
-      const response = await this.$services.do_request('get', CUSTOMER_URL, data)
+      const response = await this.$services.do_request('get', CUSTOMER_GROUP_URL, data)
       this.loading = false
 
       if (response.data.data.content) {
@@ -214,33 +176,26 @@ export default {
       this.pagination.page = val
     },
     open_add () {
-      this.$refs.add_customer.open()
+      this.$refs.add_group.open()
     },
-    open_edit (customer) {
-      this.$refs.edit_customer.open(customer)
+    open_edit (group) {
+      this.$refs.edit_group.open(group)
     },
-    open_delete (bank) {
-      this.$refs.delete_customer.open(bank)
+    open_delete (group) {
+      this.$refs.delete_group.open(group)
     },
-    customer_edited (customer) {
-      // const customer_index = this.dataTable.findIndex(item => item.id === customer.id)
-      // Object.assign(this.dataTable[customer_index], customer)
-      this.loading_customer_list()
+    group_edited (group) {
+      const group_index = this.dataTable.findIndex(item => item.id === group.id)
+      Object.assign(this.dataTable[group_index], group)
     },
-    customer_deleted () {
-      this.loading_customer_list()
+    group_deleted () {
+      this.load_customer_group_list()
     }
   },
   created () {
-    if (this.common_data.navigation.STA_CUSTOMER.getMethod === 1) {
-      this.loading_customer_list()
+    if (this.common_data.navigation.CAT_CUSTOMER_GR.postMethod === 1) {
+      this.load_customer_group_list()
     }
   }
 }
 </script>
-
-<style scoped="">
-.el-loading-spinner {
-  top: 50%
-}
-</style>

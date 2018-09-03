@@ -293,6 +293,7 @@ export default {
       }
 
       const response = await this.$services.do_request('get', CUSTOMER_STATISTIC_URL, data)
+      console.log('response', response)
       this.loading = false
       if (response.data.data) {
         this.customer_list = response.data.data.data.content

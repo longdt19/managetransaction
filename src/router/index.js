@@ -14,6 +14,7 @@ import Products from '@/components/products'
 
 import ProductAD from '@/components/administration/product'
 import CustomerAD from '@/components/administration/customer'
+import CustomerGroupAD from '@/components/administration/customer_group'
 import BankAD from '@/components/administration/bank'
 import RoleAD from '@/components/administration/role'
 import UserAD from '@/components/administration/user'
@@ -85,6 +86,11 @@ export default new Router({
           path: 'user-admin',
           name: 'user-admin',
           component: UserAD
+        },
+        {
+          path: 'customer-group-admin',
+          name: 'customer-group-admin',
+          component: CustomerGroupAD
         }
       ]
     }

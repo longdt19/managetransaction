@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     async load_customer_group_list () {
-      if (this.common_data.navigation.STA_CUSTOMER.postMethod === 0) {
+      if (this.common_data.navigation.CAT_CUSTOMER.postMethod === 0) {
         return false
       }
       if (this.loading) return

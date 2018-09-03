@@ -6,7 +6,7 @@
         <span style="font-size: 24px; margin-bottom: 50px">Danh sách sản phẩm</span>
       </div></el-col>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-        <el-button @click.native="open_add" type="primary" :disabled="common_data.navigation.STA_PRODUCT.postMethod === 0">
+        <el-button @click.native="open_add" type="primary" :disabled="common_data.navigation.CAT_PRODUCT.postMethod === 0">
           <i class="el-icon-plus" style="margin-right: 10px" />
           Thêm mới
         </el-button>
@@ -68,12 +68,12 @@
     <el-table-column label="Thao tác" header-align="center" align="center">
       <template slot-scope="scope">
           <el-button size="mini" @click="open_edit(scope.row)"
-            :disabled="common_data.navigation.STA_PRODUCT.putMethod === 0"
+            :disabled="common_data.navigation.CAT_PRODUCT.putMethod === 0"
           >
             Sửa
           </el-button>
           <el-button size="mini" type="danger" @click="open_delete(scope.row)"
-          :disabled="common_data.navigation.STA_PRODUCT.deleteMethod === 0"
+          :disabled="common_data.navigation.CAT_PRODUCT.deleteMethod === 0"
           >
             Xóa
           </el-button>
@@ -81,7 +81,9 @@
     </el-table-column>
   </el-table>
 
-  <div class="block" style="margin-top: 30px; text-align: right">
+  <div class="block" style="margin-top: 30px; text-align: right"
+    v-if="common_data.navigation.CAT_PRODUCT.getMethod === 1"
+  >
     <el-pagination
       layout="prev, pager, next"
       :page-count="pagination.totalPage"
@@ -125,12 +127,12 @@ export default {
   },
   watch: {
     'pagination.per_page' (val) {
-      if (this.common_data.navigation.STA_PRODUCT.getMethod === 1) {
+      if (this.common_data.navigation.CAT_PRODUCT.getMethod === 1) {
         this.load_product_list()
       }
     },
     'pagination.page' (val) {
-      if (this.common_data.navigation.STA_PRODUCT.getMethod === 1) {
+      if (this.common_data.navigation.CAT_PRODUCT.getMethod === 1) {
         this.load_product_list()
       }
     }
@@ -138,7 +140,7 @@ export default {
   methods: {
     converseTime,
     async load_product_list () {
-      if (this.common_data.navigation.STA_PRODUCT.getMethod === 0) {
+      if (this.common_data.navigation.CAT_PRODUCT.getMethod === 0) {
         return
       }
 
@@ -197,7 +199,7 @@ export default {
     }
   },
   created () {
-    if (this.common_data.navigation.STA_PRODUCT.getMethod === 1) {
+    if (this.common_data.navigation.CAT_PRODUCT.getMethod === 1) {
       this.load_product_list()
     }
   }

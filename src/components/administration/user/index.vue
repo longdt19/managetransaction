@@ -76,7 +76,9 @@
     </el-table-column>
   </el-table>
 
-  <div class="block" style="margin-top: 30px; text-align: right">
+  <div class="block" style="margin-top: 30px; text-align: right"
+    v-if="common_data.navigation.AD_USER.getMethod === 1"
+  >
     <el-pagination
       layout="prev, pager, next"
       :page-count="pagination.totalPage"

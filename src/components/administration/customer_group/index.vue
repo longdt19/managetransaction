@@ -76,6 +76,7 @@
   </el-table>
 
   <div class="block" style="margin-top: 30px; text-align: right"
+    v-if="common_data.navigation.CAT_CUSTOMER_GR.getMethod === 1"
   >
     <el-pagination
       layout="prev, pager, next"
@@ -121,12 +122,12 @@ export default {
   },
   watch: {
     'pagination.per_page' (val) {
-      if (this.common_data.navigation.CAT_CUSTOMER_GR.postMethod === 1) {
+      if (this.common_data.navigation.CAT_CUSTOMER_GR.getMethod === 1) {
         this.load_customer_group_list()
       }
     },
     'pagination.page' (val) {
-      if (this.common_data.navigation.CAT_CUSTOMER_GR.postMethod === 1) {
+      if (this.common_data.navigation.CAT_CUSTOMER_GR.getMethod === 1) {
         this.load_customer_group_list()
       }
     }
@@ -193,7 +194,7 @@ export default {
     }
   },
   created () {
-    if (this.common_data.navigation.CAT_CUSTOMER_GR.postMethod === 1) {
+    if (this.common_data.navigation.CAT_CUSTOMER_GR.getMethod === 1) {
       this.load_customer_group_list()
     }
   }

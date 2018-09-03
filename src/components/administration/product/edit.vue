@@ -47,7 +47,7 @@ export default {
       this.dialogFormVisible = true
     },
     async edit () {
-      if (this.common_data.navigation.STA_PRODUCT.putMethod === 0) {
+      if (this.common_data.navigation.CAT_PRODUCT.putMethod === 0) {
         return
       }
 

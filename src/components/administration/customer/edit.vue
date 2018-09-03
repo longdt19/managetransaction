@@ -91,7 +91,7 @@ export default {
       console.log('group', this.group)
     },
     async load_customer_group_list () {
-      if (this.common_data.navigation.STA_CUSTOMER.postMethod === 0) {
+      if (this.common_data.navigation.CAT_CUSTOMER.postMethod === 0) {
         return false
       }
       if (this.loading) return
@@ -109,7 +109,7 @@ export default {
       }
     },
     async edit () {
-      if (this.common_data.navigation.STA_CUSTOMER.putMethod === 0) {
+      if (this.common_data.navigation.CAT_CUSTOMER.putMethod === 0) {
         return
       }
       if (this.validate_input() === false) {

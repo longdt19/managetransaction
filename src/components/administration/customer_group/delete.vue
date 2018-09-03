@@ -40,9 +40,6 @@ export default {
       if (this.common_data.navigation.CAT_CUSTOMER_GR.deleteMethod === 0) {
         return
       }
-      if (this.common_data.navigation.CAT_BANK.deleteMethod === 0) {
-        return
-      }
       if (this.loading) return
       this.loading = true
 

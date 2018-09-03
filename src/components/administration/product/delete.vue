@@ -38,7 +38,7 @@ export default {
       this.centerDialogVisible = true
     },
     async delete_product () {
-      if (this.common_data.navigation.STA_PRODUCT.deleteMethod === 0) {
+      if (this.common_data.navigation.CAT_PRODUCT.deleteMethod === 0) {
         return
       }
 

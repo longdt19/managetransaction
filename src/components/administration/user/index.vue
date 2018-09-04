@@ -52,7 +52,7 @@
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
               v-for="item in role_list"
-              :key="item.id"
+              :key="item.name"
               @click.native="update_role(scope.row, item)"
               :disabled="scope.row.id === 1 || common_data.navigation.AD_USER.putMethod === 0"
             >
@@ -156,7 +156,7 @@ export default {
       if (response.data.message === 'Success') {
         this.dataTable.forEach(item => {
           if (item.id === user.id) {
-            item.role.name = role.code
+            item.role.name = role.name
           }
         })
         this.$message.success('Cập nhật quyền hạn thành công')

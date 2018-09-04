@@ -68,6 +68,11 @@ export default {
         return
       }
 
+      if (this.username.length < 2) {
+        this.$message.error('Tên đăng nhập ít nhất 2 ký tự')
+        return
+      }
+
       if (this.password1 !== this.password2) {
         this.$message.error('Mật khẩu không trùng nhau')
         return

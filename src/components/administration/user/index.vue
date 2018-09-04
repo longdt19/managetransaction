@@ -56,7 +56,7 @@
               @click.native="update_role(scope.row, item)"
               :disabled="scope.row.id === 1 || common_data.navigation.AD_USER.putMethod === 0"
             >
-              {{item.code}}
+              {{item.name}}
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -176,9 +176,9 @@ export default {
 
       if (response.data.message === 'Success') {
         this.role_list = response.data.data.content
-        this.role_list.forEach(item => {
-          item.code = this.converseRole(item.code)
-        })
+        // this.role_list.forEach(item => {
+        //   item.code = this.converseRole(item.code)
+        // })
       } else if (response.status === 400) {
         console.log('Bad resquest')
         this.$message.error('Tải danh sách thất bại')
@@ -223,8 +223,7 @@ export default {
       this.load_user_list()
     },
     converseRole (role) {
-      if (role === 'ROLE_ADMIN') return 'Admin'
-      return 'Nhân viên'
+      return role.replace('ROLE_', '')
     }
   },
   created () {

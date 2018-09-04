@@ -2,14 +2,14 @@
   <section v-if="common_data.navigation.AD_ROLE.status === 1">
     <div class="" style="margin-bottom: 20px">
       <el-row>
-        <el-col :xs="24" :md="16"><div class="grid-content bg-purple">
+        <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
           <span style="font-size: 24px; margin-bottom: 50px">Thống kê các quyền hạn</span>
         </div></el-col>
-        <el-col :xs="12" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
+        <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
+          <el-button @click="open_add_role" :disabled="common_data.navigation.AD_ROLE.postMethod === 0">
+            Thêm mới
+          </el-button>
         </div></el-col>
-        <!-- <el-col :xs="12" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
-          <el-button>Xuất Excel</el-button>
-        </div></el-col> -->
       </el-row>
     </div>
 
@@ -84,6 +84,7 @@
     </el-table>
 
     <edit-role-component ref='edit_role' />
+    <add-role-component ref='add_role' />
   </section>
 </template>
 
@@ -92,9 +93,10 @@ import formatDate from '@/utils/time'
 
 import { ROLE_URL } from '@/constants/endpoints'
 import EditRoleComponent from './edit'
+import AddRoleComponent from './add'
 
 export default {
-  components: { EditRoleComponent },
+  components: { EditRoleComponent, AddRoleComponent },
   data () {
     return {
       role_list: [],
@@ -124,6 +126,9 @@ export default {
     },
     open_edit (role) {
       this.$refs.edit_role.open(role)
+    },
+    open_add_role () {
+      this.$refs.add_role.open()
     }
   },
   created () {

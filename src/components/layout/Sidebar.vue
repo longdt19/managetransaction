@@ -40,18 +40,18 @@
       </el-menu-item>
 
       <el-menu-item-group title="Quản trị" style="margin-left: -10px; margin-top: 10px; margin-bottom: 10px"
-        v-if="common_data.navigation.CAT_BANK.status === 1 &&
-              common_data.navigation.CAT_PRODUCT.status === 1 &&
-              common_data.navigation.CAT_CUSTOMER.status === 1 &&
-              common_data.navigation.CAT_CUSTOMER_GR.status === 1 &&
-              common_data.navigation.AD_ROLE.status === 1 &&
+        v-if="common_data.navigation.CAT_BANK.status === 1 ||
+              common_data.navigation.CAT_PRODUCT.status === 1 ||
+              common_data.navigation.CAT_CUSTOMER.status === 1 ||
+              common_data.navigation.CAT_CUSTOMER_GR.status === 1 ||
+              common_data.navigation.AD_ROLE.status === 1 ||
               common_data.navigation.AD_USER.status === 1">
       </el-menu-item-group>
 
       <el-submenu index="1"
-        v-if="common_data.navigation.CAT_BANK.status === 1 &&
-              common_data.navigation.CAT_PRODUCT.status === 1 &&
-              common_data.navigation.CAT_CUSTOMER.status === 1 &&
+        v-if="common_data.navigation.CAT_BANK.status === 1 ||
+              common_data.navigation.CAT_PRODUCT.status === 1 ||
+              common_data.navigation.CAT_CUSTOMER.status === 1 ||
               common_data.navigation.CAT_CUSTOMER_GR.status === 1"
       >
         <template slot="title">
@@ -65,7 +65,7 @@
       </el-submenu>
 
       <el-submenu index="2"
-        v-if="common_data.navigation.AD_ROLE.status === 1 && common_data.navigation.AD_USER.status === 1"
+        v-if="common_data.navigation.AD_ROLE.status === 1 || common_data.navigation.AD_USER.status === 1"
       >
         <template slot="title">
           <img src="../../assets/icon/user.svg" style="width: 30px" />

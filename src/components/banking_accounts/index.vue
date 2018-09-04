@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section v-if="common_data.navigation.STA_BANK.status === 1">
     <div class="" style="margin-bottom: 20px">
       <el-row>
         <el-col :xs="24" :md="12"><div class="grid-content bg-purple">

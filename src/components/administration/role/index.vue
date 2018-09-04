@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section v-if="common_data.navigation.AD_ROLE.status === 1">
     <div class="" style="margin-bottom: 20px">
       <el-row>
         <el-col :xs="24" :md="16"><div class="grid-content bg-purple">

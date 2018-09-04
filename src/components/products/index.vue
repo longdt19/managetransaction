@@ -22,6 +22,7 @@
               v-model="from_date"
               type="date"
               value-format="dd-MM-yyyy"
+              format="dd-MM-yyyy"
               :disabled="common_data.navigation.STA_PRODUCT.getMethod === 0"
             >
             </el-date-picker>
@@ -32,6 +33,7 @@
               v-model="to_date"
               type="date"
               value-format="dd-MM-yyyy"
+              format="dd-MM-yyyy"
               :disabled="common_data.navigation.STA_PRODUCT.getMethod === 0"
               >
             </el-date-picker>
@@ -272,6 +274,10 @@ export default {
         this.statistic = response.data.data.statistic
         this.pagination.totalElement = response.data.data.data.totalElements
         this.pagination.totalPage = response.data.data.data.totalPages
+      } else if (response.status === 400) {
+        console.log('Bad resquest')
+      } else {
+        this.$router.push('/e-500')
       }
     }
   }

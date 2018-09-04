@@ -22,6 +22,7 @@
               v-model="from_date"
               type="date"
               value-format="dd-MM-yyyy"
+              format="dd-MM-yyyy"
               :disabled="common_data.navigation.STA_CUSTOMER.getMethod === 0"
             >
             </el-date-picker>
@@ -32,6 +33,7 @@
               v-model="to_date"
               type="date"
               value-format="dd-MM-yyyy"
+              format="dd-MM-yyyy"
               :disabled="common_data.navigation.STA_CUSTOMER.getMethod === 0"
               >
             </el-date-picker>
@@ -293,7 +295,6 @@ export default {
       }
 
       const response = await this.$services.do_request('get', CUSTOMER_STATISTIC_URL, data)
-      console.log('response', response)
       this.loading = false
       if (response.data.data) {
         this.customer_list = response.data.data.data.content
@@ -301,6 +302,10 @@ export default {
         this.statistic = response.data.data.statistic
         this.pagination.totalElement = response.data.data.data.totalElements
         this.pagination.totalPage = response.data.data.data.totalPages
+      } else if (response.status === 400) {
+        console.log('Bad resquest')
+      } else {
+        this.$router.push('/e-500')
       }
     }
   }

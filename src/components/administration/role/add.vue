@@ -50,7 +50,10 @@ export default {
       }
 
       const response = await this.$services.do_request('post', ROLE_URL, data)
+      this.loading = false
       if (response.data.message === 'Success') {
+        this.name = ''
+        this.code = ''
         this.$message.success('Thêm quyền hạn thành công')
         this.$parent.load_role_list()
         this.dialogFormVisible = false

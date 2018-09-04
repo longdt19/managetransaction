@@ -205,7 +205,14 @@ export default {
       if (this.loading) return
       this.loading = true
 
-      const response = await this.$services.do_request('get', USER_URL)
+      if (this.pagination.per_page > this.pagination.totalElement) {
+        this.pagination.page = 1
+      }
+      const data = {
+        size: this.pagination.per_page,
+        page: this.pagination.page - 1
+      }
+      const response = await this.$services.do_request('get', USER_URL, data)
       this.loading = false
 
       if (response.data.data.content) {

@@ -13,54 +13,47 @@
       </el-row>
     </div>
 
-    <div class="" style="display: flex; align-items: flex-end; justify-content: space-between">
-
-      <!-- <div class=""  style="margin-top: 15px">
-        <search-component ></search-component>
-      </div>
-      <div class="" style="text-align: right">
-        <el-row>
-          <span>Hiển thị: </span>
-          <el-select v-model="pagination.per_page" style="width: 80px">
-            <el-option
-              v-for="item in pagination.list"
-              :key="item"
-              :label="item"
-              :value="item">
-            </el-option>
-          </el-select>
-        </el-row>
-      </div> -->
+    <div class="" style="text-align: right; margin-bottom: 20px">
+      <span>Hiển thị: </span>
+      <el-select v-model="pagination.per_page" style="width: 80px">
+        <el-option
+          v-for="item in pagination.list"
+          :key="item"
+          :label="item"
+          :value="item">
+        </el-option>
+      </el-select>
     </div>
 
     <el-table
       :data="role_list"
       style="width: 100%"
       v-loading="loading"
+      border
     >
 
-      <el-table-column type="index" label="STT" width="50" align="center">
+      <el-table-column type="index" label="STT" width="50" header-align="center" align="center">
       </el-table-column>
 
-      <el-table-column label="Tên">
+      <el-table-column label="Tên" header-align="center" align="center">
         <template slot-scope="scope">
           {{scope.row.name}}
         </template>
       </el-table-column>
 
-      <el-table-column label="Quyền hạn">
+      <el-table-column label="Quyền hạn" header-align="center" align="center">
         <template slot-scope="scope">
           {{scope.row.code}}
         </template>
       </el-table-column>
 
-      <el-table-column label="Người tạo">
+      <el-table-column label="Người tạo" header-align="center" align="center">
         <template slot-scope="scope">
           {{scope.row.creator}}
         </template>
       </el-table-column>
 
-      <el-table-column label="Ngày tạo">
+      <el-table-column label="Ngày tạo" header-align="center" align="center">
         <template slot-scope="scope">
           {{formatDate(scope.row.created)}}
         </template>
@@ -80,8 +73,21 @@
             </el-button>
           </template>
       </el-table-column>
-
     </el-table>
+
+    <div class="block" style="margin-top: 30px; text-align: right"
+      v-if="common_data.navigation.AD_ROLE.getMethod === 1"
+    >
+      <el-pagination
+        layout="prev, pager, next"
+        :page-count="pagination.totalPage"
+        :current-page.sync="pagination.page"
+        @current-change="change_page"
+        @prev-click="prev_page"
+        @next-click="next_page"
+      >
+      </el-pagination>
+    </div>
 
     <edit-role-component ref='edit_role' />
     <add-role-component ref='add_role' />
@@ -100,7 +106,26 @@ export default {
   data () {
     return {
       role_list: [],
-      loading: false
+      loading: false,
+      pagination: {
+        totalPage: null,
+        totalElement: null,
+        page: 1,
+        per_page: 10,
+        list: [10, 20, 30]
+      }
+    }
+  },
+  watch: {
+    'pagination.per_page' (val) {
+      if (this.common_data.navigation.AD_ROLE.getMethod === 1) {
+        this.load_role_list()
+      }
+    },
+    'pagination.page' (val) {
+      if (this.common_data.navigation.AD_ROLE.getMethod === 1) {
+        this.load_role_list()
+      }
     }
   },
   methods: {
@@ -113,11 +138,20 @@ export default {
       if (this.loading) return
       this.loading = true
 
-      const response = await this.$services.do_request('get', ROLE_URL)
+      if (this.pagination.per_page > this.pagination.totalElement) {
+        this.pagination.page = 1
+      }
+      const data = {
+        size: this.pagination.per_page,
+        page: this.pagination.page - 1
+      }
+      const response = await this.$services.do_request('get', ROLE_URL, data)
       this.loading = false
 
       if (response.data.message === 'Success') {
         this.role_list = response.data.data.content
+        this.pagination.totalPage = response.data.data.totalPages
+        this.pagination.totalElement = response.data.data.totalElements
       } else if (response.status === 400) {
         console.log('Bad resquest')
       } else {

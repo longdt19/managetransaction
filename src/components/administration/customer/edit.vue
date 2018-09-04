@@ -136,13 +136,14 @@ export default {
       }
 
       const response = await this.$services.do_request('put', CUSTOMER_URL, data)
-      console.log('response', response)
       this.loading = false
 
       if (response.data.message === 'Success') {
         this.$emit('customer_edited', this.customer)
         this.$message.success('Cập nhật khách hàng thành công')
         this.dialogFormVisible = false
+      } else if (response.data.message === 'Az account is existed') {
+        this.$message.error('Tên tài khoản đã tồn tại')
       } else if (response.status === 400) {
         console.log('Bad request')
       } else {

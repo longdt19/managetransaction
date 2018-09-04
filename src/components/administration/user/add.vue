@@ -94,6 +94,8 @@ export default {
       if (response.data.message === 'Success') {
         this.$message.success('Thêm mới người dùng thành công')
         this.$emit('user_created')
+      } else if (response.data.message === 'Username is existed') {
+        this.$message.error('Tên đăng nhập đã tồn tại')
       } else if (response.status === 400) {
         console.log('Bad resquest')
         this.$message.error('Thêm mới người dùng thất bại')

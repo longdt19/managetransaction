@@ -26,6 +26,7 @@
             v-model="from_date"
             type="date"
             value-format="dd-MM-yyyy"
+            format="dd-MM-yyyy"
             :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
           >
           </el-date-picker>
@@ -36,6 +37,7 @@
             v-model="to_date"
             type="date"
             value-format="dd-MM-yyyy"
+            format="dd-MM-yyyy"
             :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
           >
           </el-date-picker>

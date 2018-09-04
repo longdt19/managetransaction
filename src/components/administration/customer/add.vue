@@ -119,6 +119,8 @@ export default {
         this.$parent.loading_customer_list()
         this.$message.success('Thêm mới khách hàng thành công')
         this.dialogFormVisible = false
+      } else if (response.data.message === 'Az account is existed') {
+        this.$message.error('Tên tài khoản đã tồn tại')
       } else if (response.status === 400) {
         console.log('Bad request')
       } else {

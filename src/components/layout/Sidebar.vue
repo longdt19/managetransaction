@@ -13,28 +13,28 @@
 
       <el-menu-item index="transaction" @click.native="go_to('transaction')" v-if="common_data.navigation.TRANSACTION.status === 1">
         <el-tooltip class="item" effect="dark" content="Thống kê chung" placement="right">
-          <img src="../../assets/icon/dashboard.svg" style="width: 30px" />
+          <img src="../../assets/icon/dashboard.svg" style="width: 25px; margin-right: 10px" />
         </el-tooltip>
         <span>Chi tiết</span>
       </el-menu-item>
 
       <el-menu-item index="banking-accounts" @click.native="go_to('banking-accounts')" v-if="common_data.navigation.STA_BANK.status === 1">
         <el-tooltip class="item" effect="dark" content="Thống kê chi tiết tài khoản ngân hàng" placement="right">
-          <img src="../../assets/icon/bank.svg" style="width: 30px" />
+          <img src="../../assets/icon/bank.svg" style="width: 25px; margin-right: 10px" />
         </el-tooltip>
         <span>Ngân hàng</span>
       </el-menu-item>
 
       <el-menu-item index="customer-accounts" @click.native="go_to('customer-accounts')" v-if="common_data.navigation.STA_CUSTOMER.status === 1">
         <el-tooltip class="item" effect="dark" content="Thống kê chi tiết tài khoản khách hàng" placement="right">
-          <img src="../../assets/icon/customer.svg" style="width: 30px" />
+          <img src="../../assets/icon/customer.svg" style="width: 25px; margin-right: 10px" />
         </el-tooltip>
         <span>Khách hàng</span>
       </el-menu-item>
 
       <el-menu-item index="products" @click.native="go_to('products')" v-if="common_data.navigation.STA_PRODUCT.status === 1">
         <el-tooltip class="item" effect="dark" content="Thống kê chi tiết các sản phẩm" placement="right">
-          <img src="../../assets/icon/product.svg" style="width: 30px" />
+          <img src="../../assets/icon/product.svg" style="width: 25px; margin-right: 10px" />
         </el-tooltip>
         <span>Sản phẩm</span>
       </el-menu-item>
@@ -55,7 +55,7 @@
               common_data.navigation.CAT_CUSTOMER_GR.status === 1"
       >
         <template slot="title">
-          <img src="../../assets/icon/category.svg" style="width: 30px" />
+          <img src="../../assets/icon/category.svg" style="width: 25px; margin-right: 10px" />
           <span>Danh mục</span>
         </template>
         <el-menu-item index="1-1" @click.native="go_to('bank-admin')" v-if="common_data.navigation.CAT_BANK.status === 1">Ngân hàng</el-menu-item>
@@ -68,7 +68,7 @@
         v-if="common_data.navigation.AD_ROLE.status === 1 || common_data.navigation.AD_USER.status === 1"
       >
         <template slot="title">
-          <img src="../../assets/icon/user.svg" style="width: 30px" />
+          <img src="../../assets/icon/user.svg" style="width: 25px; margin-right: 10px" />
           <span>Người dùng</span>
         </template>
         <el-menu-item index="1-4" @click.native="go_to('role-admin')" v-if="common_data.navigation.AD_ROLE.status === 1">Nhóm người dùng</el-menu-item>

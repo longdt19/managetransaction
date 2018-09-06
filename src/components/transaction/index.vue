@@ -181,7 +181,6 @@
           {{formatNumber(scope.row.discount)}}
         </template>
       </el-table-column>
-
       <!-- tổng thành tiền thực tế phải thu khách hàng -->
       <el-table-column label="Tổng" header-align="center" align="center">
         <template slot-scope="scope">
@@ -220,15 +219,23 @@
 
     <el-table-column label="Ghi chú" header-align="center" align="center">
       <template slot-scope="scope">
-        <span>hihihihi</span>
+        <span style="font-size: 10px">hihihihi</span>
       </template>
     </el-table-column>
 
     <el-table-column label="Người tạo" header-align="center" align="center">
       <template slot-scope="scope">
         <span style="color: #dc3545!important">{{scope.row.creator}}</span>
-
       </template>
+    </el-table-column>
+
+    <el-table-column label="Thao tác" header-align="center" align="center">
+      <template slot-scope="scope">
+          <el-button size="mini" @click="open_edit(scope.row)"
+          >
+            Sửa
+          </el-button>
+        </template>
     </el-table-column>
 
   </el-table>
@@ -245,20 +252,22 @@
     >
     </el-pagination>
   </div>
+  <edit-transaction-component ref='edit_transaction' />
 </section>
 </template>
 
 <script>
-import { BANK_LIST_URL, CUSTOMER_LIST_URL, PRODUCT_LIST_URL, TRANSACTION_URL } from '@/constants/endpoints'
+import { BANK_LIST_URL, CUSTOMER_LIST_URL, PRODUCT_LIST_URL, TRANSACTION_URL, TRANSACTION_DOWNLOAD_URL } from '@/constants/endpoints'
 
 import formatNumber from '@/utils/numeric'
 import formatDate from '@/utils/time'
 
 import SearchComponent from '@/components/transaction/search'
 import AddTransactionComponent from './add_transaction'
+import EditTransactionComponent from './edit'
 
 export default {
-  components: { SearchComponent, AddTransactionComponent },
+  components: { SearchComponent, AddTransactionComponent, EditTransactionComponent },
   data () {
     return {
       value: '',
@@ -316,6 +325,16 @@ export default {
   methods: {
     formatNumber,
     formatDate,
+    export_excel () {
+      if (this.validate_input() === false) {
+        return
+      }
+
+      window.location.href = process.env.BACKEND_URL + '/' + TRANSACTION_DOWNLOAD_URL + `?fromDate=${this.from_date}&toDate=${this.to_date}`
+    },
+    open_edit (transaction) {
+      this.$refs.edit_transaction.open(transaction)
+    },
     type_of_status (status) {
       // 1: Xuất
       // 2: Nhập

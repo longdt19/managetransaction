@@ -6,7 +6,7 @@
           <span style="font-size: 24px; margin-bottom: 50px">Thống kê theo tài khoản khách hàng</span>
         </div></el-col>
         <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-          <el-button style="background-color: #2e7d32" :disabled="common_data.navigation.STA_CUSTOMER.getMethod === 0">
+          <el-button style="background-color: #2e7d32" :disabled="common_data.navigation.STA_CUSTOMER.getMethod === 0" @click="export_excel">
             <img src="../../assets/icon/download.svg" style="height: 15px" />
             <span style="margin-left: 5px; color: white">Xuất Excel</span>
           </el-button>
@@ -114,7 +114,7 @@
         <el-table-column prop="address" label="Địa chỉ" header-align="center" align="center">
           <template slot-scope="scope">
             <el-tooltip :content="scope.row.address" placement="top">
-              <span style="font-size: 10px">{{scope.row.province}}</span>
+              <span>{{scope.row.province}}</span>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -178,26 +178,10 @@
         </el-table-column>
 
         <el-table-column label="Tổng" header-align="center" align="center">
+          <template slot-scope="scope">
+            {{formatNumber(scope.row.total)}}
+          </template>
         </el-table-column>
-        <!-- <el-table-column label="Tồn cuối kỳ" header-align="center">
-          <el-table-column label="Nạp" header-align="center" align="center">
-            <template slot-scope="scope">
-              {{formatNumber(scope.row.afterPeriodPaid)}}
-            </template>
-          </el-table-column>
-
-          <el-table-column label="Thanh toán" header-align="center" align="center">
-            <template slot-scope="scope">
-              {{formatNumber(scope.row.afterPeriodOwed)}}
-            </template>
-          </el-table-column>
-
-          <el-table-column label="Tổng" header-align="center" align="center">
-            <template slot-scope="scope">
-              {{formatNumber(scope.row.afterPeriodTotal)}}
-            </template>
-          </el-table-column>
-        </el-table-column> -->
       </el-table>
     </div>
     <div class="block" style="margin-top: 30px; text-align: right"
@@ -219,7 +203,7 @@
 <script>
 import formatNumber from '@/utils/numeric'
 
-import { CUSTOMER_STATISTIC_URL } from '@/constants/endpoints'
+import { CUSTOMER_STATISTIC_URL, CUSTOMER_STATISTIC_DOWNLOAD_URL } from '@/constants/endpoints'
 
 export default {
   data () {
@@ -253,30 +237,15 @@ export default {
   },
   methods: {
     formatNumber,
-    prev_page () {
-      if (this.pagination.page === 1) return
+    export_excel () {
+      if (this.validate_input() === false) {
+        return
+      }
 
-      this.pagination.page = this.pagination.page - 1
-    },
-    next_page () {
-      if (this.pagination.page === this.total_page) return
-      this.pagination.page = this.pagination.page + 1
-    },
-    change_page (val) {
-      this.pagination.page = val
+      window.location.href = process.env.BACKEND_URL + '/' + CUSTOMER_STATISTIC_DOWNLOAD_URL + `?fromDate=${this.from_date}&toDate=${this.to_date}`
     },
     async search_customer () {
-      if (this.common_data.navigation.STA_CUSTOMER.getMethod === 0) {
-        return
-      }
-
-      if (this.from_date === '' || this.to_date === '') {
-        this.$message.error('Trường tìm kiếm không được để trống')
-        return
-      }
-
-      if (this.from_date > this.to_date) {
-        this.$message.error('Vui lòng nhập lại ngày thống kê')
+      if (this.validate_input() === false) {
         return
       }
 
@@ -307,6 +276,34 @@ export default {
       } else {
         this.$router.push('/e-500')
       }
+    },
+    validate_input () {
+      if (this.common_data.navigation.STA_CUSTOMER.getMethod === 0) {
+        this.$message.error('Bạn không đủ quyền hạn cho chức năng này')
+        return false
+      }
+
+      if (this.from_date === '' || this.to_date === '') {
+        this.$message.error('Trường tìm kiếm không được để trống')
+        return false
+      }
+
+      if (this.from_date > this.to_date) {
+        this.$message.error('Vui lòng nhập lại ngày thống kê')
+        return false
+      }
+      return true
+    },
+    prev_page () {
+      if (this.pagination.page === 1) return
+      this.pagination.page = this.pagination.page - 1
+    },
+    next_page () {
+      if (this.pagination.page === this.total_page) return
+      this.pagination.page = this.pagination.page + 1
+    },
+    change_page (val) {
+      this.pagination.page = val
     }
   }
 }

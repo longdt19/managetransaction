@@ -29,6 +29,7 @@
     :data="dataTable"
     style="width: 100%"
     v-loading="loading"
+    border
   >
     <el-table-column type="index" label="STT" width="50" align="center">
     </el-table-column>
@@ -54,7 +55,7 @@
               v-for="item in role_list"
               :key="item.name"
               @click.native="update_role(scope.row, item)"
-              :disabled="scope.row.id === 1 || common_data.navigation.AD_USER.putMethod === 0"
+              :disabled="disable_edit_role(scope.row, item) === true"
             >
               {{item.name}}
             </el-dropdown-item>
@@ -69,10 +70,15 @@
       </template>
     </el-table-column>
 
-    <el-table-column label="Thao tác" header-align="center" align="center">
+    <el-table-column label="Thao tác" header-align="center" align="center" width="250">
       <template slot-scope="scope">
-          <el-button size="mini" type="danger" disabled>Xóa</el-button>
-        </template>
+        <el-button size="mini" type="danger" disabled>Xóa</el-button>
+
+        <el-button size="mini" type="warning" @click="open_reset_pass(scope.row)" :disabled="common_data.navigation.AD_USER.putMethod === 0">
+          <i class="el-icon-refresh"></i>
+          Mật khẩu
+        </el-button>
+      </template>
     </el-table-column>
   </el-table>
 
@@ -90,6 +96,7 @@
     </el-pagination>
   </div>
   <add-user-component ref='add_user' @user_created="user_created"/>
+  <reset-password-component ref='reset_pass' />
 </section>
 </template>
 
@@ -99,9 +106,10 @@ import converseTime from '@/utils/time'
 import { USER_URL, ROLE_URL } from '@/constants/endpoints'
 
 import AddUserComponent from './add'
+import ResetPasswordComponent from './reset_pass'
 
 export default {
-  components: { AddUserComponent },
+  components: { AddUserComponent, ResetPasswordComponent },
   data () {
     return {
       dataTable: [],
@@ -136,7 +144,7 @@ export default {
         return
       }
 
-      if (user.id === 1 && role.id === 1) {
+      if (user.id === 1) {
         this.$message.error('Cập nhật quyền hạn thất bại')
         return
       }
@@ -186,6 +194,15 @@ export default {
         this.$router.push('/e-500')
       }
     },
+    disable_edit_role (user, role) {
+      if (user.id === 1) return true
+      if (user.role.id === role.id) return true
+      if (this.common_data.navigation.AD_USER.putMethod === 0) return true
+      return false
+    },
+    open_reset_pass (user) {
+      this.$refs.reset_pass.open(user)
+    },
     open_add_user () {
       this.$refs.add_user.open(this.role_list)
     },
@@ -219,7 +236,6 @@ export default {
         this.pagination.totalPage = response.data.data.totalPages
         this.pagination.totalElement = response.data.data.totalElements
         this.dataTable = response.data.data.content
-        this.load_role_list()
       } else if (response.status === 400) {
         console.log('Bad resquest')
       } else {
@@ -236,6 +252,7 @@ export default {
   created () {
     if (this.common_data.navigation.AD_USER.getMethod === 1) {
       this.load_user_list()
+      this.load_role_list()
     }
   }
 }

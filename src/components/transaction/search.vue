@@ -100,8 +100,8 @@ export default {
       }
       const data = {
         search: {
-          'productId': bank_id,
-          'bankAccountId': product_id,
+          'productId': product_id,
+          'bankAccountId': bank_id,
           'customerId': customer_id,
           'fromDate': this.$parent.from_date,
           'toDate': this.$parent.to_date

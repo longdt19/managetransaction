@@ -6,7 +6,7 @@
           <span style="font-size: 24px; margin-bottom: 50px">Thống kê chi tiết các sản phẩm</span>
         </div></el-col>
         <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-          <el-button style="background-color: #2e7d32" :disabled="common_data.navigation.STA_PRODUCT.getMethod === 0">
+          <el-button style="background-color: #2e7d32" :disabled="common_data.navigation.STA_PRODUCT.getMethod === 0" @click="export_excel">
             <img src="../../assets/icon/download.svg" style="height: 15px" />
             <span style="margin-left: 5px; color: white">Xuất Excel</span>
           </el-button>
@@ -194,7 +194,7 @@
 <script>
 import formatNumber from '@/utils/numeric'
 
-import { PRODUCT_STATISTIC_URL } from '@/constants/endpoints'
+import { PRODUCT_STATISTIC_URL, PRODUCT_STATISTIC_DOWNLOAD_URL } from '@/constants/endpoints'
 
 export default {
   data () {
@@ -227,6 +227,13 @@ export default {
   },
   methods: {
     formatNumber,
+    export_excel () {
+      if (this.validate_input() === false) {
+        return
+      }
+
+      window.location.href = process.env.BACKEND_URL + '/' + PRODUCT_STATISTIC_DOWNLOAD_URL + `?fromDate=${this.from_date}&toDate=${this.to_date}`
+    },
     prev_page () {
       if (this.pagination.page === 1) return
 
@@ -240,16 +247,7 @@ export default {
       this.pagination.page = val
     },
     async search_product () {
-      if (this.common_data.navigation.STA_PRODUCT.getMethod === 0) {
-        return
-      }
-      if (this.from_date === '' || this.to_date === '') {
-        this.$message.error('Vui lòng chọn ngày')
-        return
-      }
-
-      if (this.from_date > this.to_date) {
-        this.$message.error('Vui lòng nhập lại ngày thống kê')
+      if (this.validate_input() === false) {
         return
       }
 
@@ -279,6 +277,22 @@ export default {
       } else {
         this.$router.push('/e-500')
       }
+    },
+    validate_input () {
+      if (this.common_data.navigation.STA_PRODUCT.getMethod === 0) {
+        this.$message.error('Bạn không đủ quyền hạn cho chức năng này')
+        return false
+      }
+      if (this.from_date === '' || this.to_date === '') {
+        this.$message.error('Vui lòng chọn ngày')
+        return false
+      }
+
+      if (this.from_date > this.to_date) {
+        this.$message.error('Vui lòng nhập lại ngày thống kê')
+        return false
+      }
+      return true
     }
   }
 }

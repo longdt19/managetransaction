@@ -6,7 +6,7 @@
           <span style="font-size: 24px; margin-bottom: 50px">Thống kê chi tiết ngân hàng</span>
         </div></el-col>
         <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
-          <el-button style="background-color: #2e7d32" :disabled="common_data.navigation.STA_BANK.getMethod === 0">
+          <el-button style="background-color: #2e7d32" :disabled="common_data.navigation.STA_BANK.getMethod === 0" @click="export_excel">
             <img src="../../assets/icon/download.svg" style="height: 15px" />
             <span style="margin-left: 5px; color: white">Xuất Excel</span>
           </el-button>
@@ -203,7 +203,7 @@
 <script>
 import formatNumber from '@/utils/numeric'
 
-import { BANK_STATISTIC_URL } from '@/constants/endpoints'
+import { BANK_STATISTIC_URL, BANK_STATISTIC_DOWNLOAD_URL } from '@/constants/endpoints'
 
 export default {
   data () {
@@ -224,7 +224,8 @@ export default {
         per_page: 10,
         list: [10, 20, 30]
       },
-      loading: false
+      loading: false,
+      loading_export: false
     }
   },
   watch: {
@@ -241,30 +242,15 @@ export default {
   },
   methods: {
     formatNumber,
-    prev_page () {
-      if (this.pagination.page === 1) return
+    export_excel () {
+      if (this.validate_input() === false) {
+        return
+      }
 
-      this.pagination.page = this.pagination.page - 1
-    },
-    next_page () {
-      if (this.pagination.page === this.total_page) return
-      this.pagination.page = this.pagination.page + 1
-    },
-    change_page (val) {
-      this.pagination.page = val
+      window.location.href = process.env.BACKEND_URL + '/' + BANK_STATISTIC_DOWNLOAD_URL + `?fromDate=${this.from_date}&toDate=${this.to_date}`
     },
     async search_bank () {
-      if (this.common_data.navigation.STA_BANK.getMethod === 0) {
-        return
-      }
-
-      if (this.from_date === '' || this.to_date === '') {
-        this.$message.error('Vui lòng chọn ngày')
-        return
-      }
-
-      if (this.from_date > this.to_date) {
-        this.$message.error('Vui lòng nhập lại ngày thống kê')
+      if (this.validate_input() === false) {
         return
       }
 
@@ -281,7 +267,6 @@ export default {
         size: this.pagination.per_page,
         page: this.pagination.page - 1
       }
-
       const response = await this.$services.do_request('get', BANK_STATISTIC_URL, data)
       this.loading = false
 
@@ -295,6 +280,35 @@ export default {
       } else {
         this.$router.push('/e-500')
       }
+    },
+    validate_input () {
+      if (this.common_data.navigation.STA_BANK.getMethod === 0) {
+        this.$message.error('Bạn không đủ quyền hạn cho chức năng này')
+        return false
+      }
+
+      if (this.from_date === '' || this.to_date === '') {
+        this.$message.error('Vui lòng chọn ngày')
+        return false
+      }
+
+      if (this.from_date > this.to_date) {
+        this.$message.error('Vui lòng nhập lại ngày thống kê')
+        return false
+      }
+      return true
+    },
+    prev_page () {
+      if (this.pagination.page === 1) return
+
+      this.pagination.page = this.pagination.page - 1
+    },
+    next_page () {
+      if (this.pagination.page === this.total_page) return
+      this.pagination.page = this.pagination.page + 1
+    },
+    change_page (val) {
+      this.pagination.page = val
     }
   }
 }

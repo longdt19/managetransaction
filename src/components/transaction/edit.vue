@@ -6,48 +6,72 @@
     width="700px"
     :before-close="handleClose"
   >
-    <el-row style="margin-top: 20px">
-      <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
-        <el-form>
-          <el-form-item label="Số tiền(*)" label-width="110px">
-            <el-input placeholder="Mời nhập" v-model="price_input"></el-input>
-            <span v-if="is_number(price_input) === false" style="color: #dc3545!important">*Số tiền nhập vào không hợp lệ</span>
-          </el-form-item>
+  <el-row style="margin-top: 20px">
+    <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
+      <el-form>
+        <el-form-item label="Mã giao dịch(*)" label-width="110px">
+          <el-input :placeholder="code" disabled></el-input>
+        </el-form-item>
 
-          <el-form-item label="Chiết suất (%)" label-width="110px">
-            <el-input placeholder="Mời nhập" v-model="extract_input"></el-input>
-            <span v-if="is_number(extract_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
-          </el-form-item>
+        <el-form-item label="Sản phẩm(*)" label-width="110px">
+          <el-input :placeholder="product_name" disabled></el-input>
+        </el-form-item>
 
-          <el-form-item label="Bớt tiền" label-width="110px">
-            <el-input placeholder="Mời nhập" v-model="discount_input"></el-input>
-            <span v-if="is_number(discount_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
-          </el-form-item>
-        </el-form>
-      </div></el-col>
-      <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
-        <el-form>
+        <el-form-item label="Người giao dịch(*)" label-width="110px">
+          <el-input :placeholder="customer_name" disabled></el-input>
+        </el-form-item>
 
-          <el-form-item label="Tổng(*)" label-width="110px">
-            <el-input placeholder="Mời nhập" v-model="total_input"></el-input>
-            <span v-if="is_number(total_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
-          </el-form-item>
+        <el-form-item label="Ngân hàng(*)" label-width="110px">
+          <el-input :placeholder="bank_name" disabled></el-input>
+        </el-form-item>
 
-          <el-form-item label="Đã thanh toán(*)" label-width="110px">
-            <el-input placeholder="Mời nhập" v-model="paid_input"></el-input>
-            <span v-if="is_number(paid_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
-          </el-form-item>
+        <el-form-item label="Ghi chú" label-width="110px">
+          <el-input :placeholder="note" disabled></el-input>
+        </el-form-item>
 
-          <el-form-item label="Còn nợ(*)" label-width="110px">
-            <el-input placeholder="Mời nhập" v-model="unpaid_input"></el-input>
-            <span v-if="is_number(unpaid_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
-          </el-form-item>
-        </el-form>
-      </div></el-col>
-    </el-row>
+        <el-form-item label="Trạng thái(*)" label-width="110px">
+          <el-input :placeholder="status" disabled></el-input>
+        </el-form-item>
+
+      </el-form>
+    </div></el-col>
+    <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
+      <el-form>
+        <el-form-item label="Số tiền(*)" label-width="110px">
+          <el-input placeholder="Mời nhập" v-model="price_input"></el-input>
+          <span v-if="is_number(price_input) === false" style="color: #dc3545!important">*Số tiền nhập vào không hợp lệ</span>
+        </el-form-item>
+
+        <el-form-item label="Chiết suất (%)" label-width="110px">
+          <el-input placeholder="Mời nhập" v-model="extract_input"></el-input>
+          <span v-if="is_number(extract_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+        </el-form-item>
+
+        <el-form-item label="Bớt tiền" label-width="110px">
+          <el-input placeholder="Mời nhập" v-model="discount_input"></el-input>
+          <span v-if="is_number(discount_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+        </el-form-item>
+
+        <el-form-item label="Tổng(*)" label-width="110px">
+          <el-input placeholder="Mời nhập" v-model="total_input"></el-input>
+          <span v-if="is_number(total_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+        </el-form-item>
+
+        <el-form-item label="Đã thanh toán(*)" label-width="110px">
+          <el-input placeholder="Mời nhập" v-model="paid_input"></el-input>
+          <span v-if="is_number(paid_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+        </el-form-item>
+
+        <el-form-item label="Còn nợ(*)" label-width="110px">
+          <el-input placeholder="Mời nhập" v-model="unpaid_input"></el-input>
+          <span v-if="is_number(unpaid_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+        </el-form-item>
+      </el-form>
+    </div></el-col>
+  </el-row>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">Hủy bỏ</el-button>
-      <el-button type="primary" @click="create" :loading="loading">Tạo mới</el-button>
+      <el-button type="primary"  :loading="loading">Cập nhật</el-button>
     </span>
   </el-dialog>
 </section>
@@ -60,6 +84,12 @@ import { TRANSACTION_URL } from '@/constants/endpoints'
 export default {
   data () {
     return {
+      code: '',
+      product_name: '',
+      customer_name: '',
+      bank_name: '',
+      note: '',
+      status: '',
       price_input: '',
       extract_input: '',
       discount_input: '',
@@ -79,6 +109,12 @@ export default {
       this.total_input = transaction.total
       this.paid_input = transaction.paid
       this.unpaid_input = transaction.owed
+      this.code = transaction.code
+      this.product_name = transaction.product.name
+      this.customer_name = transaction.customer.name
+      this.bank_name = transaction.bankAccount.bankName
+      this.note = transaction.note
+      this.status = transaction.status
       this.transaction = transaction
       this.dialogVisible = true
     },

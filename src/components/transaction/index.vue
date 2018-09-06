@@ -257,6 +257,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { BANK_LIST_URL, CUSTOMER_LIST_URL, PRODUCT_LIST_URL, TRANSACTION_URL, TRANSACTION_DOWNLOAD_URL } from '@/constants/endpoints'
 
 import formatNumber from '@/utils/numeric'
@@ -307,7 +308,9 @@ export default {
       customer: {
         list: [],
         loading: false
-      }
+      },
+      old_search: {},
+      new_search: {}
     }
   },
   watch: {
@@ -380,11 +383,16 @@ export default {
         this.pagination.page = 1
       }
 
+      if (_.isEqual(this.old_search, this.new_search) !== true) {
+        this.pagination.page = 1
+      }
+
       const data = {
-        search: {},
+        search: this.new_search,
         size: this.pagination.per_page,
         page: this.pagination.page - 1
       }
+
       const response = await this.$services.do_request('get', TRANSACTION_URL, data)
       this.transaction.loading = false
 
@@ -393,6 +401,7 @@ export default {
         this.pagination.totalElement = response.data.data.data.totalElements
         this.pagination.totalPage = response.data.data.data.totalPages
         this.statistic = response.data.data.statistic
+        this.old_search = this.new_search
       } else {
         this.$router.push('/e-500')
       }

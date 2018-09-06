@@ -62,8 +62,6 @@
 </template>
 
 <script>
-import { TRANSACTION_URL } from '@/constants/endpoints'
-
 export default {
   data () {
     return {
@@ -82,9 +80,6 @@ export default {
         return
       }
 
-      if (this.$parent.transaction.loading) return
-      this.$parent.transaction.loading = true
-
       let bank_id = this.input_bank
       let product_id = this.input_product
       let customer_id = this.input_customer
@@ -98,28 +93,14 @@ export default {
       if (this.input_customer === '') {
         customer_id = 0
       }
-      const data = {
-        search: {
-          'productId': product_id,
-          'bankAccountId': bank_id,
-          'customerId': customer_id,
-          'fromDate': this.$parent.from_date,
-          'toDate': this.$parent.to_date
-        },
-        size: this.$parent.pagination.per_page,
-        page: this.$parent.pagination.page - 1
+      this.$parent.new_search = {
+        'productId': product_id,
+        'bankAccountId': bank_id,
+        'customerId': customer_id,
+        'fromDate': this.$parent.from_date,
+        'toDate': this.$parent.to_date
       }
-
-      const response = await this.$services.do_request('get', TRANSACTION_URL, data)
-      this.$parent.transaction.loading = false
-      if (response.data.data) {
-        this.$parent.transaction.list = response.data.data.data.content
-        this.$parent.statistic = response.data.data.statistic
-        this.$parent.pagination.totalElement = response.data.data.data.totalElements
-        this.$parent.pagination.totalPage = response.data.data.data.totalPages
-      } else {
-        this.$router.push('/e-500')
-      }
+      this.$parent.load_transaction_list()
     }
   },
   created () {

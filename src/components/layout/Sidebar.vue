@@ -71,7 +71,7 @@
           <img src="../../assets/icon/user.svg" style="width: 30px" />
           <span>Người dùng</span>
         </template>
-        <el-menu-item index="1-4" @click.native="go_to('role-admin')" v-if="common_data.navigation.AD_ROLE.status === 1">Quyền hạn</el-menu-item>
+        <el-menu-item index="1-4" @click.native="go_to('role-admin')" v-if="common_data.navigation.AD_ROLE.status === 1">Nhóm người dùng</el-menu-item>
         <el-menu-item index="1-5" @click.native="go_to('user-admin')" v-if="common_data.navigation.AD_USER.status === 1">Người dùng</el-menu-item>
       </el-submenu>
 

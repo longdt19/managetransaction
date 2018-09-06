@@ -3,7 +3,7 @@
     <div class="" style="margin-bottom: 20px">
       <el-row>
         <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
-          <span style="font-size: 24px; margin-bottom: 50px">Thống kê các quyền hạn</span>
+          <span style="font-size: 24px; margin-bottom: 50px">Thống kê các nhóm người dùng</span>
         </div></el-col>
         <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
           <el-button @click="open_add_role" :disabled="common_data.navigation.AD_ROLE.postMethod === 0">

@@ -188,7 +188,8 @@ export default {
         'total': this.total_input,
         'paid': this.paid_input,
         'owed': this.unpaid_input,
-        'status': this.input_status.input
+        'status': this.input_status.input,
+        'note': this.note_input
       }
       const response = await this.$services.do_request('post', TRANSACTION_URL, formData)
       this.loading = false

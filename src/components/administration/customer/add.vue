@@ -81,6 +81,7 @@ export default {
   methods: {
     async load_customer_group_list () {
       if (this.common_data.navigation.CAT_CUSTOMER.postMethod === 0) {
+        this.$message.error('Bạn không đủ quyền hạn để thực hiện chức năng này')
         return false
       }
       if (this.loading) return

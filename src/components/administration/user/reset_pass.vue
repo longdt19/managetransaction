@@ -44,7 +44,7 @@ export default {
     },
     async reset_pass () {
       if (this.common_data.navigation.AD_USER.putMethod === 0) {
-        this.$message.error('Bạn không có quyền thực hiện thao tác này')
+        this.$message.error('Bạn không đủ quyền hạn để thực hiện chức năng này')
         return
       }
       if (this.loading) return

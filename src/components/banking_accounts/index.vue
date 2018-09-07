@@ -283,7 +283,7 @@ export default {
     },
     validate_input () {
       if (this.common_data.navigation.STA_BANK.getMethod === 0) {
-        this.$message.error('Bạn không đủ quyền hạn cho chức năng này')
+        this.$message.error('Bạn không đủ quyền hạn để thực hiện chức năng này')
         return false
       }
 

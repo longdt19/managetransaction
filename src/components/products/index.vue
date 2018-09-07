@@ -280,7 +280,7 @@ export default {
     },
     validate_input () {
       if (this.common_data.navigation.STA_PRODUCT.getMethod === 0) {
-        this.$message.error('Bạn không đủ quyền hạn cho chức năng này')
+        this.$message.error('Bạn không đủ quyền hạn để thực hiện chức năng này')
         return false
       }
       if (this.from_date === '' || this.to_date === '') {

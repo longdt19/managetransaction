@@ -70,16 +70,19 @@ export default {
       input_customer: null
     }
   },
+  watch: {
+    'input_bank' (val) {
+      this.load_data_to_search()
+    },
+    'input_product' (val) {
+      this.load_data_to_search()
+    },
+    'input_customer' (val) {
+      this.load_data_to_search()
+    }
+  },
   methods: {
-    async search () {
-      if (this.common_data.navigation.TRANSACTION.getMethod === 0) {
-        return
-      }
-      if (this.$parent.from_date > this.$parent.to_date) {
-        this.$message.error('Vui lòng nhập lại ngày thống kê')
-        return
-      }
-
+    load_data_to_search () {
       let bank_id = this.input_bank
       let product_id = this.input_product
       let customer_id = this.input_customer
@@ -100,6 +103,16 @@ export default {
         'fromDate': this.$parent.from_date,
         'toDate': this.$parent.to_date
       }
+    },
+    async search () {
+      if (this.common_data.navigation.TRANSACTION.getMethod === 0) {
+        return
+      }
+      if (this.$parent.from_date > this.$parent.to_date) {
+        this.$message.error('Vui lòng nhập lại ngày thống kê')
+        return
+      }
+
       this.$parent.load_transaction_list()
     }
   },

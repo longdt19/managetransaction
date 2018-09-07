@@ -66,6 +66,7 @@ export default {
   methods: {
     async update (row) {
       if (this.common_data.navigation.AD_ROLE.putMethod === 0) {
+        this.$message.error('Bạn không đủ quyền hạn để thực hiện chức năng này')
         return
       }
 

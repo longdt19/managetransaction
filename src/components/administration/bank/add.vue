@@ -64,6 +64,7 @@ export default {
     },
     async add () {
       if (this.common_data.navigation.CAT_BANK.postMethod === 0) {
+        this.$message.error('Bạn không đủ quyền hạn để thực hiện chức năng này')
         return
       }
       if (this.validate_input() === false) {

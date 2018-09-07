@@ -62,7 +62,7 @@
     <el-table-column label="Thao tác" header-align="center" align="center">
       <template slot-scope="scope">
           <el-button size="mini" @click="open_edit(scope.row)"
-            :disabled="common_data.navigation.CAT_CUSTOMER_GR.puttMethod === 0"
+            :disabled="common_data.navigation.CAT_CUSTOMER_GR.putMethod === 0"
           >
             Sửa
           </el-button>

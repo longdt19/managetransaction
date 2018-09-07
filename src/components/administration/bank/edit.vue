@@ -70,6 +70,7 @@ export default {
     },
     async edit () {
       if (this.common_data.navigation.CAT_BANK.putMethod === 0) {
+        this.$message.error('Bạn không đủ quyền hạn để thực hiện chức năng này')
         return
       }
       if (this.validate_input() === false) {

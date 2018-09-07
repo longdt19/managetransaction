@@ -141,6 +141,7 @@ export default {
     converseTime,
     async update_role (user, role) {
       if (this.common_data.navigation.AD_USER.putMethod === 0) {
+        this.$message.error('Bạn không đủ quyền hạn để thực hiện chức năng này')
         return
       }
 

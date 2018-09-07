@@ -60,6 +60,7 @@ export default {
     },
     async create_user () {
       if (this.common_data.navigation.AD_USER.postMethod === 0) {
+        this.$message.error('Bạn không đủ quyền hạn để thực hiện chức năng này')
         return
       }
 

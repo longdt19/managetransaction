@@ -38,6 +38,7 @@ export default {
     },
     async delete_customer () {
       if (this.common_data.navigation.CAT_CUSTOMER.deleteMethod === 0) {
+        this.$message.error('Bạn không đủ quyền hạn để thực hiện chức năng này')
         return
       }
       if (this.loading) return

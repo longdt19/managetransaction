@@ -10,7 +10,7 @@
         <add-transaction-component ref='add_transaction' @transaction_added="transaction_added"></add-transaction-component>
       </div></el-col>
       <el-col :xs="12" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
-        <el-button style="background-color: #2e7d32" :disabled="common_data.navigation.TRANSACTION.getMethod === 0">
+        <el-button style="background-color: #2e7d32" :disabled="common_data.navigation.TRANSACTION.getMethod === 0" @click="export_excel">
           <img src="../../assets/icon/download.svg" style="height: 15px" />
           <span style="margin-left: 5px; color: white">Xuất Excel</span>
         </el-button>
@@ -219,7 +219,7 @@
 
     <el-table-column label="Ghi chú" header-align="center" align="center">
       <template slot-scope="scope">
-        <span style="font-size: 10px">hihihihi</span>
+        <span style="font-size: 10px">{{scope.row.note}}</span>
       </template>
     </el-table-column>
 
@@ -232,6 +232,7 @@
     <el-table-column label="Thao tác" header-align="center" align="center">
       <template slot-scope="scope">
           <el-button size="mini" @click="open_edit(scope.row)"
+            :disabled="common_data.navigation.TRANSACTION.putMethod === 0"
           >
             Sửa
           </el-button>
@@ -240,7 +241,7 @@
 
   </el-table>
   <div class="block" style="margin-top: 30px; text-align: right" align="center"
-    v-if="this.common_data.navigation.TRANSACTION.getMethod === 1"
+    v-if="common_data.navigation.TRANSACTION.getMethod === 1"
   >
     <el-pagination
       layout="prev, pager, next"
@@ -252,7 +253,7 @@
     >
     </el-pagination>
   </div>
-  <edit-transaction-component ref='edit_transaction' />
+  <edit-transaction-component ref='edit_transaction' @transaction_edited='transaction_edited'/>
 </section>
 </template>
 
@@ -328,48 +329,9 @@ export default {
   methods: {
     formatNumber,
     formatDate,
-    export_excel () {
-      if (this.validate_input() === false) {
-        return
-      }
-
-      window.location.href = process.env.BACKEND_URL + '/' + TRANSACTION_DOWNLOAD_URL + `?fromDate=${this.from_date}&toDate=${this.to_date}`
-    },
-    open_edit (transaction) {
-      this.$refs.edit_transaction.open(transaction)
-    },
-    type_of_status (status) {
-      // 1: Xuất
-      // 2: Nhập
-      // 3: Hoàn tiền
-      let type = ''
-      let label = ''
-
-      if (status === 1) {
-        type = 'success'
-        label = 'Xuất'
-      } else if (status === 2) {
-        type = 'warning'
-        label = 'Nhập'
-      } else if (status === 3) {
-        type = 'danger'
-        label = 'Hoàn tiền'
-      }
-      return {
-        type: type,
-        label: label
-      }
-    },
-    prev_page () {
-      if (this.pagination.page === 1) return
-      this.pagination.page = this.pagination.page - 1
-    },
-    next_page () {
-      if (this.pagination.page === this.total_page) return
-      this.pagination.page = this.pagination.page + 1
-    },
-    change_page (val) {
-      this.pagination.page = val
+    async export_excel () {
+      let search = encodeURI(JSON.stringify(this.new_search))
+      window.location.href = process.env.BACKEND_URL + '/' + TRANSACTION_DOWNLOAD_URL + `?search=${search}`
     },
     async load_transaction_list () {
       if (this.common_data.navigation.TRANSACTION.getMethod === 0) {
@@ -458,8 +420,51 @@ export default {
         this.$router.push('/e-500')
       }
     },
+    transaction_edited (transaction) {
+      console.log('1', transaction)
+      console.log('2', this.transaction.list)
+      const transaction_index = this.transaction.list.findIndex(item => item.id === transaction.id)
+      console.log('3', transaction_index)
+      Object.assign(this.transaction.list[transaction_index], transaction)
+    },
     transaction_added () {
       this.load_transaction_list()
+    },
+    open_edit (transaction) {
+      this.$refs.edit_transaction.open(transaction)
+    },
+    type_of_status (status) {
+      // 1: Xuất
+      // 2: Nhập
+      // 3: Hoàn tiền
+      let type = ''
+      let label = ''
+
+      if (status === 1) {
+        type = 'success'
+        label = 'Xuất'
+      } else if (status === 2) {
+        type = 'warning'
+        label = 'Nhập'
+      } else if (status === 3) {
+        type = 'danger'
+        label = 'Hoàn tiền'
+      }
+      return {
+        type: type,
+        label: label
+      }
+    },
+    prev_page () {
+      if (this.pagination.page === 1) return
+      this.pagination.page = this.pagination.page - 1
+    },
+    next_page () {
+      if (this.pagination.page === this.total_page) return
+      this.pagination.page = this.pagination.page + 1
+    },
+    change_page (val) {
+      this.pagination.page = val
     }
   },
   created () {

@@ -71,7 +71,7 @@
   </el-row>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">Hủy bỏ</el-button>
-      <el-button type="primary"  :loading="loading">Cập nhật</el-button>
+      <el-button type="primary"  :loading="loading" @click="edit">Cập nhật</el-button>
     </span>
   </el-dialog>
 </section>
@@ -118,7 +118,7 @@ export default {
       this.transaction = transaction
       this.dialogVisible = true
     },
-    async create () {
+    async edit () {
       if (this.common_data.navigation.TRANSACTION.putMethod === 0) {
         return
       }
@@ -135,6 +135,11 @@ export default {
 
       let data = {
         'id': this.transaction.id,
+        'bankAccount': {'id': this.transaction.bankAccount.id},
+        'customer': {'id': this.transaction.customer.id},
+        'product': {'id': this.transaction.product.id},
+        'status': this.transaction.input,
+        'code': this.transaction.code,
         'cost': this.price_input,
         'extracts': this.extract_input,
         'discount': this.discount_input,
@@ -142,13 +147,18 @@ export default {
         'paid': this.paid_input,
         'owed': this.unpaid_input
       }
-      console.log('data', data)
       const response = await this.$services.do_request('put', TRANSACTION_URL, data)
       this.loading = false
 
       if (response.data.message === 'Success') {
         this.$message.success('Thay đổi giao dịch thành công')
-        // this.$emit('transaction_edited', this.transaction)
+        this.transaction.cost = this.price_input
+        this.transaction.extracts = this.extract_input
+        this.transaction.discount = this.discount_input
+        this.transaction.total = this.total_input
+        this.transaction.paid = this.paid_input
+        this.transaction.owed = this.unpaid_input
+        this.$emit('transaction_edited', this.transaction)
         this.dialogVisible = false
       } else if (response.status === 400) {
         console.log('Bad request')
@@ -192,23 +202,11 @@ export default {
       }
     },
     check_null_before_create () {
-      if (this.code_input === '') {
-        this.$message.error('Mã giao dịch không được để trống')
-        return false
-      } else if (this.input_product === '') {
-        this.$message.error('Sản phẩm không được để trống')
-        return false
-      } else if (this.input_customer === '') {
-        this.$message.error('Người giao dịch không được để trống')
-        return false
-      } else if (this.input_bank === '') {
-        this.$message.error('Ngân hàng không được để trống')
-        return false
-      } else if (this.input_status === '') {
-        this.$message.error('Trạng thái không được để trống')
-        return false
-      } else if (this.price_input === '') {
+      if (this.price_input === '') {
         this.$message.error('Số tiền không được để trống')
+        return false
+      } else if (this.discount_input === '') {
+        this.$message.error('Bớt tiền không được để trống')
         return false
       } else if (this.total === '') {
         this.$message.error('Tổng không được để trống')

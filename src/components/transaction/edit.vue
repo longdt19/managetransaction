@@ -138,14 +138,15 @@ export default {
         'bankAccount': {'id': this.transaction.bankAccount.id},
         'customer': {'id': this.transaction.customer.id},
         'product': {'id': this.transaction.product.id},
-        'status': this.transaction.input,
+        'status': this.transaction.status,
         'code': this.transaction.code,
         'cost': this.price_input,
         'extracts': this.extract_input,
         'discount': this.discount_input,
         'total': this.total_input,
         'paid': this.paid_input,
-        'owed': this.unpaid_input
+        'owed': this.unpaid_input,
+        'note': this.transaction.note
       }
       const response = await this.$services.do_request('put', TRANSACTION_URL, data)
       this.loading = false

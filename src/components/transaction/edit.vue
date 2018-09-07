@@ -26,11 +26,11 @@
         </el-form-item>
 
         <el-form-item label="Ghi chú" label-width="110px">
-          <el-input :placeholder="note" disabled></el-input>
+          <el-input :placeholder="note" v-model="note"></el-input>
         </el-form-item>
 
         <el-form-item label="Trạng thái(*)" label-width="110px">
-          <el-input :placeholder="status" disabled></el-input>
+          <el-input :placeholder="status_list[status-1]" disabled></el-input>
         </el-form-item>
 
       </el-form>
@@ -97,12 +97,14 @@ export default {
       paid_input: '',
       unpaid_input: '',
       transaction: {},
+      status_list: ['Xuất', 'Nhập', 'Tồn'],
       dialogVisible: false,
       loading: false
     }
   },
   methods: {
     open (transaction) {
+      console.log('123', transaction.status)
       this.price_input = transaction.cost
       this.extract_input = transaction.extracts
       this.discount_input = transaction.discount
@@ -146,7 +148,7 @@ export default {
         'total': this.total_input,
         'paid': this.paid_input,
         'owed': this.unpaid_input,
-        'note': this.transaction.note
+        'note': this.note
       }
       const response = await this.$services.do_request('put', TRANSACTION_URL, data)
       this.loading = false
@@ -159,6 +161,7 @@ export default {
         this.transaction.total = this.total_input
         this.transaction.paid = this.paid_input
         this.transaction.owed = this.unpaid_input
+        this.transaction.note = this.note
         this.$emit('transaction_edited', this.transaction)
         this.dialogVisible = false
       } else if (response.status === 400) {

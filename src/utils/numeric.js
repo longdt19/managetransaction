@@ -1,5 +1,4 @@
 export default function formatNumber (number) {
-  console.log('number', number)
   if (number === 0 || number === '' || number === '0') {
     return 0
   } else if (number) {

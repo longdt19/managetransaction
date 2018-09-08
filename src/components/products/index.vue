@@ -172,6 +172,9 @@
         </el-table-column>
 
         <el-table-column label="Tổng" header-align="center" align="center">
+          <template slot-scope="scope">
+            {{formatNumber(scope.row.total)}}
+          </template>
         </el-table-column>
       </el-table>
     </div>

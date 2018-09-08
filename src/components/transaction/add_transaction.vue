@@ -267,6 +267,9 @@ export default {
       } else if (this.unpaid_input === '') {
         this.$message.error('Còn nợ không được để trống')
         return false
+      } else if (!this.input_status.input) {
+        this.$message.error('Trạng thái không được để trống')
+        return false
       } else {
         return true
       }

@@ -47,15 +47,15 @@
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
         <el-row >
           <el-col :span="8"><div class="grid-content bg-purple">
-              <span style="font-size: 15px;">Có:</span>
+              <span style="font-size: 15px;">Nạp:</span>
               <el-tag type="success" v-if="statistic.paid">
                 <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.paid)}}</span>
               </el-tag>
           </div></el-col>
 
           <el-col :span="8"><div class="grid-content bg-purple-light">
-            <span style="font-size: 15px;">Nợ:</span>
-            <el-tag type="danger" v-if="statistic.owed">tinbank
+            <span style="font-size: 15px;">Thanh toán:</span>
+            <el-tag type="danger" v-if="statistic.owed">
               <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.owed)}}</span>
             </el-tag>
           </div></el-col>

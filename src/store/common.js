@@ -75,6 +75,12 @@ export default {
     },
     search_customer_loaded: (state, value) => {
       state.search_customer = value
+    },
+    restore: (state) => {
+      const s = INIT_STATE
+      Object.keys(s).forEach(key => {
+        state[key] = s[key]
+      })
     }
   },
   actions: {},

@@ -37,39 +37,68 @@
     <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
       <el-form>
         <el-form-item label="Số tiền(*)" label-width="130px">
-          <el-input placeholder="Mời nhập" v-model="price_input"></el-input>
-          <span v-if="is_number(price_input) === false" style="color: #dc3545!important">*Số tiền nhập vào không hợp lệ</span>
+          <div class="">
+            <el-input placeholder="Mời nhập" v-model="price_input"></el-input>
+          </div>
+          <div class="">
+            <span v-if="is_number(price_input) === false" style="color: #dc3545!important">*Số tiền nhập vào không hợp lệ</span>
+          </div>
         </el-form-item>
 
         <el-form-item label="Chiết suất (%)" label-width="130px">
-          <el-input placeholder="Mời nhập" v-model="extract_input"></el-input>
-          <span v-if="is_number(extract_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+          <div class="">
+            <el-input placeholder="Mời nhập" v-model="extract_input"></el-input>
+          </div>
+          <div class="">
+            <span v-if="is_number(extract_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+          </div>
         </el-form-item>
 
         <el-form-item label="Bớt tiền" label-width="130px">
-          <el-input placeholder="Mời nhập" v-model="discount_input"></el-input>
-          <span v-if="is_number(discount_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+          <div class="">
+            <el-input placeholder="Mời nhập" v-model="discount_input"></el-input>
+          </div>
+          <div class="">
+            <span v-if="is_number(discount_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+          </div>
+        </el-form-item>
+
+        <el-form-item v-if="status === 3 || status === 2" label="Phí ngân hàng" label-width="130px">
+          <div class="">
+            <el-input placeholder="Mời nhập" v-model="bank_fee"></el-input>
+          </div>
+          <div class="">
+            <span v-if="is_number(bank_fee) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+          </div>
         </el-form-item>
 
         <el-form-item label="Tổng(*)" label-width="130px">
-          <el-input placeholder="Mời nhập" v-model="total_input"></el-input>
-          <span v-if="is_number(total_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+          <div class="">
+            <el-input placeholder="Mời nhập" v-model="total_input" disabled></el-input>
+          </div>
+          <div class="">
+            <span v-if="is_number(total_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+          </div>
         </el-form-item>
 
         <el-form-item label="Đã thanh toán(*)" label-width="130px">
-          <el-input placeholder="Mời nhập" v-model="paid_input"></el-input>
-          <span v-if="is_number(paid_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+          <div class="">
+            <el-input placeholder="Mời nhập" v-model="paid_input"></el-input>
+          </div>
+          <div class="">
+            <span v-if="is_number(paid_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+          </div>
         </el-form-item>
 
         <el-form-item label="Còn nợ(*)" label-width="130px">
-          <el-input placeholder="Mời nhập" v-model="unpaid_input"></el-input>
-          <span v-if="is_number(unpaid_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+          <div class="">
+            <el-input placeholder="Mời nhập" v-model="unpaid_input" disabled></el-input>
+          </div>
+          <div class="">
+            <span v-if="is_number(unpaid_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+          </div>
         </el-form-item>
 
-        <el-form-item v-if="status === 3 || status === 2" label="Phí ngân hàng(*)" label-width="130px">
-          <el-input placeholder="Mời nhập" v-model="bank_fee"></el-input>
-          <span v-if="is_number(bank_fee) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
-        </el-form-item>
       </el-form>
     </div></el-col>
   </el-row>
@@ -94,28 +123,57 @@ export default {
       bank_name: '',
       note: '',
       status: '',
-      price_input: '',
-      extract_input: '',
-      discount_input: '',
-      total_input: '',
-      paid_input: '',
-      unpaid_input: '',
-      bank_fee: '',
+      price_input: 0,
+      extract_input: 0,
+      discount_input: 0,
+      total_input: 0,
+      paid_input: 0,
+      unpaid_input: 0,
+      bank_fee: 0,
       transaction: {},
       status_list: ['Xuất', 'Nhập', 'Hoàn tiền'],
       dialogVisible: false,
       loading: false
     }
   },
+  watch: {
+    'price_input' (val) {
+      console.log('123', typeof val)
+      this.auto_complete()
+    },
+    'extract_input' (val) {
+      this.auto_complete()
+    },
+    'discount_input' (val) {
+      this.auto_complete()
+    },
+    'paid_input' (val) {
+      this.auto_complete()
+    },
+    'bank_fee' (val) {
+      console.log('123', typeof val)
+      this.auto_complete()
+    }
+  },
   methods: {
+    auto_complete () {
+      this.total_input = this.price_input - this.extract_input * this.price_input / 100 - this.discount_input
+      this.total_input = parseFloat(this.total_input)
+      if (this.bank_fee) {
+        this.total_input += parseFloat(this.bank_fee)
+      } else {
+        this.total_input += this.bank_fee
+      }
+      this.unpaid_input = this.total_input - this.paid_input
+    },
     open (transaction) {
-      console.log('123', transaction.status)
       this.price_input = transaction.cost
       this.extract_input = transaction.extracts
       this.discount_input = transaction.discount
       this.total_input = transaction.total
       this.paid_input = transaction.paid
       this.unpaid_input = transaction.owed
+      this.bank_fee = transaction.bankFee
       this.code = transaction.code
       this.product_name = transaction.product.name
       this.customer_name = transaction.customer.name
@@ -140,6 +198,7 @@ export default {
       if (this.loading) return
       this.loading = true
 
+      this.auto_complete()
       let data = {
         'id': this.transaction.id,
         'bankAccount': {'id': this.transaction.bankAccount.id},
@@ -153,7 +212,8 @@ export default {
         'total': this.total_input,
         'paid': this.paid_input,
         'owed': this.unpaid_input,
-        'note': this.note
+        'note': this.note,
+        'bankFee': this.bank_fee
       }
       const response = await this.$services.do_request('put', TRANSACTION_URL, data)
       this.loading = false
@@ -161,7 +221,7 @@ export default {
       if (response.data.message === 'Success') {
         this.$message.success('Thay đổi giao dịch thành công')
         // update after edit
-        this.total_input = this.price_input - (this.extract_input * this.price_input / 100 + this.discount_input)
+        this.total_input = this.price_input - this.extract_input * this.price_input / 100 - this.discount_input
         this.unpaid_input = this.total_input - this.paid_input
 
         this.transaction.cost = this.price_input
@@ -171,6 +231,7 @@ export default {
         this.transaction.paid = this.paid_input
         this.transaction.owed = this.unpaid_input
         this.transaction.note = this.note
+        this.transaction.bankFee = this.bank_fee
         this.$emit('transaction_edited', this.transaction)
         this.dialogVisible = false
       } else if (response.status === 400) {

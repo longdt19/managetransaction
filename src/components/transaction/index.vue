@@ -203,6 +203,12 @@
         </template>
       </el-table-column>
 
+      <el-table-column label="Phí ngân hàng" header-align="center" align="center">
+        <template slot-scope="scope">
+          {{scope.row.bankFee}}
+        </template>
+      </el-table-column>
+
       <el-table-column label="Đã thanh toán" header-align="center" align="center">
         <template slot-scope="scope">
           {{formatNumber(scope.row.paid)}}
@@ -356,6 +362,7 @@ export default {
       }
 
       const response = await this.$services.do_request('get', TRANSACTION_URL, data)
+      console.log('respo9nse', response)
       this.transaction.loading = false
 
       if (response.data.data) {

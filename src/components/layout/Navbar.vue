@@ -143,6 +143,7 @@ export default {
       }
     },
     logout () {
+      this.$store.commit('Common/restore')
       this.$router.push('/login')
     },
     check_change_pass (pass1, pass2) {

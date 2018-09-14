@@ -19,7 +19,7 @@
           <el-col :xs="24" :md="10"><div class="grid-content bg-purple" style="margin-left: 12px">
             <span>Từ ngày:</span>
             <el-date-picker
-              v-model="from_date"
+              v-model="search.from_date"
               type="date"
               value-format="dd-MM-yyyy"
               format="dd-MM-yyyy"
@@ -30,7 +30,7 @@
           <el-col :xs="24" :md="10"><div class="grid-content bg-purple-light">
             <span>Đến ngày:</span>
             <el-date-picker
-              v-model="to_date"
+              v-model="search.to_date"
               type="date"
               value-format="dd-MM-yyyy"
               format="dd-MM-yyyy"
@@ -195,15 +195,19 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import formatNumber from '@/utils/numeric'
+import getDays from '@/utils/day'
 
 import { PRODUCT_STATISTIC_URL, PRODUCT_STATISTIC_DOWNLOAD_URL } from '@/constants/endpoints'
 
 export default {
   data () {
     return {
-      from_date: '',
-      to_date: '',
+      search: {
+        from_date: '',
+        to_date: ''
+      },
       product_list: [],
       statistic: {},
       loading: false,
@@ -226,6 +230,12 @@ export default {
       if (this.common_data.navigation.STA_PRODUCT.getMethod === 1) {
         this.search_product()
       }
+    },
+    'search.from_date' (val) {
+      this.$store.commit('Common/search_product_loaded', this.search)
+    },
+    'search.to_date' (val) {
+      this.$store.commit('Common/search_product_loaded', this.search)
     }
   },
   methods: {
@@ -235,7 +245,7 @@ export default {
         return
       }
 
-      window.location.href = process.env.BACKEND_URL + '/' + PRODUCT_STATISTIC_DOWNLOAD_URL + `?fromDate=${this.from_date}&toDate=${this.to_date}`
+      window.location.href = process.env.BACKEND_URL + '/' + PRODUCT_STATISTIC_DOWNLOAD_URL + `?fromDate=${this.search.from_date}&toDate=${this.search.to_date}`
     },
     prev_page () {
       if (this.pagination.page === 1) return
@@ -261,8 +271,8 @@ export default {
       }
 
       const data = {
-        'fromDate': this.from_date,
-        'toDate': this.to_date,
+        'fromDate': this.search.from_date,
+        'toDate': this.search.to_date,
         'size': this.pagination.per_page,
         'page': this.pagination.page - 1
       }
@@ -286,17 +296,27 @@ export default {
         this.$message.error('Bạn không đủ quyền hạn để thực hiện chức năng này')
         return false
       }
-      if (this.from_date === '' || this.to_date === '') {
+      if (this.search.from_date === '' || this.search.to_date === '') {
         this.$message.error('Vui lòng chọn ngày')
         return false
       }
 
-      if (this.from_date > this.to_date) {
+      if (this.search.from_date > this.search.to_date) {
         this.$message.error('Vui lòng nhập lại ngày thống kê')
         return false
       }
       return true
     }
+  },
+  created () {
+    let search = getDays()
+    this.search = search
+
+    if (_.isEmpty(this.common_data.search_product) === false) {
+      this.search = this.common_data.search_product
+    }
+
+    this.search_product()
   }
 }
 </script>

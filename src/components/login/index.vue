@@ -44,7 +44,6 @@ export default {
       }
 
       const response = await this.$services.do_request('post', LOGIN_URL, data)
-      console.log('response login', response)
       this.loading = false
 
       if (response.data.data) {
@@ -54,6 +53,12 @@ export default {
         this.$store.commit('Common/username', username)
         const navigation = response.data.data.listRoleNavigation
         this.$store.commit('Common/navigation', navigation)
+
+        // set default day to search
+        // let search = getDays()
+        // this.$store.commit('Common/search_product_loaded', search)
+        // this.$store.commit('Common/search_bank_loaded', search)
+        // this.$store.commit('Common/search_customer_loaded', search)
         this.$router.push('/')
       } else if (response.data.code === 401) {
         this.$message.error('Tài khoản không đúng')
@@ -64,7 +69,7 @@ export default {
   },
   created () {
     this.$store.commit('Common/tokenLoaded', null)
-    this.$store.commit('Common/restore_navigation')
+    this.$store.commit('Common/restore')
   }
 }
 </script>

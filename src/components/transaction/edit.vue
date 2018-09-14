@@ -3,33 +3,32 @@
   <el-dialog
     title="Tạo mới giao dịch"
     :visible.sync="dialogVisible"
-    width="700px"
-    :before-close="handleClose"
+    width="75%"
   >
   <el-row style="margin-top: 20px">
     <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
       <el-form>
-        <el-form-item label="Mã giao dịch(*)" label-width="110px">
+        <el-form-item label="Mã giao dịch(*)" label-width="130px">
           <el-input :placeholder="code" disabled></el-input>
         </el-form-item>
 
-        <el-form-item label="Sản phẩm(*)" label-width="110px">
+        <el-form-item label="Sản phẩm(*)" label-width="130px">
           <el-input :placeholder="product_name" disabled></el-input>
         </el-form-item>
 
-        <el-form-item label="Người giao dịch(*)" label-width="110px">
+        <el-form-item label="Người giao dịch(*)" label-width="130px">
           <el-input :placeholder="customer_name" disabled></el-input>
         </el-form-item>
 
-        <el-form-item label="Ngân hàng(*)" label-width="110px">
+        <el-form-item label="Ngân hàng(*)" label-width="130px">
           <el-input :placeholder="bank_name" disabled></el-input>
         </el-form-item>
 
-        <el-form-item label="Ghi chú" label-width="110px">
+        <el-form-item label="Ghi chú" label-width="130px">
           <el-input :placeholder="note" v-model="note"></el-input>
         </el-form-item>
 
-        <el-form-item label="Trạng thái(*)" label-width="110px">
+        <el-form-item label="Trạng thái(*)" label-width="130px">
           <el-input :placeholder="status_list[status-1]" disabled></el-input>
         </el-form-item>
 
@@ -37,34 +36,39 @@
     </div></el-col>
     <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
       <el-form>
-        <el-form-item label="Số tiền(*)" label-width="110px">
+        <el-form-item label="Số tiền(*)" label-width="130px">
           <el-input placeholder="Mời nhập" v-model="price_input"></el-input>
           <span v-if="is_number(price_input) === false" style="color: #dc3545!important">*Số tiền nhập vào không hợp lệ</span>
         </el-form-item>
 
-        <el-form-item label="Chiết suất (%)" label-width="110px">
+        <el-form-item label="Chiết suất (%)" label-width="130px">
           <el-input placeholder="Mời nhập" v-model="extract_input"></el-input>
           <span v-if="is_number(extract_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
         </el-form-item>
 
-        <el-form-item label="Bớt tiền" label-width="110px">
+        <el-form-item label="Bớt tiền" label-width="130px">
           <el-input placeholder="Mời nhập" v-model="discount_input"></el-input>
           <span v-if="is_number(discount_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
         </el-form-item>
 
-        <el-form-item label="Tổng(*)" label-width="110px">
+        <el-form-item label="Tổng(*)" label-width="130px">
           <el-input placeholder="Mời nhập" v-model="total_input"></el-input>
           <span v-if="is_number(total_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
         </el-form-item>
 
-        <el-form-item label="Đã thanh toán(*)" label-width="110px">
+        <el-form-item label="Đã thanh toán(*)" label-width="130px">
           <el-input placeholder="Mời nhập" v-model="paid_input"></el-input>
           <span v-if="is_number(paid_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
         </el-form-item>
 
-        <el-form-item label="Còn nợ(*)" label-width="110px">
+        <el-form-item label="Còn nợ(*)" label-width="130px">
           <el-input placeholder="Mời nhập" v-model="unpaid_input"></el-input>
           <span v-if="is_number(unpaid_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
+        </el-form-item>
+
+        <el-form-item v-if="status === 3 || status === 2" label="Phí ngân hàng(*)" label-width="130px">
+          <el-input placeholder="Mời nhập" v-model="bank_fee"></el-input>
+          <span v-if="is_number(bank_fee) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
         </el-form-item>
       </el-form>
     </div></el-col>
@@ -96,8 +100,9 @@ export default {
       total_input: '',
       paid_input: '',
       unpaid_input: '',
+      bank_fee: '',
       transaction: {},
-      status_list: ['Xuất', 'Nhập', 'Tồn'],
+      status_list: ['Xuất', 'Nhập', 'Hoàn tiền'],
       dialogVisible: false,
       loading: false
     }
@@ -155,6 +160,10 @@ export default {
 
       if (response.data.message === 'Success') {
         this.$message.success('Thay đổi giao dịch thành công')
+        // update after edit
+        this.total_input = this.price_input - (this.extract_input * this.price_input / 100 + this.discount_input)
+        this.unpaid_input = this.total_input - this.paid_input
+
         this.transaction.cost = this.price_input
         this.transaction.extracts = this.extract_input
         this.transaction.discount = this.discount_input
@@ -224,13 +233,6 @@ export default {
       } else {
         return true
       }
-    },
-    handleClose (done) {
-      this.$confirm('Bạn muốn hủy bỏ việc tạo mới giao dịch ?')
-        .then(_ => {
-          done()
-        })
-        .catch(_ => {})
     }
   }
 }

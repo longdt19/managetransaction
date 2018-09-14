@@ -182,6 +182,9 @@
             </template>
           </el-table-column>
         </el-table-column>
+
+        <el-table-column label="Tổng" header-align="center" align="center">
+        </el-table-column>
       </el-table>
     </div>
     <div class="block" style="margin-top: 30px; text-align: right"

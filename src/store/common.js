@@ -18,7 +18,10 @@ const INIT_STATE = {
     'STA_CUSTOMER': {},
     'STA_PRODUCT': {},
     'CAT_CUSTOMER_GR': {}
-  }
+  },
+  search_bank: {},
+  search_product: {},
+  search_customer: {}
 }
 
 export default {
@@ -63,6 +66,15 @@ export default {
         'STA_PRODUCT': {},
         'CAT_CUSTOMER_GR': {}
       }
+    },
+    search_bank_loaded: (state, value) => {
+      state.search_bank = value
+    },
+    search_product_loaded: (state, value) => {
+      state.search_product = value
+    },
+    search_customer_loaded: (state, value) => {
+      state.search_customer = value
     }
   },
   actions: {},
@@ -74,6 +86,9 @@ export default {
     customer_list: state => state.customer_list,
     constants_loaded: state => state.constants_loaded,
     username: state => state.username,
-    navigation: state => state.navigation
+    navigation: state => state.navigation,
+    search_bank: state => state.search_bank,
+    search_product: state => state.search_product,
+    search_customer: state => state.search_customer
   }
 }

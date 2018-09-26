@@ -427,10 +427,7 @@ export default {
       }
     },
     transaction_edited (transaction) {
-      console.log('1', transaction)
-      console.log('2', this.transaction.list)
       const transaction_index = this.transaction.list.findIndex(item => item.id === transaction.id)
-      console.log('3', transaction_index)
       Object.assign(this.transaction.list[transaction_index], transaction)
     },
     transaction_added () {

@@ -113,6 +113,7 @@ export default {
         customerGroup: {id: this.group},
         province: this.province
       }
+      console.log('data', data)
       const response = await this.$services.do_request('post', CUSTOMER_URL, data)
       this.loading = false
 

@@ -242,6 +242,12 @@
           >
             Sửa
           </el-button>
+          <el-button size="mini" @click="open_edit(scope.row)"
+            :disabled="common_data.navigation.TRANSACTION.putMethod === 0"
+            type="danger"
+          >
+            Xóa
+          </el-button>
         </template>
     </el-table-column>
 
@@ -260,6 +266,7 @@
     </el-pagination>
   </div>
   <edit-transaction-component ref='edit_transaction' @transaction_edited='transaction_edited'/>
+  <delete-transaction-component ref="delete_transaction" />
 </section>
 </template>
 
@@ -273,9 +280,10 @@ import formatDate from '@/utils/time'
 import SearchComponent from '@/components/transaction/search'
 import AddTransactionComponent from './add_transaction'
 import EditTransactionComponent from './edit'
+import DeleteTransactionComponent from './delete'
 
 export default {
-  components: { SearchComponent, AddTransactionComponent, EditTransactionComponent },
+  components: { SearchComponent, AddTransactionComponent, EditTransactionComponent, DeleteTransactionComponent },
   data () {
     return {
       value: '',
@@ -360,7 +368,7 @@ export default {
         size: this.pagination.per_page,
         page: this.pagination.page - 1
       }
-
+      console.log('datea', data)
       const response = await this.$services.do_request('get', TRANSACTION_URL, data)
       this.transaction.loading = false
 
@@ -434,7 +442,13 @@ export default {
       this.load_transaction_list()
     },
     open_edit (transaction) {
+      this.$refs.edit_transaction.load_bank_list(this.bank.list)
+      this.$refs.edit_transaction.load_product_list(this.product.list)
+      this.$refs.edit_transaction.load_customer_list(this.customer.list)
       this.$refs.edit_transaction.open(transaction)
+    },
+    open_delete (transaction) {
+      this.$refs.delete_transaction.open(transaction)
     },
     type_of_status (status) {
       // 1: Xuất
@@ -471,7 +485,6 @@ export default {
     }
   },
   created () {
-    // Đợi giáo sư fix server. Địt mẹ GS
     if (this.common_data.navigation.TRANSACTION.getMethod === 1) {
       this.load_bank_list()
       this.load_customer_list()

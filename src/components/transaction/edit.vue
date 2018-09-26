@@ -9,27 +9,64 @@
     <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
       <el-form>
         <el-form-item label="Mã giao dịch(*)" label-width="130px">
-          <el-input :placeholder="code" disabled></el-input>
+          <el-input v-model="code" style="width: 250px"></el-input>
         </el-form-item>
 
         <el-form-item label="Sản phẩm(*)" label-width="130px">
-          <el-input :placeholder="product_name" disabled></el-input>
+          <el-select v-model="product_name" filterable placeholder="Chọn sản phẩm" clearable  style="width: 250px">
+            <el-option
+              v-for="item in product_list"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+              :name="item.type">
+            </el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item label="Người giao dịch(*)" label-width="130px">
-          <el-input :placeholder="customer_name" disabled></el-input>
+          <el-select v-model="customer_name" placeholder="Chọn khách hàng" filterable clearable  style="width: 250px">
+            <el-option
+              v-for="item in customer_list"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+              :name="item.name">
+              <span style="float: left">{{ item.name }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.azAccount }}</span>
+            </el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item label="Ngân hàng(*)" label-width="130px">
-          <el-input :placeholder="bank_name" disabled></el-input>
+          <el-select v-model="bank_name" placeholder="Chọn ngân hàng" filterable clearable  style="width: 250px">
+            <el-option
+              v-for="item in bank_list"
+              :key="item.id"
+              :label="item.bankName"
+              :value="item.id"
+              :name="item.bankAccount">
+              <span style="float: left">{{ item.bankName }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.userName }}</span>
+            </el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item label="Ghi chú" label-width="130px">
-          <el-input :placeholder="note" v-model="note"></el-input>
+          <el-input :placeholder="note" v-model="note" style="width: 250px"></el-input>
         </el-form-item>
 
         <el-form-item label="Trạng thái(*)" label-width="130px">
-          <el-input :placeholder="status_list[status-1]" disabled></el-input>
+          <!-- <el-input :placeholder="status_list[status-1]" disabled></el-input> -->
+          <el-select v-model="input_status.input" filterable placeholder="Chọn trạng thái" clearable style="width: 250px">
+            <el-option
+              v-for="item in input_status.select"
+              :key="item.id"
+              :label="item.label"
+              :value="item.id"
+              :name="item.label">
+            </el-option>
+          </el-select>
         </el-form-item>
 
       </el-form>
@@ -135,7 +172,27 @@ export default {
       unpaid_input: 0,
       bank_fee: 0,
       transaction: {},
+      input_status: {
+        input: null,
+        select: [
+          {
+            id: 1,
+            label: 'Xuất'
+          },
+          {
+            id: 2,
+            label: 'Nhập'
+          },
+          {
+            id: 3,
+            label: 'Hoàn tiền'
+          }
+        ]
+      },
       status_list: ['Xuất', 'Nhập', 'Hoàn tiền'],
+      bank_list: [],
+      product_list: [],
+      customer_list: [],
       dialogVisible: false,
       loading: false
     }
@@ -181,7 +238,7 @@ export default {
       this.customer_name = transaction.customer.name
       this.bank_name = transaction.bankAccount.bankName
       this.note = transaction.note
-      this.status = transaction.status
+      this.input_status.input = this.status_list[transaction.status - 1]
       this.transaction = transaction
       this.dialogVisible = true
     },
@@ -296,6 +353,15 @@ export default {
       } else {
         return true
       }
+    },
+    load_bank_list (bank) {
+      this.bank_list = bank
+    },
+    load_product_list (product) {
+      this.product_list = product
+    },
+    load_customer_list (customer) {
+      this.customer_list = customer
     }
   }
 }

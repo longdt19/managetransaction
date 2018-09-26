@@ -362,7 +362,6 @@ export default {
       }
 
       const response = await this.$services.do_request('get', TRANSACTION_URL, data)
-      console.log('respo9nse', response)
       this.transaction.loading = false
 
       if (response.data.data) {

@@ -329,6 +329,7 @@ export default {
   },
   created () {
     let search = getDays()
+    console.log('search', search)
     this.search = search
 
     if (_.isEmpty(this.common_data.search_bank) === false) {

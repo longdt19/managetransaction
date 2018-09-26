@@ -18,11 +18,12 @@
       </el-form-item>
 
       <el-form-item label="Số dư" :label-width="formLabelWidth">
-        <el-input v-model="balance" auto-complete="off"></el-input>
+        <!-- <el-input v-model="balance" auto-complete="off"></el-input> -->
+        <vue-numeric  separator="," v-model="balance" class="mngt-input"></vue-numeric>
       </el-form-item>
-      <el-form-item v-if="validate_number(balance) === false" style="text-align: left; margin-top: -20px" label-width="110px">
+      <!-- <el-form-item v-if="validate_number(balance) === false" style="text-align: left; margin-top: -20px" label-width="110px">
         <span style="color: #dc3545!important">* Số dư không hợp lệ</span>
-      </el-form-item>
+      </el-form-item> -->
 
       <el-form-item label="Chi nhánh" :label-width="formLabelWidth">
         <el-input v-model="branch" auto-complete="off"></el-input>
@@ -110,13 +111,9 @@ export default {
         this.$message.error('Số tài khoản không được để trống')
         return false
       }
+
       if (this.validate_number(this.accountNumber) === false) {
         this.$message.error('Số tài khoản không hợp lệ')
-        return false
-      }
-
-      if (this.validate_number(this.balance) === false) {
-        this.$message.error('Số dư không hợp lệ')
         return false
       }
 

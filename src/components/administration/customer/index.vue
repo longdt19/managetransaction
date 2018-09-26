@@ -14,6 +14,8 @@
     </el-row>
   </div>
 
+  <search-customer-component />
+
   <div class="" style="text-align: right; margin-bottom: 20px">
     <span>Hiển thị: </span>
     <el-select v-model="pagination.per_page" style="width: 80px">
@@ -140,9 +142,10 @@ import formatNumber from '@/utils/numeric'
 import EditCustomerComponent from './edit'
 import AddCustomerComponent from './add'
 import DeleteCustomerComponent from './delete'
+import SearchCustomerComponent from './search'
 
 export default {
-  components: { EditCustomerComponent, AddCustomerComponent, DeleteCustomerComponent },
+  components: { EditCustomerComponent, AddCustomerComponent, DeleteCustomerComponent, SearchCustomerComponent },
   data () {
     return {
       dataTable: [],

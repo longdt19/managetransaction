@@ -4,6 +4,7 @@ import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/vi'
 import moment from 'moment'
+import VueNumeric from 'vue-numeric'
 
 import '@/styles/index.scss' // global css
 
@@ -19,6 +20,7 @@ Vue.use(Element, {
   locale
 })
 Vue.use(axios)
+Vue.use(VueNumeric)
 
 moment.locale('vi')
 // Vue.use(ElementUI, { locale })

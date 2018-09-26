@@ -14,7 +14,7 @@
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
         <el-form>
           <el-form-item label="Mã giao dịch(*)" label-width="130px">
-            <el-input placeholder="Mời nhập" v-model="code_input"></el-input>
+            <el-input  v-model="code_input"></el-input>
           </el-form-item>
 
           <el-form-item label="Sản phẩm(*)" label-width="130px">
@@ -43,7 +43,7 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="Ngân hàng(*)" label-width="130px">
+          <el-form-item label="Ngân hàng" label-width="130px">
             <el-select v-model="input_bank" placeholder="Chọn ngân hàng" filterable clearable  style="width: 250px">
               <el-option
                 v-for="item in bank_list"
@@ -58,7 +58,7 @@
           </el-form-item>
 
           <el-form-item label="Ghi chú" label-width="130px">
-            <el-input placeholder="Mời nhập" v-model="note_input"></el-input>
+            <el-input  v-model="note_input"></el-input>
           </el-form-item>
 
           <el-form-item label="Trạng thái(*)" label-width="130px">
@@ -79,7 +79,8 @@
         <el-form>
           <el-form-item label="Số tiền(*)" label-width="130px">
             <div class="">
-              <el-input placeholder="Mời nhập" v-model="price_input"></el-input>
+              <!-- <el-input  v-model="price_input"></el-input> -->
+              <vue-numeric  separator="," v-model="price_input" class="mngt-input"></vue-numeric>
             </div>
             <div class="">
               <span v-if="is_number(price_input) === false" style="color: #dc3545!important">*Số tiền nhập vào không hợp lệ</span>
@@ -88,7 +89,8 @@
 
           <el-form-item label="Chiết suất (%)" label-width="130px">
             <div class="">
-              <el-input placeholder="Mời nhập" v-model="extract_input"></el-input>
+              <!-- <el-input  v-model="extract_input"></el-input> -->
+              <vue-numeric  separator="," v-model="extract_input" class="mngt-input"></vue-numeric>
             </div>
             <div class="">
               <span v-if="is_number(extract_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
@@ -97,7 +99,8 @@
 
           <el-form-item label="Bớt tiền" label-width="130px">
             <div class="">
-              <el-input placeholder="Mời nhập" v-model="discount_input"></el-input>
+              <!-- <el-input  v-model="discount_input"></el-input> -->
+              <vue-numeric  separator="," v-model="discount_input" class="mngt-input"></vue-numeric>
             </div>
             <div class="">
               <span v-if="is_number(discount_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
@@ -106,7 +109,8 @@
 
           <el-form-item v-if="input_status.input === 3 || input_status.input === 2" label="Phí ngân hàng" label-width="130px">
             <div class="">
-              <el-input placeholder="Mời nhập" v-model="bank_fee"></el-input>
+              <!-- <el-input  v-model="bank_fee"></el-input> -->
+              <vue-numeric  separator="," v-model="bank_fee" class="mngt-input"></vue-numeric>
             </div>
             <div class="">
               <span v-if="is_number(bank_fee) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
@@ -115,7 +119,8 @@
 
           <el-form-item label="Tổng(*)" label-width="130px">
             <div class="">
-              <el-input v-model="total_input" disabled></el-input>
+              <!-- <el-input v-model="total_input" disabled></el-input> -->
+              <vue-numeric  separator="," v-model="total_input" class="mngt-input"></vue-numeric>
             </div>
             <div class="">
               <span v-if="is_number(total_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
@@ -124,7 +129,8 @@
 
           <el-form-item label="Đã thanh toán(*)" label-width="130px">
             <div class="">
-              <el-input placeholder="Mời nhập" v-model="paid_input"></el-input>
+              <!-- <el-input  v-model="paid_input"></el-input> -->
+              <vue-numeric  separator="," v-model="paid_input" class="mngt-input"></vue-numeric>
             </div>
             <div class="">
               <span v-if="is_number(paid_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
@@ -133,7 +139,8 @@
 
           <el-form-item label="Còn nợ(*)" label-width="130px">
             <div class="">
-              <el-input v-model="unpaid_input" disabled></el-input>
+              <!-- <el-input v-model="unpaid_input" disabled></el-input> -->
+              <vue-numeric  separator="," v-model="unpaid_input" class="mngt-input"></vue-numeric>
             </div>
             <div class="">
               <span v-if="is_number(unpaid_input) === false" style="color: #dc3545!important">*Tham số nhập vào không hợp lệ</span>
@@ -316,9 +323,6 @@ export default {
       } else if (this.input_customer === '') {
         this.$message.error('Người giao dịch không được để trống')
         return false
-      } else if (this.input_bank === '') {
-        this.$message.error('Ngân hàng không được để trống')
-        return false
       } else if (this.input_status === '') {
         this.$message.error('Trạng thái không được để trống')
         return false
@@ -349,6 +353,9 @@ export default {
   width: 250px;
 }
 .el-input--suffix .el-input__inner {
+  width: 250px
+}
+.mngt-input {
   width: 250px
 }
 </style>

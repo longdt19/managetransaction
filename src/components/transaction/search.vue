@@ -79,6 +79,12 @@ export default {
     },
     'input_customer' (val) {
       this.load_data_to_search()
+    },
+    '$parent.from_date' (val) {
+      this.load_data_to_search()
+    },
+    '$parent.to_date' (val) {
+      this.load_data_to_search()
     }
   },
   methods: {

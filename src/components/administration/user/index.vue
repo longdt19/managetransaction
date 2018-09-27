@@ -166,6 +166,7 @@ export default {
         this.dataTable.forEach(item => {
           if (item.id === user.id) {
             item.role.name = role.name
+            item.role.id = role.id
           }
         })
         this.$message.success('Cập nhật quyền hạn thành công')

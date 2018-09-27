@@ -235,7 +235,6 @@ export default {
     },
     open (transaction) {
       this.status = transaction.status
-      console.log('status', this.status)
       this.price_input = transaction.cost
       this.extract_input = transaction.extracts
       this.discount_input = transaction.discount
@@ -302,7 +301,6 @@ export default {
         this.transaction.note = this.note
         this.transaction.bankFee = this.bank_fee
         this.transaction.status = this.input_status.input
-        console.log('this.input_status.status', this.input_status.status)
         this.$emit('transaction_edited', this.transaction)
         this.dialogVisible = false
       } else if (response.status === 400) {

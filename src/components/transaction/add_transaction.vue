@@ -217,6 +217,13 @@ export default {
     },
     'bank_fee' (val) {
       this.auto_complete()
+    },
+    'input_status.input' (val) {
+      this.status = val
+      if (this.status === 1 || val === '') {
+        this.bank_fee = 0
+        this.auto_complete()
+      }
     }
   },
   methods: {

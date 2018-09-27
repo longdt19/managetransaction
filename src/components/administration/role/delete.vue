@@ -13,14 +13,14 @@
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="centerDialogVisible = false">Hủy bỏ</el-button>
-      <el-button type="primary" @click="delete_transaction" :loading="loading">Xác nhận</el-button>
+      <el-button type="primary" @click="delete_role" :loading="loading">Xác nhận</el-button>
     </span>
   </el-dialog>
 </section>
 </template>
 
 <script>
-import { TRANSACTION_URL } from '@/constants/endpoints'
+import { ROLE_URL } from '@/constants/endpoints'
 
 export default {
   data () {
@@ -32,13 +32,12 @@ export default {
   },
   methods: {
     open (id) {
-      console.log('id', id)
       this.id = null
       this.id = id
       this.centerDialogVisible = true
     },
-    async delete_transaction () {
-      if (this.common_data.navigation.TRANSACTION.deleteMethod === 0) {
+    async delete_role () {
+      if (this.common_data.navigation.AD_ROLE.deleteMethod === 0) {
         this.$message.error('Bạn không đủ quyền hạn để thực hiện chức năng này')
         return
       }
@@ -46,16 +45,17 @@ export default {
       if (this.loading) return
       this.loading = true
 
-      const response = await this.$services.do_request('delete', TRANSACTION_URL + '/' + this.id)
+      const response = await this.$services.do_request('delete', ROLE_URL + '/' + this.id)
       this.loading = false
 
+      console.log('response', response)
       if (response.data.message === 'Success') {
-        this.$message.success('Xóa giao dịch thành công')
-        this.$parent.load_transaction_list()
+        this.$message.success('Xóa nhóm người dùng thành công')
+        this.$parent.load_role_list()
         this.centerDialogVisible = false
       } else if (response.status === 400) {
         console.log('Bad resquest')
-        this.$message.error('Xóa giao dịch thất bại')
+        this.$message.error('Xóa nhóm người dùng thất bại')
       } else {
         this.$router.push('/e-500')
       }

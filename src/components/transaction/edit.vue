@@ -102,7 +102,6 @@
 
         <el-form-item v-if="status === 3 || status === 2" label="Phí ngân hàng" label-width="130px">
           <div class="">
-            <el-input placeholder="Mời nhập" v-model="bank_fee"></el-input>
             <vue-numeric  separator="," v-model="bank_fee" class="mngt-input"></vue-numeric>
           </div>
           <!-- <div class="">
@@ -163,7 +162,7 @@ export default {
       customer_name: '',
       bank_name: '',
       note: '',
-      status: '',
+      status: 0,
       price_input: 0,
       extract_input: 0,
       discount_input: 0,
@@ -212,6 +211,15 @@ export default {
     },
     'bank_fee' (val) {
       this.auto_complete()
+    },
+    'input_status.input' (val) {
+      if (typeof val === 'number' || val === '') {
+        this.status = val
+        if (this.status === 1 || this.status === '') {
+          this.bank_fee = 0
+          this.auto_complete()
+        }
+      }
     }
   },
   methods: {
@@ -226,6 +234,8 @@ export default {
       this.unpaid_input = this.total_input - this.paid_input
     },
     open (transaction) {
+      this.status = transaction.status
+      console.log('status', this.status)
       this.price_input = transaction.cost
       this.extract_input = transaction.extracts
       this.discount_input = transaction.discount
@@ -263,8 +273,8 @@ export default {
         'bankAccount': {'id': this.transaction.bankAccount.id},
         'customer': {'id': this.transaction.customer.id},
         'product': {'id': this.transaction.product.id},
-        'status': this.transaction.status,
-        'code': this.transaction.code,
+        'status': this.input_status.input,
+        'code': this.code,
         'cost': this.price_input,
         'extracts': this.extract_input,
         'discount': this.discount_input,
@@ -291,6 +301,8 @@ export default {
         this.transaction.owed = this.unpaid_input
         this.transaction.note = this.note
         this.transaction.bankFee = this.bank_fee
+        this.transaction.status = this.input_status.input
+        console.log('this.input_status.status', this.input_status.status)
         this.$emit('transaction_edited', this.transaction)
         this.dialogVisible = false
       } else if (response.status === 400) {
@@ -349,6 +361,9 @@ export default {
         return false
       } else if (this.unpaid_input === '') {
         this.$message.error('Còn nợ không được để trống')
+        return false
+      } else if (!this.input_status.input) {
+        this.$message.error('Trạng thái không được để trống')
         return false
       } else {
         return true

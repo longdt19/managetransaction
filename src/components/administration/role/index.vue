@@ -68,6 +68,7 @@
             </el-button>
             <el-button size="mini" type="danger"
               :disabled="common_data.navigation.AD_ROLE.deleteMethod === 0"
+              @click="open_delete(scope.row.id)"
             >
               Xóa
             </el-button>
@@ -91,6 +92,7 @@
 
     <edit-role-component ref='edit_role' />
     <add-role-component ref='add_role' />
+    <delete-role-component ref='delete_role' />
   </section>
 </template>
 
@@ -100,9 +102,10 @@ import formatDate from '@/utils/time'
 import { ROLE_URL } from '@/constants/endpoints'
 import EditRoleComponent from './edit'
 import AddRoleComponent from './add'
+import DeleteRoleComponent from './delete'
 
 export default {
-  components: { EditRoleComponent, AddRoleComponent },
+  components: { EditRoleComponent, AddRoleComponent, DeleteRoleComponent },
   data () {
     return {
       role_list: [],
@@ -145,6 +148,7 @@ export default {
         size: this.pagination.per_page,
         page: this.pagination.page - 1
       }
+
       const response = await this.$services.do_request('get', ROLE_URL, data)
       this.loading = false
 
@@ -158,11 +162,27 @@ export default {
         this.$router.push('/e-500')
       }
     },
+    open_delete (role) {
+      console.log('role', role)
+      this.$refs.delete_role.open(role)
+    },
     open_edit (role) {
       this.$refs.edit_role.open(role)
     },
     open_add_role () {
       this.$refs.add_role.open()
+    },
+    prev_page () {
+      if (this.pagination.page === 1) return
+
+      this.pagination.page = this.pagination.page - 1
+    },
+    next_page () {
+      if (this.pagination.page === this.total_page) return
+      this.pagination.page = this.pagination.page + 1
+    },
+    change_page (val) {
+      this.pagination.page = val
     }
   },
   created () {

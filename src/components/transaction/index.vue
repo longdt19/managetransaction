@@ -242,7 +242,7 @@
           >
             Sửa
           </el-button>
-          <el-button size="mini" @click="open_edit(scope.row)"
+          <el-button size="mini" @click="open_delete(scope.row)"
             :disabled="common_data.navigation.TRANSACTION.putMethod === 0"
             type="danger"
           >
@@ -368,7 +368,7 @@ export default {
         size: this.pagination.per_page,
         page: this.pagination.page - 1
       }
-      console.log('datea', data)
+
       const response = await this.$services.do_request('get', TRANSACTION_URL, data)
       this.transaction.loading = false
 
@@ -448,7 +448,7 @@ export default {
       this.$refs.edit_transaction.open(transaction)
     },
     open_delete (transaction) {
-      this.$refs.delete_transaction.open(transaction)
+      this.$refs.delete_transaction.open(transaction.id)
     },
     type_of_status (status) {
       // 1: Xuất

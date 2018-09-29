@@ -198,7 +198,7 @@
 
       <!-- ngân hàng khách hàng dùng để thanh toán -->
       <el-table-column label="Ngân hàng" header-align="center" align="center">
-        <template slot-scope="scope">
+        <template slot-scope="scope" v-if="scope.row.bankAccount">
           {{scope.row.bankAccount.bankName}}
         </template>
       </el-table-column>

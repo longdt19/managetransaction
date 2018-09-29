@@ -10,8 +10,9 @@
         <el-input v-model="code" auto-complete="off"></el-input>
       </el-form-item>
 
-      <el-form-item label="Loại sản phẩm" :label-width="formLabelWidth">
-        <el-input v-model="type" auto-complete="off"></el-input>
+      <el-form-item label="Số dư" :label-width="formLabelWidth">
+        <!-- <el-input v-model="balance" auto-complete="off"></el-input> -->
+        <vue-numeric  separator="," v-model="balance" class="mngt-input"></vue-numeric>
       </el-form-item>
 
     </el-form>
@@ -32,6 +33,7 @@ export default {
       name: '',
       code: '',
       type: '',
+      balance: '',
       formLabelWidth: '120px',
       dialogFormVisible: false,
       product: {},
@@ -42,7 +44,7 @@ export default {
     open (product) {
       this.name = product.name
       this.code = product.code
-      this.type = product.type
+      this.balance = product.balance
       this.product = product
       this.dialogFormVisible = true
     },
@@ -52,7 +54,7 @@ export default {
         return
       }
 
-      if (this.name === '' || this.code === '' || this.type === '') {
+      if (this.name === '' || this.code === '' || this.balance === '') {
         this.$message.error('Các trường không được để trống')
         return
       }
@@ -64,7 +66,7 @@ export default {
         id: this.product.id,
         name: this.name,
         code: this.code,
-        type: this.type
+        balance: this.balance
       }
 
       const response = await this.$services.do_request('put', PRODUCT_URL, data)
@@ -73,7 +75,7 @@ export default {
       if (response.data.message === 'Success') {
         this.product.name = this.name
         this.product.code = this.code
-        this.product.type = this.type
+        this.product.balance = this.balance
         this.$emit('product_edited', this.product)
         this.$message.success('Cập nhật sản phẩm thành công')
         this.dialogFormVisible = false

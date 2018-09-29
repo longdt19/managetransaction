@@ -38,7 +38,8 @@
       </el-form-item>
 
       <el-form-item label="Nợ trước" :label-width="formLabelWidth">
-        <el-input v-model="debtBefore" auto-complete="off"></el-input>
+        <!-- <el-input v-model="debtBefore" auto-complete="off"></el-input> -->
+        <vue-numeric  separator="," v-model="debtBefore" class="mngt-input"></vue-numeric>
       </el-form-item>
 
       <el-form-item label="Ghi chú" :label-width="formLabelWidth">

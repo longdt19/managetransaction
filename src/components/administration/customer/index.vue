@@ -133,6 +133,8 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
 import { NUMBER_VALIDATOR } from '@/constants'
 import { CUSTOMER_URL } from '@/constants/endpoints'
 
@@ -156,7 +158,9 @@ export default {
         per_page: 10,
         list: [10, 20, 30]
       },
-      loading: false
+      loading: false,
+      old_search: {},
+      new_search: {}
     }
   },
   watch: {
@@ -189,7 +193,12 @@ export default {
         this.pagination.page = 1
       }
 
+      if (_.isEqual(this.old_search, this.new_search) !== true) {
+        this.pagination.page = 1
+      }
+
       let data = {
+        search: this.new_search,
         size: this.pagination.per_page,
         page: this.pagination.page - 1
       }

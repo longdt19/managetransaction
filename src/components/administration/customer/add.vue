@@ -38,11 +38,12 @@
       </el-form-item>
 
       <el-form-item label="Nợ trước" :label-width="formLabelWidth">
-        <el-input v-model="debtBefore" auto-complete="off"></el-input>
+        <!-- <el-input v-model="debtBefore" auto-complete="off"></el-input> -->
+        <vue-numeric  separator="," v-model="debtBefore" class="mngt-input"></vue-numeric>
       </el-form-item>
-      <el-form-item v-if="validate_number(debtBefore) === false" style="text-align: left; margin-top: -20px" label-width="110px">
+      <!-- <el-form-item v-if="validate_number(debtBefore) === false" style="text-align: left; margin-top: -20px" label-width="110px">
         <span style="color: #dc3545!important">* Nợ trước không hợp lệ</span>
-      </el-form-item>
+      </el-form-item> -->
 
       <el-form-item label="Ghi chú" :label-width="formLabelWidth">
         <el-input type="textarea" v-model="note" auto-complete="off"></el-input>
@@ -155,10 +156,6 @@ export default {
       }
       if (this.validate_phone(this.phone) === false) {
         this.$message.error('Số điện thoại không hợp lệ')
-        return false
-      }
-      if (this.validate_number(this.debtBefore) === false) {
-        this.$message.error('Nợ trước không hợp lệ')
         return false
       }
       return true

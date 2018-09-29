@@ -55,7 +55,7 @@
 
     <el-table-column label="Số dư" header-align="center" align="center">
       <template slot-scope="scope">
-        {{scope.row.balance}}
+        {{formatNumber(scope.row.balance)}}
       </template>
     </el-table-column>
 
@@ -109,6 +109,7 @@ import EditProductComponent from './edit'
 import DeleteProductComponent from './delete'
 
 import converseTime from '@/utils/time'
+import formatNumber from '@/utils/numeric'
 
 export default {
   components: { AddProductComponent, EditProductComponent, DeleteProductComponent },
@@ -139,6 +140,7 @@ export default {
   },
   methods: {
     converseTime,
+    formatNumber,
     async load_product_list () {
       if (this.common_data.navigation.CAT_PRODUCT.getMethod === 0) {
         return

@@ -163,7 +163,6 @@ export default {
       }
     },
     open_delete (role) {
-      console.log('role', role)
       this.$refs.delete_role.open(role)
     },
     open_edit (role) {

@@ -34,7 +34,6 @@ export default {
     open (product) {
       this.ids = null
       this.ids = product.id
-      console.log('ids', this.ids)
       this.centerDialogVisible = true
     },
     async delete_product () {

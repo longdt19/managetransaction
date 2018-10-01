@@ -32,7 +32,6 @@ export default {
   },
   methods: {
     open (id) {
-      console.log('id', id)
       this.id = null
       this.id = id
       this.centerDialogVisible = true

@@ -33,7 +33,6 @@ export default {
   },
   watch: {
     'username' (val) {
-      console.log('val', val)
       this.load_data_to_search()
     },
     'phone' (val) {

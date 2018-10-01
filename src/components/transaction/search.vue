@@ -72,7 +72,6 @@ export default {
   },
   watch: {
     'input_bank' (val) {
-      console.log('val', val)
       this.load_data_to_search()
     },
     'input_product' (val) {
@@ -85,7 +84,6 @@ export default {
       this.load_data_to_search()
     },
     '$parent.to_date' (val) {
-      console.log('val', val)
       this.load_data_to_search()
     }
   },

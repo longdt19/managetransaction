@@ -48,7 +48,6 @@ export default {
       const response = await this.$services.do_request('delete', ROLE_URL + '/' + this.id)
       this.loading = false
 
-      console.log('response', response)
       if (response.data.message === 'Success') {
         this.$message.success('Xóa nhóm người dùng thành công')
         this.$parent.load_role_list()

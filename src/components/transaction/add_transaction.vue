@@ -257,7 +257,6 @@ export default {
       }
 
       this.auto_complete()
-      console.log('input_bank', this.input_bank === '')
       let formData = {
         'customer': {'id': this.input_customer},
         'product': {'id': this.input_product},
@@ -276,7 +275,6 @@ export default {
         formData['bankAccount'] = {'id': this.input_bank}
       }
 
-      console.log('formdata', formData)
       const response = await this.$services.do_request('post', TRANSACTION_URL, formData)
       this.loading = false
 

@@ -1,7 +1,7 @@
 <template lang="html">
 <section style="text-align: left">
   <el-dialog
-    title="Tạo mới giao dịch"
+    title="Sửa giao dịch"
     :visible.sync="dialogVisible"
     width="75%"
   >
@@ -45,7 +45,7 @@
               :key="item.id"
               :label="item.bankName"
               :value="item.id"
-              :name="item.bankAccount">
+              >
               <span style="float: left">{{ item.bankName }}</span>
               <span style="float: right; color: #8492a6; font-size: 13px">{{ item.userName }}</span>
             </el-option>
@@ -64,7 +64,7 @@
               :key="item.id"
               :label="item.label"
               :value="item.id"
-              :name="item.label">
+              >
             </el-option>
           </el-select>
         </el-form-item>
@@ -213,6 +213,7 @@ export default {
       this.auto_complete()
     },
     'input_status.input' (val) {
+      console.log('123', val)
       if (typeof val === 'number' || val === '') {
         this.status = val
         if (this.status === 1 || this.status === '') {
@@ -234,7 +235,8 @@ export default {
       this.unpaid_input = this.total_input - this.paid_input
     },
     open (transaction) {
-      this.status = transaction.status
+      console.log('transaction', transaction)
+      // this.status = transaction.status
       this.price_input = transaction.cost
       this.extract_input = transaction.extracts
       this.discount_input = transaction.discount
@@ -243,11 +245,13 @@ export default {
       this.unpaid_input = transaction.owed
       this.bank_fee = transaction.bankFee
       this.code = transaction.code
-      this.product_name = transaction.product.name
-      this.customer_name = transaction.customer.name
-      this.bank_name = transaction.bankAccount.bankName
+      this.product_name = transaction.product.id
+      this.customer_name = transaction.customer.id
       this.note = transaction.note
-      this.input_status.input = this.status_list[transaction.status - 1]
+      // this.input_status.input = this.status_list[transaction.status - 1]
+      this.input_status.input = transaction.status
+
+      if (transaction.bankAccount) this.bank_name = transaction.bankAccount.id
       this.transaction = transaction
       this.dialogVisible = true
     },
@@ -267,11 +271,11 @@ export default {
       this.loading = true
 
       this.auto_complete()
+      console.log('transaction', this.transaction)
       let data = {
         'id': this.transaction.id,
-        'bankAccount': {'id': this.transaction.bankAccount.id},
-        'customer': {'id': this.transaction.customer.id},
-        'product': {'id': this.transaction.product.id},
+        'customer': {'id': this.customer_name},
+        'product': {'id': this.product_name},
         'status': this.input_status.input,
         'code': this.code,
         'cost': this.price_input,
@@ -283,6 +287,11 @@ export default {
         'note': this.note,
         'bankFee': this.bank_fee
       }
+
+      if (this.bank_name) {
+        data['bankAccount'] = {'id': this.bank_name}
+      }
+      console.log('data', data)
       const response = await this.$services.do_request('put', TRANSACTION_URL, data)
       this.loading = false
 

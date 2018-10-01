@@ -53,7 +53,7 @@ export default {
         this.centerDialogVisible = false
       } else if (response.status === 400) {
         console.log('Bad resquest')
-        this.$message.error('Xóa ngân hàng thất bại')
+        this.$message.error('Xóa ngân hàng thất bại. Do còn giao dịch')
       } else {
         this.$router.push('/e-500')
       }

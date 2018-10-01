@@ -6,16 +6,16 @@
     </div></el-col>
     <el-col :xs="24" :md="8" v-loading="loading"><div class="grid-content bg-purple"  >
       <div class="" >
-        <h2 class="form-tittle">Login</h2>
+        <h2 class="form-tittle">Đăng nhập</h2>
       </div>
-          <p class="form-description">Management System</p>
+          <p class="form-description">Transaction Management</p>
           <div class="form-group">
             <input v-model="username" type="username" class="form-control" id="id_email" placeholder="Username" name="username">
           </div>
           <div class="form-group">
             <input v-model="password" type="password" class="form-control" id="id_password" placeholder="Password" name="password">
           </div>
-          <el-button  type="submit" class="btn btn-primary" @click="login">Login In</el-button>
+          <el-button  type="submit" class="btn btn-primary" @click="login">Đăng nhập</el-button>
     </div></el-col>
   </el-row>
 </section>

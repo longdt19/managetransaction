@@ -72,6 +72,7 @@ export default {
   },
   watch: {
     'input_bank' (val) {
+      console.log('val', val)
       this.load_data_to_search()
     },
     'input_product' (val) {
@@ -84,11 +85,16 @@ export default {
       this.load_data_to_search()
     },
     '$parent.to_date' (val) {
+      console.log('val', val)
       this.load_data_to_search()
     }
   },
   methods: {
     load_data_to_search () {
+      if (!this.input_bank && !this.input_product && !this.input_customer && !this.$parent.from_date && !this.$parent.to_date) {
+        this.$parent.new_search = {}
+        this.$parent.load_transaction_list()
+      }
       let bank_id = this.input_bank
       let product_id = this.input_product
       let customer_id = this.input_customer

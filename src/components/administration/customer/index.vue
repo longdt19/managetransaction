@@ -202,6 +202,7 @@ export default {
         size: this.pagination.per_page,
         page: this.pagination.page - 1
       }
+      console.log('data', data)
 
       const response = await this.$services.do_request('get', CUSTOMER_URL, data)
       this.loading = false
@@ -210,6 +211,7 @@ export default {
         this.pagination.totalPage = response.data.data.totalPages
         this.pagination.totalElement = response.data.data.totalElements
         this.dataTable = response.data.data.content
+        this.old_search = this.new_search
       } else if (response.status === 400) {
         console.log('Bad resquest')
       } else {

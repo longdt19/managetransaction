@@ -2,7 +2,7 @@
   <section>
     <el-row>
       <el-col :md="24" :lg="5" :xl="5"><div class="grid-content bg-purple">
-        <el-input v-model='username' placeholder="Nhập tên đăng nhập" style="width: 200px" clearable/>
+        <el-input v-model='username' placeholder="Nhập tên tài khoản" style="width: 200px" clearable/>
       </div></el-col>
 
       <el-col :md="24" :lg="4" :xl="4"><div class="grid-content bg-purple-light">
@@ -33,6 +33,7 @@ export default {
   },
   watch: {
     'username' (val) {
+      console.log('val', val)
       this.load_data_to_search()
     },
     'phone' (val) {
@@ -48,6 +49,11 @@ export default {
     },
     load_data_to_search () {
       if (this.username === '' && this.phone === '' && this.address === '') {
+        this.$parent.new_search = {
+          'azAccount': '',
+          'address': '',
+          'phone': ''
+        }
         this.$parent.loading_customer_list()
       }
       let username = this.username

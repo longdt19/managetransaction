@@ -238,7 +238,8 @@ export default {
       this.unpaid_input = this.total_input - this.paid_input
     },
     async create () {
-      if (this.common_data.navigation.TRANSACTION.getMethod === 0) {
+      if (this.common_data.navigation.TRANSACTION.postMethod === 0) {
+        this.$message.error('Bạn không có quyền hạn cho chức năng này')
         return
       }
       if (this.check_null_before_create() === false) {

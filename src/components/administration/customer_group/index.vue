@@ -3,7 +3,7 @@
   <div class="" style="margin-bottom: 20px">
     <el-row>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
-        <span style="font-size: 24px; margin-bottom: 50px">Danh sách ngân hàng</span>
+        <span style="font-size: 24px; margin-bottom: 50px">Danh sách nhóm khách hàng</span>
       </div></el-col>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light" style="text-align: right">
         <el-button @click.native="open_add" type="primary" :disabled="common_data.navigation.CAT_CUSTOMER_GR.postMethod === 0">

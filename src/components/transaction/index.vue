@@ -243,7 +243,7 @@
             Sửa
           </el-button>
           <el-button size="mini" @click="open_delete(scope.row)"
-            :disabled="common_data.navigation.TRANSACTION.putMethod === 0"
+            :disabled="common_data.navigation.TRANSACTION.deleteMethod === 0"
             type="danger"
           >
             Xóa
@@ -344,6 +344,10 @@ export default {
     formatNumber,
     formatDate,
     async export_excel () {
+      if (this.common_data.navigation.TRANSACTION.getMethod === 0) {
+        this.$message.error('Bạn không đủ quyền hạn cho chức năng này')
+        return
+      }
       let search = encodeURI(JSON.stringify(this.new_search))
       window.location.href = process.env.BACKEND_URL + '/' + TRANSACTION_DOWNLOAD_URL + `?search=${search}`
     },
@@ -390,6 +394,7 @@ export default {
       if (this.bank.loading) return
       this.bank.loading = true
       const response = await this.$services.do_request('get', BANK_LIST_URL)
+
       this.bank.loading = false
       if (response.data.data) {
         this.bank.list = response.data.data

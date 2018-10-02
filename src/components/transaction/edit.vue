@@ -257,6 +257,7 @@ export default {
     },
     async edit () {
       if (this.common_data.navigation.TRANSACTION.putMethod === 0) {
+        this.$message.error('Bạn không có quyền hạn cho chức năng này')
         return
       }
       if (this.check_null_before_create() === false) {

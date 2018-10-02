@@ -69,6 +69,10 @@ export default {
         this.$message.error('Bạn không đủ quyền hạn để thực hiện chức năng này')
         return
       }
+      if (row.role.id === 1) {
+        this.$message.error('Quyền của Admin không được phép thay đổi')
+        return
+      }
 
       if (this.loading_btn) return
       this.loading_btn = true

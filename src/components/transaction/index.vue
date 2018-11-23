@@ -235,6 +235,13 @@
       </template>
     </el-table-column>
 
+    <el-table-column label="Phê duyệt" header-align="center" align="center">
+      <template slot-scope="scope">
+        <el-tag v-if="scope.row.type === 0" type="info">Đã tạo</el-tag>
+        <el-tag v-if="scope.row.type === 1">Đã duyệt</el-tag>
+      </template>
+    </el-table-column>
+
     <el-table-column label="Thao tác" header-align="center" align="center">
       <template slot-scope="scope">
           <el-button size="mini" @click="open_edit(scope.row)"

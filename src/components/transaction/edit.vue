@@ -69,6 +69,14 @@
           </el-select>
         </el-form-item>
 
+        <el-form-item label="Phê duyệt" label-width="130px">
+          <!-- <el-input :placeholder="status_list[status-1]" disabled></el-input> -->
+          <el-radio-group v-model="input_type">
+            <el-radio :label="0">Đã tạo</el-radio>
+            <el-radio :label="1">Đã duyệt</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
       </el-form>
     </div></el-col>
     <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
@@ -188,6 +196,8 @@ export default {
           }
         ]
       },
+      radio: 1,
+      input_type: 1,
       status_list: ['Xuất', 'Nhập', 'Hoàn tiền'],
       bank_list: [],
       product_list: [],
@@ -235,7 +245,6 @@ export default {
       this.unpaid_input = this.total_input - this.paid_input
     },
     open (transaction) {
-      console.log('transaction', transaction)
       // this.status = transaction.status
       this.price_input = transaction.cost
       this.extract_input = transaction.extracts
@@ -250,6 +259,7 @@ export default {
       this.note = transaction.note
       // this.input_status.input = this.status_list[transaction.status - 1]
       this.input_status.input = transaction.status
+      this.input_type = transaction.type
 
       if (transaction.bankAccount) this.bank_name = transaction.bankAccount.id
       this.transaction = transaction
@@ -272,7 +282,6 @@ export default {
       this.loading = true
 
       this.auto_complete()
-      console.log('transaction', this.transaction)
       let data = {
         'id': this.transaction.id,
         'customer': {'id': this.customer_name},
@@ -286,7 +295,8 @@ export default {
         'paid': this.paid_input,
         'owed': this.unpaid_input,
         'note': this.note,
-        'bankFee': this.bank_fee
+        'bankFee': this.bank_fee,
+        'type': this.input_type
       }
 
       if (this.bank_name) {

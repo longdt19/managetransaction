@@ -35,3 +35,6 @@ export const TRANSACTION_DOWNLOAD_URL = BASE + '/api/az/mngt/transactions/downlo
 export const PRODUCT_STATISTIC_DOWNLOAD_URL = BASE + '/api/az/mngt/statistic/products/download'
 export const CUSTOMER_STATISTIC_DOWNLOAD_URL = BASE + '/api/az/mngt/statistic/customers/download'
 export const BANK_STATISTIC_DOWNLOAD_URL = BASE + '/api/az/mngt/statistic/banks/download'
+
+// upload
+export const CUSTOMER_UPLOAD_EXCEL_URL = BASE + '/api/az/mngt/customer/upload'

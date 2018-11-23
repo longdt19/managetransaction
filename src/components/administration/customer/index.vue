@@ -10,6 +10,11 @@
           <i class="el-icon-plus" style="margin-right: 10px" />
           Thêm mới
         </el-button>
+
+        <el-button @click.native="open_upload" style="background-color: #2e7d32" type="primary" :disabled="common_data.navigation.CAT_CUSTOMER.postMethod === 0">
+          <i class="el-icon-upload2" style="margin-right: 10px" />
+          Tải lên
+        </el-button>
       </div></el-col>
     </el-row>
   </div>
@@ -129,6 +134,7 @@
   <add-customer-component ref='add_customer' />
   <edit-customer-component ref='edit_customer' @customer_edited="customer_edited"/>
   <delete-customer-component ref='delete_customer' @customer_deleted="customer_deleted" />
+  <upload-customer-component ref='upload_customer' />
 </section>
 </template>
 
@@ -145,9 +151,16 @@ import EditCustomerComponent from './edit'
 import AddCustomerComponent from './add'
 import DeleteCustomerComponent from './delete'
 import SearchCustomerComponent from './search'
+import UploadCustomerComponent from './upload'
 
 export default {
-  components: { EditCustomerComponent, AddCustomerComponent, DeleteCustomerComponent, SearchCustomerComponent },
+  components: {
+    EditCustomerComponent,
+    AddCustomerComponent,
+    DeleteCustomerComponent,
+    SearchCustomerComponent,
+    UploadCustomerComponent
+  },
   data () {
     return {
       dataTable: [],
@@ -178,6 +191,9 @@ export default {
   methods: {
     converseTime,
     formatNumber,
+    open_upload () {
+      this.$refs.upload_customer.open()
+    },
     validate_number (number) {
       if (number === '') return null
       return NUMBER_VALIDATOR.test(number.trim())

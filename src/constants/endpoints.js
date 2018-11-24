@@ -37,4 +37,4 @@ export const CUSTOMER_STATISTIC_DOWNLOAD_URL = BASE + '/api/az/mngt/statistic/cu
 export const BANK_STATISTIC_DOWNLOAD_URL = BASE + '/api/az/mngt/statistic/banks/download'
 
 // upload
-export const CUSTOMER_UPLOAD_EXCEL_URL = BASE + '/api/az/mngt/customer/upload'
+export const CUSTOMER_UPLOAD_EXCEL_URL = BASE + '/api/az/mngt/customers/upload'

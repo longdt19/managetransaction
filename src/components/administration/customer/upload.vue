@@ -43,13 +43,21 @@ export default {
     async upload_file () {
       if (this.loading) return
       this.loading = true
-      console.log('file', this.file)
       const formData = new FormData()
       formData.append('file', this.file)
-      console.log('form', formData.get('file'))
+
       const response = await this.$services.do_request('post', CUSTOMER_UPLOAD_EXCEL_URL, formData)
       this.loading = false
-      console.log('response', response)
+
+      if (response.data.message === "Success") {
+        this.$emit('customer_uploaded')
+        this.dialogVisible = false
+        this.$message.success('Tải lên khách hàng thành công')
+      } else if (response.status === 400) {
+        console.log('Bad request')
+      } else {
+        this.$router.push('/e-500')
+      }
     },
     beforeUpload (file) {
       const isLt1M = file.size / 1024 / 1024 < 1

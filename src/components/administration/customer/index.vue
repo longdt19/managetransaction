@@ -134,7 +134,7 @@
   <add-customer-component ref='add_customer' />
   <edit-customer-component ref='edit_customer' @customer_edited="customer_edited"/>
   <delete-customer-component ref='delete_customer' @customer_deleted="customer_deleted" />
-  <upload-customer-component ref='upload_customer' />
+  <upload-customer-component ref='upload_customer' @customer_uploaded="customer_uploaded"/>
 </section>
 </template>
 
@@ -218,7 +218,6 @@ export default {
         size: this.pagination.per_page,
         page: this.pagination.page - 1
       }
-      console.log('data', data)
 
       const response = await this.$services.do_request('get', CUSTOMER_URL, data)
       this.loading = false
@@ -261,6 +260,9 @@ export default {
       this.loading_customer_list()
     },
     customer_deleted () {
+      this.loading_customer_list()
+    },
+    customer_uploaded () {
       this.loading_customer_list()
     }
   },

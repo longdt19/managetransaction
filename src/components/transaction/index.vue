@@ -72,23 +72,22 @@
   </el-row>
 
   <div class="" style="display: flex; align-items: flex-end; justify-content: space-between">
-
     <div class=""  style="margin-top: 15px">
       <search-component ></search-component>
     </div>
-    <div class="" style="text-align: right">
-      <el-row>
-        <span>Hiển thị: </span>
-        <el-select v-model="pagination.per_page" style="width: 80px">
-          <el-option
-            v-for="item in pagination.list"
-            :key="item"
-            :label="item"
-            :value="item">
-          </el-option>
-        </el-select>
-      </el-row>
-    </div>
+  </div>
+  <div class="" style="text-align: right">
+    <el-row>
+      <span>Hiển thị: </span>
+      <el-select v-model="pagination.per_page" style="width: 80px">
+        <el-option
+          v-for="item in pagination.list"
+          :key="item"
+          :label="item"
+          :value="item">
+        </el-option>
+      </el-select>
+    </el-row>
   </div>
 
   <!-- <div style="margin-top: 15px; margin-bottom: 25px; align-items: center">

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { CUSTOMER_UPLOAD_EXCEL_URL } from '@/constants/endpoints'
+// import { CUSTOMER_UPLOAD_EXCEL_URL } from '@/constants/endpoints'
 import UploadExcelComponent from '@/components/helpers/UploadExcel'
 
 export default {
@@ -40,24 +40,7 @@ export default {
     open () {
       this.dialogVisible = true
     },
-    async upload_file () {
-      if (this.loading) return
-      this.loading = true
-      const formData = new FormData()
-      formData.append('file', this.file)
-
-      const response = await this.$services.do_request('post', CUSTOMER_UPLOAD_EXCEL_URL, formData)
-      this.loading = false
-
-      if (response.data.message === "Success") {
-        this.$emit('customer_uploaded')
-        this.dialogVisible = false
-        this.$message.success('Tải lên khách hàng thành công')
-      } else if (response.status === 400) {
-        console.log('Bad request')
-      } else {
-        this.$router.push('/e-500')
-      }
+    upload_file () {
     },
     beforeUpload (file) {
       const isLt1M = file.size / 1024 / 1024 < 1

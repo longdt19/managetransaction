@@ -236,8 +236,18 @@
 
     <el-table-column label="Phê duyệt" header-align="center" align="center">
       <template slot-scope="scope">
-        <el-tag v-if="scope.row.type === 0" type="info">Đã tạo</el-tag>
-        <el-tag v-if="scope.row.type === 1">Đã duyệt</el-tag>
+        <el-dropdown :hide-on-click="false">
+        <el-button size="mini" :loading="accept_loading">{{scope.row.type === 0 ? 'Đã tạo' : 'Đã duyệt'}}</el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item
+              v-for="item in type_options"
+              :key="item.value"
+              @click.native="accept_transaction(scope.row, item)"
+            >
+              {{item.label}}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </template>
     </el-table-column>
 
@@ -331,7 +341,12 @@ export default {
         loading: false
       },
       old_search: {},
-      new_search: {}
+      new_search: {},
+      type_options: [
+        {value: 1, label: 'Đã duyệt'},
+        {value: 0, label: 'Đã tạo'}
+      ],
+      accept_loading: false
     }
   },
   watch: {
@@ -349,6 +364,47 @@ export default {
   methods: {
     formatNumber,
     formatDate,
+    async accept_transaction (transaction, item) {
+      if (this.common_data.navigation.TRANSACTION.putMethod === 0) {
+        this.$message.error('Bạn không có quyền hạn cho chức năng này')
+        return
+      }
+      if (this.accept_loading) return
+      this.accept_loading = true
+
+      let data = {
+        'id': transaction.id,
+        'customer': {'id': transaction.customer.id},
+        'product': {'id': transaction.product.id},
+        'status': transaction.status,
+        'code': transaction.code,
+        'cost': transaction.cost,
+        'extracts': transaction.extracts,
+        'discount': transaction.discount,
+        'total': transaction.total,
+        'paid': transaction.paid,
+        'owed': transaction.owed,
+        'note': transaction.note,
+        'bankFee': transaction.bankFee,
+        'type': item.value
+      }
+
+      const response = await this.$services.do_request('put', TRANSACTION_URL, data)
+      this.accept_loading = false
+
+      if (response.data.message === 'Success') {
+        this.$message.success('Thay đổi giao dịch thành công')
+        this.transaction.list.forEach(i => {
+          if (i.id === transaction.id) {
+            i.type = item.value
+          }
+        })
+      } else if (response.status === 400) {
+        console.log('Bad request')
+      } else {
+        this.$router.push('/e-500')
+      }
+    },
     async export_excel () {
       if (this.common_data.navigation.TRANSACTION.getMethod === 0) {
         this.$message.error('Bạn không đủ quyền hạn cho chức năng này')

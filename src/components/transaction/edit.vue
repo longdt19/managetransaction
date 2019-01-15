@@ -308,19 +308,6 @@ export default {
 
       if (response.data.message === 'Success') {
         this.$message.success('Thay đổi giao dịch thành công')
-        // update after edit
-        // this.total_input = this.price_input - this.extract_input * this.price_input / 100 - this.discount_input
-        // this.unpaid_input = this.total_input - this.paid_input
-        //
-        // this.transaction.cost = this.price_input
-        // this.transaction.extracts = this.extract_input
-        // this.transaction.discount = this.discount_input
-        // this.transaction.total = this.total_input
-        // this.transaction.paid = this.paid_input
-        // this.transaction.owed = this.unpaid_input
-        // this.transaction.note = this.note
-        // this.transaction.bankFee = this.bank_fee
-        // this.transaction.status = this.input_status.input
         this.transaction = response.data.data
         this.$emit('transaction_edited', this.transaction)
         this.dialogVisible = false

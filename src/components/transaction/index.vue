@@ -76,17 +76,24 @@
       <search-component ></search-component>
     </div>
   </div>
-  <div class="" style="text-align: right">
+  <div class="" style="margin-top:20px">
     <el-row>
-      <span>Hiển thị: </span>
-      <el-select v-model="pagination.per_page" style="width: 80px">
-        <el-option
-          v-for="item in pagination.list"
-          :key="item"
-          :label="item"
-          :value="item">
-        </el-option>
-      </el-select>
+      <el-col :span="18">
+        <el-button @click="accept_multi_transaction">Tiến hành duyệt đơn</el-button>
+      </el-col>
+
+      <el-col :span="6" style="text-align: right">
+        <span>Hiển thị: </span>
+        <el-select v-model="pagination.per_page" style="width: 80px">
+          <el-option
+            v-for="item in pagination.list"
+            :key="item"
+            :label="item"
+            :value="item">
+          </el-option>
+        </el-select>
+      </el-col>
+
     </el-row>
   </div>
 
@@ -104,8 +111,9 @@
     style="width: 100%"
     v-loading="transaction.loading"
     highlight-current-row
-  >
+    @selection-change="handleSelectionChange">
 
+    <el-table-column type="selection" width="50"></el-table-column>
     <el-table-column type="index" label="STT" align="center">
     </el-table-column>
 
@@ -346,7 +354,8 @@ export default {
         {value: 1, label: 'Đã duyệt'},
         {value: 0, label: 'Đã tạo'}
       ],
-      accept_loading: false
+      accept_loading: false,
+      selection: []
     }
   },
   watch: {
@@ -364,6 +373,12 @@ export default {
   methods: {
     formatNumber,
     formatDate,
+    accept_multi_transaction () {
+      console.log('multi', this.selection)
+    },
+    handleSelectionChange (val) {
+      this.selection = val
+    },
     async accept_transaction (transaction, item) {
       if (this.common_data.navigation.TRANSACTION.putMethod === 0) {
         this.$message.error('Bạn không có quyền hạn cho chức năng này')

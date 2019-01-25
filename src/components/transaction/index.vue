@@ -72,17 +72,40 @@
   </el-row>
 
   <div class="" style="display: flex; align-items: flex-end; justify-content: space-between">
-    <div class=""  style="margin-top: 15px">
+    <div class=""  style="margin-top: 15px; width: 100%">
       <search-component ></search-component>
     </div>
   </div>
   <div class="" style="margin-top:20px">
     <el-row>
-      <el-col :span="18">
-        <el-button @click="accept_multi_transaction">Tiến hành duyệt đơn</el-button>
+      <el-col :span="22">
+        <el-row>
+          <el-col :span="4">
+            <el-button @click="display_accept_multi()" v-if="accept_multi_display === false">Tiến hành duyệt đơn</el-button>
+            <el-button @click="toggleSelection()" v-else>Hủy duyệt đơn</el-button>
+          </el-col>
+          <el-col :span="8">
+            <div class="">
+              <span style="font-size: 20px; color:#F56C6C"
+                v-if="this.transaction_selections.length"
+              >
+                Bạn muốn xác nhận duyệt {{this.transaction_selections.length}} đơn đã chọn ?
+              </span>
+            </div>
+          </el-col>
+
+          <el-col :span="8">
+            <el-button
+              v-if="this.transaction_selections.length"
+              @click="accept_multi_transaction()"
+            >
+              Xác nhận duyệt đơn
+            </el-button>
+          </el-col>
+        </el-row>
       </el-col>
 
-      <el-col :span="6" style="text-align: right">
+      <el-col :span="2" style="text-align: right">
         <span>Hiển thị: </span>
         <el-select v-model="pagination.per_page" style="width: 80px">
           <el-option
@@ -111,9 +134,11 @@
     style="width: 100%"
     v-loading="transaction.loading"
     highlight-current-row
-    @selection-change="handleSelectionChange">
+    @selection-change="handleSelectionChange"
+    ref="multipleTable"
+  >
 
-    <el-table-column type="selection" width="50"></el-table-column>
+    <el-table-column type="selection" width="50" v-if="accept_multi_display === true"></el-table-column>
     <el-table-column type="index" label="STT" align="center">
     </el-table-column>
 
@@ -355,7 +380,8 @@ export default {
         {value: 0, label: 'Đã tạo'}
       ],
       accept_loading: false,
-      selection: []
+      transaction_selections: [],
+      accept_multi_display: false
     }
   },
   watch: {
@@ -373,11 +399,48 @@ export default {
   methods: {
     formatNumber,
     formatDate,
-    accept_multi_transaction () {
-      console.log('multi', this.selection)
+    async accept_multi_transaction () {
+      if (this.common_data.navigation.TRANSACTION.putMethod === 0) {
+        this.$message.error('Bạn không có quyền hạn cho chức năng này')
+        return
+      }
+      if (this.accept_loading) return
+      this.accept_loading = true
+
+      let transaction_id_list = []
+      this.transaction_selections.forEach(item => {
+        transaction_id_list.push(item.id)
+      })
+
+      const data = {
+        'transactionIds': transaction_id_list,
+        'newStatus': 1
+      }
+      console.log('data', data)
+
+      const response = await this.$services.do_request('put', TRANSACTION_URL, data)
+      this.accept_loading = false
+      console.log('response', response)
+
+      if (response.data.message === 'Success') {
+        this.$message.success('Duyệt đơn thành công')
+      } else if (response.status === 400) {
+        this.$message.error('Duyệt đơn thất bại')
+        console.log('Bad request')
+      } else {
+        this.$router.push('/e-500')
+      }
+    },
+    display_accept_multi () {
+      this.accept_multi_display = !this.accept_multi_display
+      this.transaction_selections = []
     },
     handleSelectionChange (val) {
-      this.selection = val
+      this.transaction_selections = val
+    },
+    toggleSelection () {
+      this.$refs.multipleTable.clearSelection()
+      this.accept_multi_display = !this.accept_multi_display
     },
     async accept_transaction (transaction, item) {
       if (this.common_data.navigation.TRANSACTION.putMethod === 0) {

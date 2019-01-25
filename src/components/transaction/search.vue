@@ -1,14 +1,19 @@
 <template>
 <section>
+  <div class="group">
+    <span>Tìm kiếm:</span>
+  </div>
   <el-row :butter="10">
-    <el-col :xs="24" :md="2"><div class="grid-content bg-purple">
+    <!-- <el-col :xs="24" :md="2"><div class="grid-content bg-purple">
       <div class="group">
         <span>Tìm kiếm:</span>
       </div>
-    </div></el-col>
-    <el-col :xs="24" :sm="4" :md="4"><div class="grid-content bg-purple">
+    </div></el-col> -->
+    <el-col :xs="24" :sm="3"><div class="grid-content bg-purple">
       <div class="group" v-loading="$parent.bank.loading" element-loading-spinner="el-icon-loading">
-        <el-select v-model="input_bank" placeholder="Ngân hàng" filterable clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0">
+        <el-select v-model="input_bank" placeholder="Ngân hàng" filterable clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
+          style="width: 180px"
+        >
           <el-option
             v-for="item in $parent.bank.list"
             :key="item.id"
@@ -22,9 +27,11 @@
       </div>
     </div></el-col>
 
-    <el-col :xs="24" :sm="4" :md="4"><div class="grid-content bg-purple-light">
+    <el-col :xs="24" :sm="3"><div class="grid-content bg-purple-light">
       <div class="group" v-loading="$parent.product.loading" element-loading-spinner="el-icon-loading">
-        <el-select v-model="input_product" filterable placeholder="Sản phẩm" clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0">
+        <el-select v-model="input_product" filterable placeholder="Sản phẩm" clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
+          style="width: 180px"
+        >
           <el-option
             v-for="item in $parent.product.list"
             :key="item.id"
@@ -36,9 +43,11 @@
       </div>
     </div></el-col>
 
-    <el-col :xs="24" :sm="4" :md="4"><div class="grid-content bg-purple">
+    <el-col :xs="24" :sm="3"><div class="grid-content bg-purple">
       <div class="group" v-loading="$parent.customer.loading" element-loading-spinner="el-icon-loading">
-        <el-select v-model="input_customer" placeholder="Khách hàng" filterable clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0">
+        <el-select v-model="input_customer" placeholder="Khách hàng" filterable clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
+          style="width: 180px"
+        >
           <el-option
             v-for="item in $parent.customer.list"
             :key="item.id"
@@ -52,15 +61,55 @@
       </div>
     </div></el-col>
 
-    <el-col :xs="24" :sm="4" :md="4"><div class="grid-content bg-purple">
+    <el-col :xs="24" :sm="3"><div class="grid-content bg-purple">
       <div class="group" v-loading="$parent.customer.loading" element-loading-spinner="el-icon-loading">
-        <el-input placeholder="Mã giao dịch" v-model="code" clearable/>
+        <el-input placeholder="Mã giao dịch" v-model="code"
+          clearable
+          style="width: 180px"
+          :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
+        />
       </div>
     </div></el-col>
 
-    <el-col :xs="24" :sm="4" :md="4"><div class="grid-content bg-purple">
+    <el-col :xs="24" :sm="3"><div class="grid-content bg-purple">
       <div class="group" v-loading="$parent.customer.loading" element-loading-spinner="el-icon-loading">
-        <el-input placeholder="Ghi chú" v-model="note" clearable/>
+        <el-input placeholder="Ghi chú" v-model="note"
+          clearable
+          style="width: 180px"
+          :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
+        />
+      </div>
+    </div></el-col>
+
+    <el-col :xs="24" :sm="3"><div class="grid-content bg-purple" style="">
+      <div class="group">
+        <el-select v-model="status" placeholder="Trạng thái"
+          :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
+          style="width: 180px"
+        >
+          <el-option
+            v-for="item in status_selections"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </div>
+    </div></el-col>
+
+    <el-col :xs="24" :sm="3"><div class="grid-content bg-purple" style="">
+      <div class="group">
+        <el-select v-model="type" placeholder="Phê duyệt"
+          :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
+          style="width: 180px"
+        >
+          <el-option
+            v-for="item in type_selections"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
       </div>
     </div></el-col>
 
@@ -69,6 +118,7 @@
         <el-button slot="append" icon="el-icon-search" @click.native="search" :disabled="common_data.navigation.TRANSACTION.getMethod === 0"></el-button>
       </div>
     </div></el-col>
+
   </el-row>
 </section>
 </template>
@@ -81,7 +131,33 @@ export default {
       input_product: null,
       input_customer: null,
       code: '',
-      note: ''
+      note: '',
+      status: '',
+      type: '',
+      type_selections: [
+        {
+          value: 0,
+          label: 'Đã tạo'
+        },
+        {
+          value: 1,
+          label: 'Đã duyệt'
+        }
+      ],
+      status_selections: [
+        {
+          value: 1,
+          label: 'Nhập'
+        },
+        {
+          value: 2,
+          label: 'Xuất'
+        },
+        {
+          value: 3,
+          label: 'Hoàn tiền'
+        }
+      ]
     }
   },
   watch: {
@@ -104,6 +180,12 @@ export default {
       this.load_data_to_search()
     },
     'note' (val) {
+      this.load_data_to_search()
+    },
+    'status' (val) {
+      this.load_data_to_search()
+    },
+    'type' (val) {
       this.load_data_to_search()
     }
   },
@@ -128,6 +210,7 @@ export default {
       if (this.input_customer === '') {
         customer_id = 0
       }
+      console.log('status', this.status)
       this.$parent.new_search = {
         'productId': product_id,
         'bankAccountId': bank_id,
@@ -135,7 +218,9 @@ export default {
         'fromDate': this.$parent.from_date,
         'toDate': this.$parent.to_date,
         'code': this.code,
-        'note': this.note
+        'note': this.note,
+        'type': this.type,
+        'status': this.status
       }
     },
     async search () {

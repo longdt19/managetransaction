@@ -514,6 +514,7 @@ export default {
         size: this.pagination.per_page,
         page: this.pagination.page - 1
       }
+      console.log('data search', data)
 
       const response = await this.$services.do_request('get', TRANSACTION_URL, data)
       this.transaction.loading = false

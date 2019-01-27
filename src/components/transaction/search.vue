@@ -3,13 +3,13 @@
   <div class="group">
     <span>Tìm kiếm:</span>
   </div>
-  <el-row :butter="10">
-    <!-- <el-col :xs="24" :md="2"><div class="grid-content bg-purple">
+  <el-row :gutter="10">
+    <!-- <el-col :sm="24" :md="2"><div class="grid-content bg-purple">
       <div class="group">
         <span>Tìm kiếm:</span>
       </div>
     </div></el-col> -->
-    <el-col :xs="24" :sm="3"><div class="grid-content bg-purple">
+    <el-col :sm="24" :md="6" :lg="3"><div class="grid-content bg-purple">
       <div class="group" v-loading="$parent.bank.loading" element-loading-spinner="el-icon-loading">
         <el-select v-model="input_bank" placeholder="Ngân hàng" filterable clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
           style="width: 180px"
@@ -27,7 +27,7 @@
       </div>
     </div></el-col>
 
-    <el-col :xs="24" :sm="3"><div class="grid-content bg-purple-light">
+    <el-col :sm="24" :md="6" :lg="3"><div class="grid-content bg-purple-light">
       <div class="group" v-loading="$parent.product.loading" element-loading-spinner="el-icon-loading">
         <el-select v-model="input_product" filterable placeholder="Sản phẩm" clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
           style="width: 180px"
@@ -43,7 +43,7 @@
       </div>
     </div></el-col>
 
-    <el-col :xs="24" :sm="3"><div class="grid-content bg-purple">
+    <el-col :sm="24" :md="6" :lg="3"><div class="grid-content bg-purple">
       <div class="group" v-loading="$parent.customer.loading" element-loading-spinner="el-icon-loading">
         <el-select v-model="input_customer" placeholder="Khách hàng" filterable clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
           style="width: 180px"
@@ -61,7 +61,7 @@
       </div>
     </div></el-col>
 
-    <el-col :xs="24" :sm="3"><div class="grid-content bg-purple">
+    <el-col :sm="24" :md="6" :lg="3"><div class="grid-content bg-purple">
       <div class="group" v-loading="$parent.customer.loading" element-loading-spinner="el-icon-loading">
         <el-input placeholder="Mã giao dịch" v-model="code"
           clearable
@@ -71,7 +71,7 @@
       </div>
     </div></el-col>
 
-    <el-col :xs="24" :sm="3"><div class="grid-content bg-purple">
+    <el-col :sm="24" :md="6" :lg="3"><div class="grid-content bg-purple">
       <div class="group" v-loading="$parent.customer.loading" element-loading-spinner="el-icon-loading">
         <el-input placeholder="Ghi chú" v-model="note"
           clearable
@@ -81,7 +81,7 @@
       </div>
     </div></el-col>
 
-    <el-col :xs="24" :sm="3"><div class="grid-content bg-purple" style="">
+    <el-col :sm="24" :md="6" :lg="3"><div class="grid-content bg-purple" style="">
       <div class="group">
         <el-select v-model="status" placeholder="Trạng thái"
           :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
@@ -97,7 +97,7 @@
       </div>
     </div></el-col>
 
-    <el-col :xs="24" :sm="3"><div class="grid-content bg-purple" style="">
+    <el-col :sm="24" :md="6" :lg="3"><div class="grid-content bg-purple" style="">
       <div class="group">
         <el-select v-model="type" placeholder="Phê duyệt"
           :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
@@ -113,7 +113,7 @@
       </div>
     </div></el-col>
 
-    <el-col :xs="24" :sm="2" :md="2"><div class="grid-content bg-purple" style="">
+    <el-col :sm="24" :md="24" :lg="2"><div class="grid-content bg-purple" style="">
       <div class="group">
         <el-button slot="append" icon="el-icon-search" @click.native="search" :disabled="common_data.navigation.TRANSACTION.getMethod === 0"></el-button>
       </div>
@@ -193,7 +193,8 @@ export default {
     load_data_to_search () {
       if (!this.input_bank && !this.input_product &&
           !this.input_customer && !this.$parent.from_date &&
-          !this.$parent.to_date && !this.note && !this.code) {
+          !this.$parent.to_date && !this.note && !this.code &&
+          !this.status && !this.type) {
         this.$parent.new_search = {}
         this.$parent.load_transaction_list()
       }
@@ -210,7 +211,7 @@ export default {
       if (this.input_customer === '') {
         customer_id = 0
       }
-      console.log('status', this.status)
+
       this.$parent.new_search = {
         'productId': product_id,
         'bankAccountId': bank_id,

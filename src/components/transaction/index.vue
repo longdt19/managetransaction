@@ -466,8 +466,10 @@ export default {
         'bankFee': transaction.bankFee,
         'type': item.value
       }
-
-      const response = await this.$services.do_request('put', TRANSACTION_URL, data)
+      console.log('data', data)
+      let url = TRANSACTION_URL + `/${transaction.id}`
+      console.log('url', url)
+      const response = await this.$services.do_request('put', url, data)
       this.accept_loading = false
 
       if (response.data.message === 'Success') {

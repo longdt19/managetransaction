@@ -130,10 +130,10 @@ export default {
       input_bank: null,
       input_product: null,
       input_customer: null,
-      code: '',
-      note: '',
-      status: '',
-      type: '',
+      code: null,
+      note: null,
+      status: null,
+      type: null,
       type_selections: [
         {
           value: 0,
@@ -147,11 +147,11 @@ export default {
       status_selections: [
         {
           value: 1,
-          label: 'Nhập'
+          label: 'Xuất'
         },
         {
           value: 2,
-          label: 'Xuất'
+          label: 'Nhập'
         },
         {
           value: 3,
@@ -212,6 +212,11 @@ export default {
         customer_id = 0
       }
 
+      let type = this.type
+      if (!this.type) {
+        type = -1
+      }
+
       this.$parent.new_search = {
         'productId': product_id,
         'bankAccountId': bank_id,
@@ -220,7 +225,7 @@ export default {
         'toDate': this.$parent.to_date,
         'code': this.code,
         'note': this.note,
-        'type': this.type,
+        'type': type,
         'status': this.status
       }
     },

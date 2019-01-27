@@ -82,7 +82,7 @@
         <el-row>
           <el-col :span="4">
             <el-button @click="display_accept_multi()" v-if="accept_multi_display === false">Tiến hành duyệt đơn</el-button>
-            <el-button @click="toggleSelection()" v-else>Hủy duyệt đơn</el-button>
+            <el-button @click="toggleSelection()" v-else :loading="accept_loading">Hủy duyệt đơn</el-button>
           </el-col>
           <el-col :span="8">
             <div class="">
@@ -98,6 +98,7 @@
             <el-button
               v-if="this.transaction_selections.length"
               @click="accept_multi_transaction()"
+              :loading="accept_loading"
             >
               Xác nhận duyệt đơn
             </el-button>
@@ -374,7 +375,9 @@ export default {
         loading: false
       },
       old_search: {},
-      new_search: {},
+      new_search: {
+        'type': -1
+      },
       type_options: [
         {value: 1, label: 'Đã duyệt'},
         {value: 0, label: 'Đã tạo'}
@@ -420,10 +423,10 @@ export default {
 
       const response = await this.$services.do_request('put', TRANSACTION_URL, data)
       this.accept_loading = false
-      console.log('response', response)
 
       if (response.data.message === 'Success') {
         this.$message.success('Duyệt đơn thành công')
+        this.load_transaction_list()
       } else if (response.status === 400) {
         this.$message.error('Duyệt đơn thất bại')
         console.log('Bad request')
@@ -466,9 +469,8 @@ export default {
         'bankFee': transaction.bankFee,
         'type': item.value
       }
-      console.log('data', data)
+
       let url = TRANSACTION_URL + `/${transaction.id}`
-      console.log('url', url)
       const response = await this.$services.do_request('put', url, data)
       this.accept_loading = false
 
@@ -514,7 +516,6 @@ export default {
         size: this.pagination.per_page,
         page: this.pagination.page - 1
       }
-      console.log('data search', data)
 
       const response = await this.$services.do_request('get', TRANSACTION_URL, data)
       this.transaction.loading = false

@@ -243,8 +243,8 @@ export default {
 
       this.auto_complete()
       let formData = {
-        'customer': {'id': this.input_customer},
-        'product': {'id': this.input_product},
+        'customerId': this.input_customer,
+        'productId': this.input_product,
         'code': this.code_input,
         'cost': this.price_input,
         'extracts': this.extract_input,
@@ -254,10 +254,11 @@ export default {
         'owed': this.unpaid_input,
         'status': this.input_status.input,
         'note': this.note_input,
-        'bankFee': this.bank_fee
+        'bankFee': this.bank_fee,
+        'created': this.created_input
       }
       if (this.input_bank !== '') {
-        formData['bankAccount'] = {'id': this.input_bank}
+        formData['bankAccountId'] = this.input_bank
       }
 
       const response = await this.$services.do_request('post', TRANSACTION_URL, formData)

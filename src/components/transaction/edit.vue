@@ -303,7 +303,9 @@ export default {
         data['bankAccount'] = {'id': this.bank_name}
       }
 
-      const response = await this.$services.do_request('put', TRANSACTION_URL, data)
+      let url = TRANSACTION_URL + `/${this.transaction.id}`
+
+      const response = await this.$services.do_request('put', url, data)
       this.loading = false
 
       if (response.data.message === 'Success') {

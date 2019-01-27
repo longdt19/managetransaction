@@ -419,7 +419,6 @@ export default {
         'transactionIds': transaction_id_list,
         'newStatus': 1
       }
-      console.log('data', data)
 
       const response = await this.$services.do_request('put', TRANSACTION_URL, data)
       this.accept_loading = false
@@ -468,6 +467,10 @@ export default {
         'note': transaction.note,
         'bankFee': transaction.bankFee,
         'type': item.value
+      }
+
+      if (this.bank_name) {
+        data['bankAccount'] = {'id': this.bank_name}
       }
 
       let url = TRANSACTION_URL + `/${transaction.id}`

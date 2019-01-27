@@ -284,8 +284,8 @@ export default {
       this.auto_complete()
       let data = {
         'id': this.transaction.id,
-        'customerId': this.customer_name,
-        'productId': this.product_name,
+        'customer': {'id': this.customer_name},
+        'product': {'id': this.product_name},
         'status': this.input_status.input,
         'code': this.code,
         'cost': this.price_input,
@@ -300,7 +300,7 @@ export default {
       }
 
       if (this.bank_name) {
-        data['bankAccountId'] = this.bank_name
+        data['bankAccount'] = {'id': this.bank_name}
       }
 
       let url = TRANSACTION_URL + `/${this.transaction.id}`

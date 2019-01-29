@@ -81,8 +81,16 @@
       <el-col :span="22">
         <el-row>
           <el-col :span="4">
-            <el-button @click="display_accept_multi()" v-if="accept_multi_display === false">Tiến hành duyệt đơn</el-button>
-            <el-button @click="toggleSelection()" v-else :loading="accept_loading">Hủy duyệt đơn</el-button>
+            <el-button @click="display_accept_multi()" v-if="accept_multi_display === false"
+              :disabled="common_data.navigation.TRANSACTION.putMethod === 0"
+            >
+              Tiến hành duyệt đơn
+            </el-button>
+            <el-button @click="toggleSelection()" v-else :loading="accept_loading"
+              :disabled="common_data.navigation.TRANSACTION.putMethod === 0"
+            >
+              Hủy duyệt đơn
+            </el-button>
           </el-col>
           <el-col :span="8">
             <div class="">

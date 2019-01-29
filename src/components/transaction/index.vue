@@ -402,6 +402,10 @@ export default {
   methods: {
     formatNumber,
     formatDate,
+    convert_date_from_timestamp (stamp) {
+      let date = new Date(stamp)
+      return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+    },
     async accept_multi_transaction () {
       if (this.common_data.navigation.TRANSACTION.putMethod === 0) {
         this.$message.error('Bạn không có quyền hạn cho chức năng này')
@@ -454,8 +458,8 @@ export default {
 
       let data = {
         'id': transaction.id,
-        'customer': {'id': transaction.customer.id},
-        'product': {'id': transaction.product.id},
+        'customerId': transaction.customer.id,
+        'productId': transaction.product.id,
         'status': transaction.status,
         'code': transaction.code,
         'cost': transaction.cost,
@@ -466,11 +470,12 @@ export default {
         'owed': transaction.owed,
         'note': transaction.note,
         'bankFee': transaction.bankFee,
-        'type': item.value
+        'type': item.value,
+        'created': this.convert_date_from_timestamp(transaction.created)
       }
 
-      if (this.bank_name) {
-        data['bankAccount'] = {'id': this.bank_name}
+      if (transaction.bankAccount) {
+        data['bankAccountId'] = transaction.bankAccount.id
       }
 
       let url = TRANSACTION_URL + `/${transaction.id}`

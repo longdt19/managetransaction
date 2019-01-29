@@ -69,6 +69,16 @@
           </el-select>
         </el-form-item>
 
+        <el-form-item label="Ngày tạo" label-width="130px">
+          <el-date-picker
+            v-model="created_input"
+            type="date"
+            value-format="dd-MM-yyyy"
+            format="dd-MM-yyyy"
+          >
+          </el-date-picker>
+        </el-form-item>
+
         <el-form-item label="Phê duyệt" label-width="130px">
           <!-- <el-input :placeholder="status_list[status-1]" disabled></el-input> -->
           <el-radio-group v-model="input_type">
@@ -178,6 +188,7 @@ export default {
       paid_input: 0,
       unpaid_input: 0,
       bank_fee: 0,
+      created_input: '',
       transaction: {},
       input_status: {
         input: null,
@@ -223,7 +234,6 @@ export default {
       this.auto_complete()
     },
     'input_status.input' (val) {
-      console.log('123', val)
       if (typeof val === 'number' || val === '') {
         this.status = val
         if (this.status === 1 || this.status === '') {
@@ -244,6 +254,10 @@ export default {
       }
       this.unpaid_input = this.total_input - this.paid_input
     },
+    convert_date_from_timestamp (stamp) {
+      let date = new Date(stamp)
+      return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
+    },
     open (transaction) {
       // this.status = transaction.status
       this.price_input = transaction.cost
@@ -260,6 +274,7 @@ export default {
       // this.input_status.input = this.status_list[transaction.status - 1]
       this.input_status.input = transaction.status
       this.input_type = transaction.type
+      this.created_input = this.convert_date_from_timestamp(transaction.created)
 
       if (transaction.bankAccount) this.bank_name = transaction.bankAccount.id
       this.transaction = transaction
@@ -284,8 +299,8 @@ export default {
       this.auto_complete()
       let data = {
         'id': this.transaction.id,
-        'customer': {'id': this.customer_name},
-        'product': {'id': this.product_name},
+        'customerId': this.customer_name,
+        'productId': this.product_name,
         'status': this.input_status.input,
         'code': this.code,
         'cost': this.price_input,
@@ -296,11 +311,12 @@ export default {
         'owed': this.unpaid_input,
         'note': this.note,
         'bankFee': this.bank_fee,
-        'type': this.input_type
+        'type': this.input_type,
+        'created': this.created_input
       }
 
       if (this.bank_name) {
-        data['bankAccount'] = {'id': this.bank_name}
+        data['bankAccountId'] = this.bank_name
       }
 
       let url = TRANSACTION_URL + `/${this.transaction.id}`

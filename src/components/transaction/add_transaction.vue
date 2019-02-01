@@ -95,7 +95,7 @@
 
           <el-form-item label="Chiết suất (%)" label-width="130px">
             <div class="">
-              <vue-numeric  separator="," v-model="extract_input" class="mngt-input"></vue-numeric>
+              <el-input v-model="extract_input"></el-input>
             </div>
           </el-form-item>
 
@@ -158,7 +158,7 @@ export default {
       bank_input: '',
       note_input: '',
       price_input: '',
-      extract_input: '',
+      extract_input: null,
       discount_input: '',
       total_input: '',
       paid_input: '',

@@ -48,22 +48,22 @@
     <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
       <el-row >
         <el-col :span="8"><div class="grid-content bg-purple">
-            <span style="font-size: 15px;">Có:</span>
-            <el-tag type="success" v-if="statistic.paid">
+            <span style="font-size: 15px;">Tổng:</span>
+            <el-tag type="success" v-if="statistic.total">
               <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.paid)}}</span>
             </el-tag>
         </div></el-col>
 
         <el-col :span="8"><div class="grid-content bg-purple-light">
-          <span style="font-size: 15px;">Nợ:</span>
-          <el-tag type="danger" v-if="statistic.owed">
+          <span style="font-size: 15px;">Thanh toán:</span>
+          <el-tag type="danger" v-if="statistic.paid">
             <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.owed)}}</span>
           </el-tag>
         </div></el-col>
 
         <el-col :span="8"><div class="grid-content bg-purple-light">
-          <span style="font-size: 15px;">Tổng:</span>
-          <el-tag v-if="statistic.total">
+          <span style="font-size: 15px;">Nợ:</span>
+          <el-tag v-if="statistic.owed">
             <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.total)}}</span>
           </el-tag>
         </div></el-col>
@@ -532,8 +532,9 @@ export default {
         size: this.pagination.per_page,
         page: this.pagination.page - 1
       }
-
+      console.log('data', data)
       const response = await this.$services.do_request('get', TRANSACTION_URL, data)
+      console.log('response', response)
       this.transaction.loading = false
 
       if (response.data.data) {

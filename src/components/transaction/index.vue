@@ -17,59 +17,70 @@
       </div></el-col>
     </el-row>
   </div>
-  <el-row>
-    <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
-      <el-row>
-        <el-col :xs="24" :md="12"><div class="grid-content bg-purple" style="margin-left: 12px">
-          <span>Từ ngày:</span>
-          <el-date-picker
-            v-model="from_date"
-            type="date"
-            value-format="dd-MM-yyyy"
-            format="dd-MM-yyyy"
-            :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
-          >
-          </el-date-picker>
-        </div></el-col>
-        <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
-          <span>Đến ngày:</span>
-          <el-date-picker
-            v-model="to_date"
-            type="date"
-            value-format="dd-MM-yyyy"
-            format="dd-MM-yyyy"
-            :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
-          >
-          </el-date-picker>
-        </div></el-col>
-      </el-row>
-    </div></el-col>
-
-    <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
+  <div class="">
+    <el-col :xs="24" :md="24"><div class="grid-content bg-purple-light">
       <el-row >
-        <el-col :span="8"><div class="grid-content bg-purple">
+        <el-col :span="6"><div class="grid-content bg-purple">
+            <span style="font-size: 15px;">Số tiền:</span>
+            <el-tag type="warning" v-if="statistic.cost">
+              <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.cost)}}</span>
+            </el-tag>
+        </div></el-col>
+
+        <el-col :span="6"><div class="grid-content bg-purple">
             <span style="font-size: 15px;">Tổng:</span>
-            <el-tag type="success" v-if="statistic.total">
+            <el-tag type="success" v-if="statistic.paid">
               <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.paid)}}</span>
             </el-tag>
         </div></el-col>
 
-        <el-col :span="8"><div class="grid-content bg-purple-light">
+        <el-col :span="6"><div class="grid-content bg-purple-light">
           <span style="font-size: 15px;">Thanh toán:</span>
-          <el-tag type="danger" v-if="statistic.paid">
+          <el-tag type="danger" v-if="statistic.owed">
             <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.owed)}}</span>
           </el-tag>
         </div></el-col>
 
-        <el-col :span="8"><div class="grid-content bg-purple-light">
+        <el-col :span="6"><div class="grid-content bg-purple-light">
           <span style="font-size: 15px;">Nợ:</span>
-          <el-tag v-if="statistic.owed">
+          <el-tag v-if="statistic.total">
             <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.total)}}</span>
           </el-tag>
         </div></el-col>
       </el-row>
     </div></el-col>
-  </el-row>
+  </div>
+  <br>
+  <div class="" style="margin-top: 30px; margin-bottom: 0px;">
+    <el-row>
+      <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
+        <el-row>
+          <el-col :xs="24" :md="12"><div class="grid-content bg-purple" style="margin-left: 12px">
+            <span>Từ ngày:</span>
+            <el-date-picker
+              v-model="from_date"
+              type="date"
+              value-format="dd-MM-yyyy"
+              format="dd-MM-yyyy"
+              :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
+            >
+            </el-date-picker>
+          </div></el-col>
+          <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
+            <span>Đến ngày:</span>
+            <el-date-picker
+              v-model="to_date"
+              type="date"
+              value-format="dd-MM-yyyy"
+              format="dd-MM-yyyy"
+              :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
+            >
+            </el-date-picker>
+          </div></el-col>
+        </el-row>
+      </div></el-col>
+    </el-row>
+  </div>
 
   <div class="" style="display: flex; align-items: flex-end; justify-content: space-between">
     <div class=""  style="margin-top: 15px; width: 100%">

@@ -16,28 +16,40 @@
     <el-row>
       <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
         <el-row :gutter="5">
-          <el-col :xs="24" :md="10"><div class="grid-content bg-purple" style="margin-left: 12px">
-            <span>Từ ngày:</span>
-            <el-date-picker
-              v-model="search.from_date"
-              type="date"
-              value-format="dd-MM-yyyy"
-              format="dd-MM-yyyy"
-              :disabled="common_data.navigation.STA_CUSTOMER.getMethod === 0"
-            >
-            </el-date-picker>
-          </div></el-col>
-          <el-col :xs="24" :md="10"><div class="grid-content bg-purple-light">
-            <span>Đến ngày:</span>
-            <el-date-picker
-              v-model="search.to_date"
-              type="date"
-              value-format="dd-MM-yyyy"
-              format="dd-MM-yyyy"
-              :disabled="common_data.navigation.STA_CUSTOMER.getMethod === 0"
+          <el-col :xs="24" :md="10">
+            <div class="grid-content bg-purple" style="margin-left: 12px">
+              <span>Từ ngày:</span>
+              <el-date-picker
+                v-model="search.from_date"
+                type="date"
+                value-format="dd-MM-yyyy"
+                format="dd-MM-yyyy"
+                :disabled="common_data.navigation.STA_CUSTOMER.getMethod === 0"
               >
-            </el-date-picker>
-          </div></el-col>
+              </el-date-picker>
+              <div class="" style="margin-top: 20px">
+                <span>Tài khoản:</span>
+                <el-input v-model="azAccount" clearable/>
+              </div>
+            </div>
+          </el-col>
+          <el-col :xs="24" :md="10">
+            <div class="grid-content bg-purple-light">
+              <span>Đến ngày:</span>
+              <el-date-picker
+                v-model="search.to_date"
+                type="date"
+                value-format="dd-MM-yyyy"
+                format="dd-MM-yyyy"
+                :disabled="common_data.navigation.STA_CUSTOMER.getMethod === 0"
+                >
+              </el-date-picker>
+            </div>
+            <div class="" style="margin-top: 20px">
+              <span>Số điện thoại:</span>
+              <el-input v-model="phone" clearable/>
+            </div>
+          </el-col>
           <el-col :xs="24" :md="4"><div class="grid-content bg-purple-light">
             <el-button slot="append" icon="el-icon-search" @click.native="search_customer" :disabled="common_data.navigation.STA_CUSTOMER.getMethod === 0"></el-button>
           </div></el-col>
@@ -213,6 +225,8 @@ export default {
       customer_list: [],
       total: null,
       statistic: {},
+      azAccount: null,
+      phone: null,
       search: {
         from_date: '',
         to_date: ''
@@ -271,6 +285,12 @@ export default {
         'toDate': this.search.to_date,
         'size': this.pagination.per_page,
         'page': this.pagination.page - 1
+      }
+      if (this.azAccount) {
+        data['azAccount'] = this.azAccount
+      }
+      if (this.phone) {
+        data['phone'] = this.phone
       }
 
       const response = await this.$services.do_request('get', CUSTOMER_STATISTIC_URL, data)

@@ -223,6 +223,7 @@ export default {
   watch: {
     'pagination.per_page' (val) {
       if (this.common_data.navigation.STA_PRODUCT.getMethod === 1) {
+        this.pagination.page = 1
         this.search_product()
       }
     },

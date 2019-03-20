@@ -123,6 +123,7 @@ export default {
   watch: {
     'pagination.per_page' (val) {
       if (this.common_data.navigation.CAT_CUSTOMER_GR.getMethod === 1) {
+        this.pagination.page = 1
         this.load_customer_group_list()
       }
     },

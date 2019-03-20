@@ -141,6 +141,7 @@ export default {
   watch: {
     'pagination.per_page' (val) {
       if (this.common_data.navigation.CAT_BANK.getMethod === 1) {
+        this.pagination.page = 1
         this.load_bank_list()
       }
     },

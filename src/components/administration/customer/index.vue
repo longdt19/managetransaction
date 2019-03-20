@@ -179,6 +179,7 @@ export default {
   watch: {
     'pagination.per_page' (val) {
       if (this.common_data.navigation.CAT_CUSTOMER.getMethod === 1) {
+        this.pagination.page = 1
         this.loading_customer_list()
       }
     },

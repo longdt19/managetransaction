@@ -122,6 +122,7 @@ export default {
   watch: {
     'pagination.per_page' (val) {
       if (this.common_data.navigation.AD_ROLE.getMethod === 1) {
+        this.pagination.page = 1
         this.load_role_list()
       }
     },

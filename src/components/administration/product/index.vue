@@ -129,6 +129,7 @@ export default {
   watch: {
     'pagination.per_page' (val) {
       if (this.common_data.navigation.CAT_PRODUCT.getMethod === 1) {
+        this.pagination.page = 1
         this.load_product_list()
       }
     },

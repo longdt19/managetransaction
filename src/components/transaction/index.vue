@@ -409,6 +409,7 @@ export default {
   watch: {
     'pagination.per_page' (val) {
       if (this.common_data.navigation.TRANSACTION.getMethod === 1) {
+        this.pagination.page = 1
         this.load_transaction_list()
       }
     },
@@ -543,6 +544,7 @@ export default {
         size: this.pagination.per_page,
         page: this.pagination.page - 1
       }
+      console.log('data', data)
 
       const response = await this.$services.do_request('get', TRANSACTION_URL, data)
       this.transaction.loading = false

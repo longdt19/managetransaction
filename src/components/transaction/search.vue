@@ -86,6 +86,7 @@
         <el-select v-model="status" placeholder="Trạng thái"
           :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
           style="width: 180px"
+          clearable
         >
           <el-option
             v-for="item in status_selections"
@@ -102,6 +103,7 @@
         <el-select v-model="type" placeholder="Phê duyệt"
           :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
           style="width: 180px"
+          clearable
         >
           <el-option
             v-for="item in type_selections"
@@ -194,7 +196,8 @@ export default {
       if (!this.input_bank && !this.input_product &&
           !this.input_customer && !this.$parent.from_date &&
           !this.$parent.to_date && !this.note && !this.code &&
-          !this.status && !this.type) {
+          !this.status &&
+          (this.type !== 1 && this.type !== 0)) {
         this.$parent.new_search = {}
         this.$parent.load_transaction_list()
       }
@@ -212,9 +215,10 @@ export default {
         customer_id = 0
       }
 
-      let type = this.type
-      if (!this.type) {
-        type = -1
+      let type = -1
+
+      if (this.type === 0 || this.type === 1) {
+        type = this.type
       }
 
       this.$parent.new_search = {

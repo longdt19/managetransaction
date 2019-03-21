@@ -44,8 +44,9 @@
           </el-form-item>
 
           <el-form-item label="Ngân hàng" label-width="130px">
-            <el-select v-model="input_bank" placeholder="Chọn ngân hàng" filterable clearable  style="width: 250px">
+            <el-select v-model="input_bank" placeholder="Chọn ngân hàng" filterable clearable  style="width: 250px; border-color: red">
               <el-option
+                style=" border-color: red"
                 v-for="item in bank_list"
                 :key="item.id"
                 :label="item.bankName"
@@ -55,6 +56,11 @@
                 <span style="float: right; color: #8492a6; font-size: 13px">{{ item.userName }}</span>
               </el-option>
             </el-select>
+            <span style="float: left; color: #F56C6C"
+              v-if="check_paid_and_bank()"
+            >
+              *Ngân hàng không được bỏ trống
+            </span>
           </el-form-item>
 
           <el-form-item label="Ghi chú" label-width="130px">
@@ -211,6 +217,16 @@ export default {
     }
   },
   methods: {
+    check_paid_and_bank () {
+      // display warning when paid_input != 0 and input_bank = 0
+      if (this.paid_input) {
+        if (this.input_bank) {
+          return false
+        }
+        return true
+      }
+      return false
+    },
     auto_complete () {
       this.total_input = this.price_input - this.extract_input * this.price_input / 100 - this.discount_input
       this.total_input = parseFloat(this.total_input)
@@ -226,6 +242,11 @@ export default {
         this.$message.error('Bạn không có quyền hạn cho chức năng này')
         return
       }
+      if (this.check_paid_and_bank() === true) {
+        this.$message.error('Ngân hàng không được bỏ trống')
+        return
+      }
+
       if (this.check_null_before_create() === false) {
         return
       }
@@ -284,7 +305,7 @@ export default {
       this.customer_list = customer
     },
     is_number (input) {
-      if (input.length === 0) return true
+      if (!input) return true
       return NUMBER_VALIDATOR.test(input)
     },
     validate_number_before_create () {

@@ -184,9 +184,9 @@
       <!-- 1: Xuất
       2: Nhập
       3: Hoàn tiền -->
-      <el-table-column label="Trạng thái" header-align="center" align="center">
+      <el-table-column label="Loại" header-align="center" align="center">
         <template slot-scope="scope" >
-          <el-tag v-if="scope.row.status" :type="type_of_status(scope.row.status).type">{{type_of_status(scope.row.status).label}}</el-tag>
+          <el-tag v-if="scope.row.status" :type="get_type(scope.row.type).type_label">{{get_type(scope.row.type).label}}</el-tag>
         </template>
       </el-table-column>
 
@@ -287,13 +287,13 @@
       </template>
     </el-table-column>
 
-    <el-table-column label="Phê duyệt" header-align="center" align="center">
+    <el-table-column label="Trạng thái" header-align="center" align="center">
       <template slot-scope="scope">
         <el-dropdown :hide-on-click="false">
-        <el-button size="mini" :loading="accept_loading">{{scope.row.type === 0 ? 'Đã tạo' : 'Đã duyệt'}}</el-button>
+        <el-button size="mini" :loading="accept_loading">{{get_status(scope.row.status).label}}</el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
-              v-for="item in type_options"
+              v-for="item in STATUS_LIST"
               :key="item.value"
               @click.native="accept_transaction(scope.row, item)"
             >
@@ -342,6 +342,7 @@
 <script>
 import _ from 'lodash'
 import { BANK_LIST_URL, CUSTOMER_LIST_URL, PRODUCT_LIST_URL, TRANSACTION_URL, TRANSACTION_DOWNLOAD_URL } from '@/constants/endpoints'
+import { TYPE_LIST, STATUS_LIST } from '@/constants'
 
 import formatNumber from '@/utils/numeric'
 import formatDate from '@/utils/time'
@@ -397,10 +398,8 @@ export default {
       new_search: {
         'type': -1
       },
-      type_options: [
-        {value: 1, label: 'Đã duyệt'},
-        {value: 0, label: 'Đã tạo'}
-      ],
+      STATUS_LIST,
+      TYPE_LIST,
       accept_loading: false,
       transaction_selections: [],
       accept_multi_display: false
@@ -422,6 +421,20 @@ export default {
   methods: {
     formatNumber,
     formatDate,
+    get_status (status) {
+      let result = {
+        value: '',
+        label: ''
+      }
+
+      this.STATUS_LIST.forEach(item => {
+        if (item.value === status) {
+          result = item
+        }
+      })
+
+      return result
+    },
     convert_date_from_timestamp (stamp) {
       let date = new Date(stamp)
       return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`
@@ -480,7 +493,7 @@ export default {
         'id': transaction.id,
         'customerId': transaction.customer.id,
         'productId': transaction.product.id,
-        'status': transaction.status,
+        'type': transaction.type,
         'code': transaction.code,
         'cost': transaction.cost,
         'extracts': transaction.extracts,
@@ -490,7 +503,7 @@ export default {
         'owed': transaction.owed,
         'note': transaction.note,
         'bankFee': transaction.bankFee,
-        'type': item.value,
+        'status': item.value,
         'created': this.convert_date_from_timestamp(transaction.created)
       }
 
@@ -506,7 +519,7 @@ export default {
         this.$message.success('Thay đổi giao dịch thành công')
         this.transaction.list.forEach(i => {
           if (i.id === transaction.id) {
-            i.type = item.value
+            i.status = item.value
           }
         })
       } else if (response.status === 400) {
@@ -548,6 +561,7 @@ export default {
 
       const response = await this.$services.do_request('get', TRANSACTION_URL, data)
       this.transaction.loading = false
+      console.log('response', response)
 
       if (response.data.data) {
         this.transaction.list = response.data.data.data.content
@@ -628,27 +642,19 @@ export default {
     open_delete (transaction) {
       this.$refs.delete_transaction.open(transaction.id)
     },
-    type_of_status (status) {
-      // 1: Xuất
-      // 2: Nhập
-      // 3: Hoàn tiền
-      let type = ''
-      let label = ''
+    get_type (type) {
+      let result = {
+        type: '',
+        label: '',
+        type_label: ''
+      }
+      this.TYPE_LIST.forEach(item => {
+        if (item.type === type) {
+          result = item
+        }
+      })
 
-      if (status === 1) {
-        type = 'success'
-        label = 'Xuất'
-      } else if (status === 2) {
-        type = 'warning'
-        label = 'Nhập'
-      } else if (status === 3) {
-        type = 'danger'
-        label = 'Hoàn tiền'
-      }
-      return {
-        type: type,
-        label: label
-      }
+      return result
     },
     prev_page () {
       if (this.pagination.page === 1) return

@@ -67,13 +67,13 @@
             <el-input  v-model="note_input"></el-input>
           </el-form-item>
 
-          <el-form-item label="Trạng thái(*)" label-width="130px">
-            <el-select v-model="input_status.input" filterable placeholder="Chọn trạng thái" clearable style="width: 250px">
+          <el-form-item label="Loại(*)" label-width="130px">
+            <el-select v-model="input_type.input" filterable placeholder="Chọn trạng thái" clearable style="width: 250px">
               <el-option
-                v-for="item in input_status.select"
+                v-for="item in input_type.select"
                 :key="item.id"
                 :label="item.label"
-                :value="item.id"
+                :value="item.type"
                 :name="item.label">
               </el-option>
             </el-select>
@@ -111,7 +111,7 @@
             </div>
           </el-form-item>
 
-          <el-form-item v-if="input_status.input === 3 || input_status.input === 2" label="Phí ngân hàng" label-width="130px">
+          <el-form-item v-if="input_type.input === 'NHAP' || input_type.input === 'HOAN_TIEN' " label="Phí ngân hàng" label-width="130px">
             <div class="">
               <vue-numeric  separator="," v-model="bank_fee" class="mngt-input"></vue-numeric>
             </div>
@@ -147,7 +147,7 @@
 </template>
 
 <script>
-import { NUMBER_VALIDATOR } from '@/constants'
+import { NUMBER_VALIDATOR, TYPE_LIST } from '@/constants'
 import { TRANSACTION_URL } from '@/constants/endpoints'
 import getDays from '@/utils/day'
 
@@ -171,22 +171,9 @@ export default {
       unpaid_input: '',
       bank_fee: '',
       created_input: '',
-      input_status: {
+      input_type: {
         input: null,
-        select: [
-          {
-            id: 1,
-            label: 'Xuất'
-          },
-          {
-            id: 2,
-            label: 'Nhập'
-          },
-          {
-            id: 3,
-            label: 'Hoàn tiền'
-          }
-        ]
+        select: TYPE_LIST
       },
       dialogVisible: false,
       loading: false
@@ -208,7 +195,7 @@ export default {
     'bank_fee' (val) {
       this.auto_complete()
     },
-    'input_status.input' (val) {
+    'input_type.input' (val) {
       this.status = val
       if (this.status === 1 || val === '') {
         this.bank_fee = 0
@@ -238,6 +225,7 @@ export default {
       this.unpaid_input = this.total_input - this.paid_input
     },
     async create () {
+      console.log('type input', this.input_type.input)
       if (this.common_data.navigation.TRANSACTION.postMethod === 0) {
         this.$message.error('Bạn không có quyền hạn cho chức năng này')
         return
@@ -273,7 +261,7 @@ export default {
         'total': this.total_input,
         'paid': this.paid_input,
         'owed': this.unpaid_input,
-        'status': this.input_status.input,
+        'type': this.input_type.input,
         'note': this.note_input,
         'bankFee': this.bank_fee,
         'created': this.created_input
@@ -340,7 +328,7 @@ export default {
       } else if (this.input_customer === '') {
         this.$message.error('Người giao dịch không được để trống')
         return false
-      } else if (this.input_status === '') {
+      } else if (this.input_type === '') {
         this.$message.error('Trạng thái không được để trống')
         return false
       } else if (this.price_input === '') {
@@ -355,7 +343,7 @@ export default {
       } else if (this.unpaid_input === '') {
         this.$message.error('Còn nợ không được để trống')
         return false
-      } else if (!this.input_status.input) {
+      } else if (!this.input_type.input) {
         this.$message.error('Trạng thái không được để trống')
         return false
       } else {

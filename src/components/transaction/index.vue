@@ -7,7 +7,13 @@
       </div></el-col>
       <el-col :xs="12" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
         <!-- <el-button>Thêm mới giao dịch</el-button> -->
-        <add-transaction-component ref='add_transaction' @transaction_added="transaction_added"></add-transaction-component>
+        <add-component
+          @transaction_object_added="transaction_object_added"
+          :bank_list_loaded="bank.list"
+          :product_list_loaded="product.list"
+          :customer_list_loaded="customer.list"
+          >
+        </add-component>
       </div></el-col>
       <el-col :xs="12" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
         <el-button style="background-color: #2e7d32" :disabled="common_data.navigation.TRANSACTION.getMethod === 0" @click="export_excel">
@@ -351,9 +357,16 @@ import SearchComponent from '@/components/transaction/search'
 import AddTransactionComponent from './add_transaction'
 import EditTransactionComponent from './edit'
 import DeleteTransactionComponent from './delete'
+import AddComponent from './add'
 
 export default {
-  components: { SearchComponent, AddTransactionComponent, EditTransactionComponent, DeleteTransactionComponent },
+  components: {
+    SearchComponent,
+    AddTransactionComponent,
+    EditTransactionComponent,
+    DeleteTransactionComponent,
+    AddComponent
+  },
   data () {
     return {
       value: '',
@@ -557,11 +570,9 @@ export default {
         size: this.pagination.per_page,
         page: this.pagination.page - 1
       }
-      console.log('data', data)
 
       const response = await this.$services.do_request('get', TRANSACTION_URL, data)
       this.transaction.loading = false
-      console.log('response', response)
 
       if (response.data.data) {
         this.transaction.list = response.data.data.data.content
@@ -585,7 +596,6 @@ export default {
       this.bank.loading = false
       if (response.data.data) {
         this.bank.list = response.data.data
-        this.$refs.add_transaction.load_bank_data(response.data.data)
       } else {
         this.$router.push('/e-500')
       }
@@ -603,7 +613,6 @@ export default {
 
       if (response.data.data) {
         this.customer.list = response.data.data
-        this.$refs.add_transaction.load_customer_data(response.data.data)
       } else {
         this.$router.push('/e-500')
       }
@@ -621,7 +630,6 @@ export default {
 
       if (response.data.data) {
         this.product.list = response.data.data
-        this.$refs.add_transaction.load_product_data(response.data.data)
       } else {
         this.$router.push('/e-500')
       }
@@ -630,7 +638,7 @@ export default {
       const transaction_index = this.transaction.list.findIndex(item => item.id === transaction.id)
       Object.assign(this.transaction.list[transaction_index], transaction)
     },
-    transaction_added () {
+    transaction_object_added () {
       this.load_transaction_list()
     },
     open_edit (transaction) {

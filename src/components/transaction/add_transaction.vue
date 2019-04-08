@@ -1,148 +1,142 @@
 <template lang="html">
-<section style="text-align: left">
-  <el-button @click="dialogVisible = true" type="primary"  :disabled="common_data.navigation.TRANSACTION.postMethod === 0">
-    <i class="el-icon-plus" style="margin-right: 10px" />
-    Thêm mới giao dịch
-  </el-button>
+<section>
+  <el-row style="margin-top: 20px">
+    <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
+      <el-form>
+        <el-form-item label="Mã giao dịch(*)" label-width="130px">
+          <el-input  v-model="code_input"></el-input>
+        </el-form-item>
 
-  <el-dialog
-    title="Tạo mới giao dịch"
-    :visible.sync="dialogVisible"
-    width="75%"
-  >
-    <el-row style="margin-top: 20px">
-      <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
-        <el-form>
-          <el-form-item label="Mã giao dịch(*)" label-width="130px">
-            <el-input  v-model="code_input"></el-input>
-          </el-form-item>
+        <el-form-item label="Sản phẩm(*)" label-width="130px">
+          <el-select v-model="input_product" filterable placeholder="Chọn sản phẩm" clearable  style="width: 250px">
+            <el-option
+              v-for="item in product_list_loaded"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+              :name="item.type">
+            </el-option>
+          </el-select>
+        </el-form-item>
 
-          <el-form-item label="Sản phẩm(*)" label-width="130px">
-            <el-select v-model="input_product" filterable placeholder="Chọn sản phẩm" clearable  style="width: 250px">
-              <el-option
-                v-for="item in product_list"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-                :name="item.type">
-              </el-option>
-            </el-select>
-          </el-form-item>
+        <el-form-item label="Người giao dịch(*)" label-width="130px">
+          <el-select v-model="input_customer" placeholder="Chọn khách hàng" filterable clearable  style="width: 250px">
+            <el-option
+              v-for="item in customer_list_loaded"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+              :name="item.name">
+              <span style="float: left">{{ item.name }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.azAccount }}</span>
+            </el-option>
+          </el-select>
+        </el-form-item>
 
-          <el-form-item label="Người giao dịch(*)" label-width="130px">
-            <el-select v-model="input_customer" placeholder="Chọn khách hàng" filterable clearable  style="width: 250px">
-              <el-option
-                v-for="item in customer_list"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-                :name="item.name">
-                <span style="float: left">{{ item.name }}</span>
-                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.azAccount }}</span>
-              </el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item label="Ngân hàng" label-width="130px">
-            <el-select v-model="input_bank" placeholder="Chọn ngân hàng" filterable clearable  style="width: 250px; border-color: red">
-              <el-option
-                style=" border-color: red"
-                v-for="item in bank_list"
-                :key="item.id"
-                :label="item.bankName"
-                :value="item.id"
-                :name="item.bankAccount">
-                <span style="float: left">{{ item.bankName }}</span>
-                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.userName }}</span>
-              </el-option>
-            </el-select>
+        <el-form-item label="Ngân hàng" label-width="130px">
+          <el-select v-model="input_bank" placeholder="Chọn ngân hàng" filterable clearable  style="width: 250px; border-color: red">
+            <el-option
+              style=" border-color: red"
+              v-for="item in bank_list_loaded"
+              :key="item.id"
+              :label="item.bankName"
+              :value="item.id"
+              :name="item.bankAccount">
+              <span style="float: left">{{ item.bankName }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.userName }}</span>
+            </el-option>
+          </el-select>
+          <div class="">
             <span style="float: left; color: #F56C6C"
               v-if="check_paid_and_bank()"
             >
               *Ngân hàng không được bỏ trống
             </span>
-          </el-form-item>
+          </div>
 
-          <el-form-item label="Ghi chú" label-width="130px">
-            <el-input  v-model="note_input"></el-input>
-          </el-form-item>
+        </el-form-item>
 
-          <el-form-item label="Loại(*)" label-width="130px">
-            <el-select v-model="input_type.input" filterable placeholder="Chọn trạng thái" clearable style="width: 250px">
-              <el-option
-                v-for="item in input_type.select"
-                :key="item.id"
-                :label="item.label"
-                :value="item.type"
-                :name="item.label">
-              </el-option>
-            </el-select>
-          </el-form-item>
+        <el-form-item label="Ghi chú" label-width="130px">
+          <el-input  v-model="note_input"></el-input>
+        </el-form-item>
 
-          <el-form-item label="Ngày tạo" label-width="130px">
-            <el-date-picker
-              v-model="created_input"
-              type="date"
-              value-format="dd-MM-yyyy"
-              format="dd-MM-yyyy"
-            >
-            </el-date-picker>
-          </el-form-item>
+        <el-form-item label="Loại(*)" label-width="130px">
+          <el-select v-model="input_type.input" filterable placeholder="Chọn trạng thái" clearable style="width: 250px">
+            <el-option
+              v-for="item in input_type.select"
+              :key="item.id"
+              :label="item.label"
+              :value="item.type"
+              :name="item.label">
+            </el-option>
+          </el-select>
+        </el-form-item>
 
-        </el-form>
-      </div></el-col>
-      <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
-        <el-form>
-          <el-form-item label="Số tiền(*)" label-width="130px">
-            <div class="">
-              <vue-numeric  separator="," v-model="price_input" class="mngt-input"></vue-numeric>
-            </div>
-          </el-form-item>
+        <el-form-item label="Ngày tạo" label-width="130px">
+          <el-date-picker
+            v-model="created_input"
+            type="date"
+            value-format="dd-MM-yyyy"
+            format="dd-MM-yyyy"
+          >
+          </el-date-picker>
+        </el-form-item>
 
-          <el-form-item label="Chiết suất (%)" label-width="130px">
-            <div class="">
-              <el-input v-model="extract_input"></el-input>
-            </div>
-          </el-form-item>
+      </el-form>
+    </div></el-col>
+    <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
+      <el-form>
+        <el-form-item label="Số tiền(*)" label-width="130px">
+          <div class="">
+            <vue-numeric  separator="," v-model="price_input" class="mngt-input"></vue-numeric>
+          </div>
+        </el-form-item>
 
-          <el-form-item label="Bớt tiền" label-width="130px">
-            <div class="">
-              <vue-numeric  separator="," v-model="discount_input" class="mngt-input"></vue-numeric>
-            </div>
-          </el-form-item>
+        <el-form-item label="Chiết suất (%)" label-width="130px">
+          <div class="">
+            <el-input v-model="extract_input"></el-input>
+          </div>
+        </el-form-item>
 
-          <el-form-item v-if="input_type.input === 'NHAP' || input_type.input === 'HOAN_TIEN' " label="Phí ngân hàng" label-width="130px">
-            <div class="">
-              <vue-numeric  separator="," v-model="bank_fee" class="mngt-input"></vue-numeric>
-            </div>
-          </el-form-item>
+        <el-form-item label="Bớt tiền" label-width="130px">
+          <div class="">
+            <vue-numeric  separator="," v-model="discount_input" class="mngt-input"></vue-numeric>
+          </div>
+        </el-form-item>
 
-          <el-form-item label="Tổng(*)" label-width="130px">
-            <div class="">
-              <vue-numeric  separator="," v-model="total_input" class="mngt-input" disabled></vue-numeric>
-            </div>
-          </el-form-item>
+        <el-form-item v-if="input_type.input === 'NHAP' || input_type.input === 'HOAN_TIEN' " label="Phí ngân hàng" label-width="130px">
+          <div class="">
+            <vue-numeric  separator="," v-model="bank_fee" class="mngt-input"></vue-numeric>
+          </div>
+        </el-form-item>
 
-          <el-form-item label="Đã thanh toán(*)" label-width="130px">
-            <div class="">
-              <vue-numeric  separator="," v-model="paid_input" class="mngt-input"></vue-numeric>
-            </div>
-          </el-form-item>
+        <el-form-item label="Tổng(*)" label-width="130px">
+          <div class="">
+            <vue-numeric  separator="," v-model="total_input" class="mngt-input" disabled></vue-numeric>
+          </div>
+        </el-form-item>
 
-          <el-form-item label="Còn nợ(*)" label-width="130px">
-            <div class="">
-              <vue-numeric  separator="," v-model="unpaid_input" class="mngt-input" disabled></vue-numeric>
-            </div>
-          </el-form-item>
+        <el-form-item label="Đã thanh toán(*)" label-width="130px">
+          <div class="">
+            <vue-numeric  separator="," v-model="paid_input" class="mngt-input"></vue-numeric>
+          </div>
+        </el-form-item>
 
-        </el-form>
-      </div></el-col>
-    </el-row>
+        <el-form-item label="Còn nợ(*)" label-width="130px">
+          <div class="">
+            <vue-numeric  separator="," v-model="unpaid_input" class="mngt-input" disabled></vue-numeric>
+          </div>
+        </el-form-item>
+
+      </el-form>
+    </div></el-col>
+  </el-row>
+  <div class="" style="text-align: right; margin-bottom: 20px">
     <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">Hủy bỏ</el-button>
+      <el-button @click="close_dialog()">Hủy bỏ</el-button>
       <el-button type="primary" @click="create" :loading="loading">Tạo mới</el-button>
     </span>
-  </el-dialog>
+  </div>
 </section>
 </template>
 
@@ -152,6 +146,7 @@ import { TRANSACTION_URL } from '@/constants/endpoints'
 import getDays from '@/utils/day'
 
 export default {
+  props: ['bank_list_loaded', 'product_list_loaded', 'customer_list_loaded'],
   data () {
     return {
       input_customer: '',
@@ -204,6 +199,9 @@ export default {
     }
   },
   methods: {
+    close_dialog () {
+      this.$emit('close_dialog')
+    },
     check_paid_and_bank () {
       // display warning when paid_input != 0 and input_bank = 0
       if (this.paid_input) {
@@ -225,7 +223,6 @@ export default {
       this.unpaid_input = this.total_input - this.paid_input
     },
     async create () {
-      console.log('type input', this.input_type.input)
       if (this.common_data.navigation.TRANSACTION.postMethod === 0) {
         this.$message.error('Bạn không có quyền hạn cho chức năng này')
         return
@@ -275,7 +272,7 @@ export default {
 
       if (response.data.message === 'Success') {
         this.$message.success('Tạo mới giao dịch thành công')
-        this.$emit('transaction_added')
+        this.$emit('close_dialog')
         this.dialogVisible = false
       } else if (response.status === 400) {
         console.log('Bad request')

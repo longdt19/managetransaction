@@ -50,11 +50,13 @@
               <span style="float: right; color: #8492a6; font-size: 13px">{{ item.userName }}</span>
             </el-option>
           </el-select>
-          <span style="float: left; color: #F56C6C"
-            v-if="check_paid_and_bank()"
-          >
-            *Ngân hàng không được bỏ trống
-          </span>
+          <div class="">
+            <span style="float: left; color: #F56C6C"
+              v-if="check_paid_and_bank()"
+            >
+              *Ngân hàng không được bỏ trống
+            </span>
+          </div>
         </el-form-item>
 
         <el-form-item label="Ghi chú" label-width="130px">

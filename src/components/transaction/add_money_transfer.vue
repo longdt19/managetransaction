@@ -94,7 +94,7 @@ export default {
     getDays,
     close_dialog () {
       this.$emit('close_dialog')
-    },
+    }
   },
   created () {
     let days = getDays()

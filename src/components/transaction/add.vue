@@ -1,5 +1,5 @@
-<template lang="html">
-<section style="text-align: left">
+<!-- <template lang="html">
+<section>
   <el-button @click="dialogVisible = true" type="primary"  :disabled="common_data.navigation.TRANSACTION.postMethod === 0">
     <i class="el-icon-plus" style="margin-right: 10px" />
     Thêm mới
@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     close_dialog () {
-      console.log('close 1')
+      this.$emit('transaction_object_added')
       this.dialogVisible = false
     }
   },
@@ -71,4 +71,4 @@ export default {
 .mngt-input {
   width: 250px
 }
-</style>
+</style> -->

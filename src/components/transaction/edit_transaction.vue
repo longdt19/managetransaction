@@ -63,15 +63,14 @@
           <el-input :placeholder="note" v-model="note" style="width: 250px"></el-input>
         </el-form-item>
 
-        <el-form-item label="Trạng thái(*)" label-width="130px">
-          <!-- <el-input :placeholder="status_list[status-1]" disabled></el-input> -->
-          <el-select v-model="input_status.input" filterable placeholder="Chọn trạng thái" clearable style="width: 250px">
+        <el-form-item label="Loại(*)" label-width="130px">
+          <el-select v-model="input_type.input" filterable placeholder="Chọn loại" clearable style="width: 250px">
             <el-option
-              v-for="item in input_status.select"
+              v-for="item in input_type.select"
               :key="item.id"
               :label="item.label"
-              :value="item.id"
-              >
+              :value="item.type"
+              :name="item.label">
             </el-option>
           </el-select>
         </el-form-item>
@@ -88,9 +87,14 @@
 
         <el-form-item label="Phê duyệt" label-width="130px">
           <!-- <el-input :placeholder="status_list[status-1]" disabled></el-input> -->
-          <el-radio-group v-model="input_type">
-            <el-radio :label="0">Đã tạo</el-radio>
-            <el-radio :label="1">Đã duyệt</el-radio>
+          <el-radio-group v-model="input_status.input">
+            <!-- <el-radio :label="0">Đã tạo</el-radio>
+            <el-radio :label="1">Đã duyệt</el-radio> -->
+            <el-radio v-for="(status, index) in input_status.select" :label="status.value"
+              v-bind:key="index"
+            >
+              {{ status.label }}
+            </el-radio>
           </el-radio-group>
         </el-form-item>
 
@@ -116,7 +120,7 @@
           </div>
         </el-form-item>
 
-        <el-form-item v-if="status === 3 || status === 2" label="Phí ngân hàng" label-width="130px">
+        <el-form-item v-if="input_type.input === 'NHAP' || input_type.input === 'HOAN_TIEN' " label="Phí ngân hàng" label-width="130px">
           <div class="">
             <vue-numeric  separator="," v-model="bank_fee" class="mngt-input"></vue-numeric>
           </div>
@@ -152,7 +156,7 @@
 </template>
 
 <script>
-import { NUMBER_VALIDATOR } from '@/constants'
+import { NUMBER_VALIDATOR, TYPE_LIST, STATUS_LIST } from '@/constants'
 import { TRANSACTION_URL } from '@/constants/endpoints'
 
 export default {
@@ -173,25 +177,15 @@ export default {
       bank_fee: 0,
       created_input: '',
       transaction: {},
+      input_type: {
+        input: null,
+        select: TYPE_LIST
+      },
       input_status: {
         input: null,
-        select: [
-          {
-            id: 1,
-            label: 'Xuất'
-          },
-          {
-            id: 2,
-            label: 'Nhập'
-          },
-          {
-            id: 3,
-            label: 'Hoàn tiền'
-          }
-        ]
+        select: STATUS_LIST
       },
       radio: 1,
-      input_type: 1,
       status_list: ['Xuất', 'Nhập', 'Hoàn tiền'],
       bank_list: [],
       product_list: [],
@@ -265,8 +259,8 @@ export default {
       this.customer_name = transaction.customer.id
       this.note = transaction.note
       // this.input_status.input = this.status_list[transaction.status - 1]
+      this.input_type.input = transaction.type
       this.input_status.input = transaction.status
-      this.input_type = transaction.type
       this.created_input = this.convert_date_from_timestamp(transaction.created)
 
       if (transaction.bankAccount) this.bank_name = transaction.bankAccount.id

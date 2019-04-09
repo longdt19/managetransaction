@@ -1,18 +1,21 @@
 <template>
 <section v-if="common_data.navigation.TRANSACTION.status === 1">
-  <div class="" style="margin-bottom: 20px; text-align: right">
+  <div class="" style="margin-bottom: 20px">
     <el-row>
-
-      <el-col :xs="8" :md="18"><div>
+      <el-col :xs="24" :md="16"><div class="grid-content bg-purple">
+        <span style="font-size: 24px; margin-bottom: 50px">Thống kê chi tiết các giao dịch</span>
+      </div></el-col>
+      <el-col :xs="12" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
         <!-- <el-button>Thêm mới giao dịch</el-button> -->
-        <add-transaction-component
+        <add-component
           @transaction_object_added="transaction_object_added"
           :bank_list_loaded="bank.list"
           :product_list_loaded="product.list"
           :customer_list_loaded="customer.list"
-        />
+          >
+        </add-component>
       </div></el-col>
-      <el-col :xs="8" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
+      <el-col :xs="12" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
         <el-button style="background-color: #2e7d32" :disabled="common_data.navigation.TRANSACTION.getMethod === 0" @click="export_excel">
           <img src="../../assets/icon/download.svg" style="height: 15px" />
           <span style="margin-left: 5px; color: white">Xuất Excel</span>
@@ -23,27 +26,31 @@
   <div class="">
     <el-col :xs="24" :md="24"><div class="grid-content bg-purple-light">
       <el-row >
-        <el-col :span="4"><div class="grid-content bg-purple" style="margin-left: 12px">
-          <span>Từ ngày:</span>
-          <el-date-picker
-            v-model="from_date"
-            type="date"
-            value-format="dd-MM-yyyy"
-            format="dd-MM-yyyy"
-            :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
-          >
-          </el-date-picker>
-        </div></el-col>
-        <el-col :span="4"><div class="grid-content bg-purple-light">
-          <span>Đến ngày:</span>
-          <el-date-picker
-            v-model="to_date"
-            type="date"
-            value-format="dd-MM-yyyy"
-            format="dd-MM-yyyy"
-            :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
-          >
-          </el-date-picker>
+        <el-col :xs="4" :md="12"><div class="grid-content bg-purple">
+          <el-row>
+            <el-col :span="4"><div class="grid-content bg-purple" style="margin-left: 12px">
+              <span>Từ ngày:</span>
+              <el-date-picker
+                v-model="from_date"
+                type="date"
+                value-format="dd-MM-yyyy"
+                format="dd-MM-yyyy"
+                :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
+              >
+              </el-date-picker>
+            </div></el-col>
+            <el-col :span="4"><div class="grid-content bg-purple-light">
+              <span>Đến ngày:</span>
+              <el-date-picker
+                v-model="to_date"
+                type="date"
+                value-format="dd-MM-yyyy"
+                format="dd-MM-yyyy"
+                :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
+              >
+              </el-date-picker>
+            </div></el-col>
+          </el-row>
         </div></el-col>
 
         <el-col :span="4"><div class="grid-content bg-purple">
@@ -78,10 +85,38 @@
   </div>
   <br>
   <div class="" style="margin-top: 30px; margin-bottom: 0px;">
+    <el-row>
+      <el-col :xs="24" :md="12"><div class="grid-content bg-purple">
+        <el-row>
+          <el-col :xs="24" :md="12"><div class="grid-content bg-purple" style="margin-left: 12px">
+            <span>Từ ngày:</span>
+            <el-date-picker
+              v-model="from_date"
+              type="date"
+              value-format="dd-MM-yyyy"
+              format="dd-MM-yyyy"
+              :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
+            >
+            </el-date-picker>
+          </div></el-col>
+          <el-col :xs="24" :md="12"><div class="grid-content bg-purple-light">
+            <span>Đến ngày:</span>
+            <el-date-picker
+              v-model="to_date"
+              type="date"
+              value-format="dd-MM-yyyy"
+              format="dd-MM-yyyy"
+              :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
+            >
+            </el-date-picker>
+          </div></el-col>
+        </el-row>
+      </div></el-col>
+    </el-row>
   </div>
 
   <div class="" style="display: flex; align-items: flex-end; justify-content: space-between">
-    <div class=""  style="width: 100%">
+    <div class=""  style="margin-top: 15px; width: 100%">
       <search-component ></search-component>
     </div>
   </div>
@@ -249,7 +284,7 @@
       <!-- ngân hàng khách hàng dùng để thanh toán -->
       <el-table-column label="Ngân hàng" header-align="center" align="center">
         <template slot-scope="scope" v-if="scope.row.bankAccount">
-          {{scope.row.toBankAccount.bankName}}
+          {{scope.row.bankAccount.bankName}}
         </template>
       </el-table-column>
 
@@ -347,8 +382,8 @@ import formatDate from '@/utils/time'
 
 import SearchComponent from '@/components/transaction/search'
 import AddTransactionComponent from './add_transaction'
-import EditTransactionComponent from './edit_transaction'
-import DeleteTransactionComponent from './delete_transaction'
+import EditTransactionComponent from './edit'
+import DeleteTransactionComponent from './delete'
 import AddComponent from './add'
 
 export default {

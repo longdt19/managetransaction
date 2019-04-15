@@ -39,7 +39,7 @@
 
       <el-form-item label="Nợ trước" :label-width="formLabelWidth">
         <!-- <el-input v-model="debtBefore" auto-complete="off"></el-input> -->
-        <vue-numeric  separator="," v-model="debtBefore" class="mngt-input"></vue-numeric>
+        <vue-numeric v-bind:minus="true" separator="," v-model="debtBefore" class="mngt-input"></vue-numeric>
       </el-form-item>
 
       <el-form-item label="Ghi chú" :label-width="formLabelWidth">
@@ -129,9 +129,10 @@ export default {
         'address': this.address,
         'province': this.province,
         'debtBefore': this.debtBefore,
-        'customerGroup': this.group,
+        'customerGroup': {'id': this.group},
         'note': this.note
       }
+      console.log('data edit', data)
 
       const response = await this.$services.do_request('put', CUSTOMER_URL, data)
       this.loading = false

@@ -55,8 +55,7 @@
     </el-table-column>
 
     <el-table-column label="Nhóm khách hàng" header-align="center" align="center">
-      <template slot-scope="scope">
-
+      <template slot-scope="scope" v-if="scope.row.customerGroup">
         <el-tooltip :content="scope.row.customerGroup.description" placement="top">
           <span>{{scope.row.customerGroup.name}}</span>
         </el-tooltip>
@@ -221,6 +220,7 @@ export default {
       }
 
       const response = await this.$services.do_request('get', CUSTOMER_URL, data)
+      console.log('response index', response)
       this.loading = false
 
       if (response.data.data.content) {

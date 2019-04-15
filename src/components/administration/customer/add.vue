@@ -39,7 +39,7 @@
 
       <el-form-item label="Nợ trước" :label-width="formLabelWidth">
         <!-- <el-input v-model="debtBefore" auto-complete="off"></el-input> -->
-        <vue-numeric  separator="," v-model="debtBefore" class="mngt-input"></vue-numeric>
+        <vue-numeric v-bind:minus="true" separator="," v-model="debtBefore" class="mngt-input"></vue-numeric>
       </el-form-item>
       <!-- <el-form-item v-if="validate_number(debtBefore) === false" style="text-align: left; margin-top: -20px" label-width="110px">
         <span style="color: #dc3545!important">* Nợ trước không hợp lệ</span>
@@ -103,13 +103,15 @@ export default {
       this.loading = true
 
       let data = {
-        name: this.name,
-        azAccount: this.azAccount,
-        phone: this.phone,
-        address: this.address,
-        customerGroup: {id: this.group},
-        province: this.province
+        'name': this.name,
+        'azAccount': this.azAccount,
+        'phone': this.phone,
+        'address': this.address,
+        'customerGroup': {'id': this.group},
+        'province': this.province,
+        'debtBefore': this.debtBefore
       }
+      console.log('data', data)
       const response = await this.$services.do_request('post', CUSTOMER_URL, data)
       this.loading = false
 

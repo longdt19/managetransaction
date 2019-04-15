@@ -81,7 +81,7 @@
     <div class="" style="text-align: right; margin-bottom: 20px">
       <span slot="footer" class="dialog-footer">
         <el-button @click="close_dialog()">Hủy bỏ</el-button>
-        <el-button type="primary" @click="create">Tạo mới</el-button>
+        <el-button type="primary" @click="edit">Tạo mới</el-button>
       </span>
     </div>
   </el-row>
@@ -93,6 +93,7 @@
 
 <script>
 import getDays from '@/utils/day'
+import date_from_timestamp from '@/utils/date_from_timestamp'
 
 import { TRANSACTION_URL } from '@/constants/endpoints'
 
@@ -107,38 +108,51 @@ export default {
       bank_fee: '',
       code: null,
       dialogVisible: false,
-      loading: false
+      loading: false,
+      transfer: {}
     }
   },
   methods: {
     getDays,
+    date_from_timestamp,
     close_dialog () {
       this.dialogVisible = false
     },
-    open () {
+    open (transfer) {
+      console.log('transfer', transfer)
+      this.transfer = transfer
+      this.from_bank = transfer.fromBankAccount.id
+      this.to_bank = transfer.toBankAccount.id
+      this.bank_fee = transfer.bankFee
+      this.code = transfer.code
+      this.created_input = date_from_timestamp(transfer.created)
+      this.price_input = transfer.total
       this.dialogVisible = true
     },
-    async create () {
+    async edit () {
       if (this.loading) return
       this.loading = true
 
       const data = {
         'fromBankAccountId': this.from_bank,
         'toBankAccountId': this.to_bank,
-        'created': this.created,
-        'cost': this.price_input,
+        'created': this.created_input,
+        'total': this.price_input,
         'code': this.code,
-        'type': 'CHUYEN_TIEN_NOI_BO'
+        'type': 'CHUYEN_TIEN_NOI_BO',
+        'id': this.transfer.id,
+        'status': this.transfer.status,
+        'bankFee': this.bank_fee
       }
 
-      const response = await this.$services.do_request('post', TRANSACTION_URL, data)
+      let url = TRANSACTION_URL + `/${this.transfer.id}`
+      const response = await this.$services.do_request('put', url, data)
       this.loading = false
-
-      console.log('response', response)
 
       if (response.data.message === 'Success') {
         this.$message.success('Chuyển tiền thành công')
         this.dialogVisible = false
+        this.$emit('load_data_table')
       } else if (response.status === 400) {
         console.log('Bad request')
       } else {
@@ -147,8 +161,6 @@ export default {
     }
   },
   created () {
-    let days = getDays()
-    this.created_input = days.to_date
   }
 }
 </script>

@@ -128,17 +128,14 @@ export default {
         'fromBankAccountId': this.from_bank,
         'toBankAccountId': this.to_bank,
         'created': this.created,
-        'cost': this.price_input,
+        'total': this.price_input,
         'code': this.code,
         'type': 'CHUYEN_TIEN_NOI_BO',
         'bankFee': this.bank_fee
       }
-      console.log('data crete', data)
 
       const response = await this.$services.do_request('post', TRANSACTION_URL, data)
       this.loading = false
-
-      console.log('response', response)
 
       if (response.data.message === 'Success') {
         this.$message.success('Chuyển tiền thành công')

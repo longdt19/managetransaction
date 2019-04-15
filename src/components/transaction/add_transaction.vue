@@ -22,7 +22,7 @@
           <el-form-item label="Sản phẩm(*)" label-width="130px">
             <el-select v-model="input_product" filterable placeholder="Chọn sản phẩm" clearable  style="width: 250px">
               <el-option
-                v-for="item in product_list"
+                v-for="item in product_list_loaded"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id"
@@ -155,7 +155,7 @@
 </template>
 
 <script>
-import { NUMBER_VALIDATOR, TYPE_LIST } from '@/constants'
+import { NUMBER_VALIDATOR, TYPE_LIST_TRANSACTION } from '@/constants'
 import { TRANSACTION_URL } from '@/constants/endpoints'
 import getDays from '@/utils/day'
 
@@ -181,7 +181,7 @@ export default {
       created_input: '',
       input_type: {
         input: null,
-        select: TYPE_LIST
+        select: TYPE_LIST_TRANSACTION
       },
       dialogVisible: false,
       loading: false
@@ -277,7 +277,7 @@ export default {
         'created': this.created_input
       }
       if (this.input_bank !== '') {
-        formData['bankAccountId'] = this.input_bank
+        formData['toBankAccountId'] = this.input_bank
       }
 
       const response = await this.$services.do_request('post', TRANSACTION_URL, formData)
@@ -354,7 +354,7 @@ export default {
         this.$message.error('Còn nợ không được để trống')
         return false
       } else if (!this.input_type.input) {
-        this.$message.error('Trạng thái không được để trống')
+        this.$message.error('Loại không được để trống')
         return false
       } else {
         return true

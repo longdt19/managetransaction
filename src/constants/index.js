@@ -25,6 +25,24 @@ export const TYPE_LIST = [
   }
 ]
 
+export const TYPE_LIST_TRANSACTION = [
+  {
+    type: 'XUAT',
+    label: 'Xuất',
+    type_label: 'success'
+  },
+  {
+    type: 'NHAP',
+    label: 'Nhập',
+    type_label: 'warning'
+  },
+  {
+    type: 'HOAN_TIEN',
+    label: 'Hoàn tiền',
+    type_label: 'danger'
+  }
+]
+
 export const STATUS_LIST = [
   {
     value: 'TAO_MOI',

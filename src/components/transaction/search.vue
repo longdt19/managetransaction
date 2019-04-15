@@ -83,16 +83,16 @@
 
     <el-col :sm="24" :md="6" :lg="3"><div class="grid-content bg-purple" style="">
       <div class="group">
-        <el-select v-model="status" placeholder="Trạng thái"
+        <el-select v-model="type" placeholder="Loại"
           :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
           style="width: 180px"
           clearable
         >
           <el-option
-            v-for="item in status_selections"
+            v-for="item in type_selections"
             :key="item.value"
             :label="item.label"
-            :value="item.value">
+            :value="item.type">
           </el-option>
         </el-select>
       </div>
@@ -100,13 +100,13 @@
 
     <el-col :sm="24" :md="6" :lg="3"><div class="grid-content bg-purple" style="">
       <div class="group">
-        <el-select v-model="type" placeholder="Phê duyệt"
+        <el-select v-model="status" placeholder="Kiểu"
           :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
           style="width: 180px"
           clearable
         >
           <el-option
-            v-for="item in type_selections"
+            v-for="item in status_selections"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -126,6 +126,8 @@
 </template>
 
 <script>
+import { TYPE_LIST_TRANSACTION, STATUS_LIST } from '@/constants'
+
 export default {
   props: ['bank_list', 'load_bank_list'],
   data () {
@@ -137,30 +139,8 @@ export default {
       note: null,
       status: null,
       type: null,
-      type_selections: [
-        {
-          value: 0,
-          label: 'Đã tạo'
-        },
-        {
-          value: 1,
-          label: 'Đã duyệt'
-        }
-      ],
-      status_selections: [
-        {
-          value: 1,
-          label: 'Xuất'
-        },
-        {
-          value: 2,
-          label: 'Nhập'
-        },
-        {
-          value: 3,
-          label: 'Hoàn tiền'
-        }
-      ]
+      status_selections: STATUS_LIST,
+      type_selections: TYPE_LIST_TRANSACTION
     }
   },
   watch: {
@@ -197,8 +177,7 @@ export default {
       if (!this.input_bank && !this.input_product &&
           !this.input_customer && !this.$parent.from_date &&
           !this.$parent.to_date && !this.note && !this.code &&
-          !this.status &&
-          (this.type !== 1 && this.type !== 0)) {
+          !this.status && !this.type) {
         this.$parent.new_search = {}
         this.$parent.load_transaction_list()
       }
@@ -216,21 +195,21 @@ export default {
         customer_id = 0
       }
 
-      let type = -1
-
-      if (this.type === 0 || this.type === 1) {
-        type = this.type
-      }
+      // let type = -1
+      //
+      // if (this.type === 0 || this.type === 1) {
+      //   type = this.type
+      // }
 
       this.$parent.new_search = {
         'productId': product_id,
-        'bankAccountId': bank_id,
+        'toBankAccountId': bank_id,
         'customerId': customer_id,
         'fromDate': this.$parent.from_date,
         'toDate': this.$parent.to_date,
         'code': this.code,
         'note': this.note,
-        'type': type,
+        'type': this.type,
         'status': this.status
       }
     },

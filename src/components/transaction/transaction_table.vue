@@ -60,6 +60,7 @@
 
         <el-col :xs="12" :md="3"><div class="grid-content bg-purple-light">
           <span style="font-size: 15px;">Nợ : </span>
+          <br />
           <el-tag type="danger" v-if="statistic.owed">
             <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.owed)}}</span>
           </el-tag>
@@ -291,7 +292,7 @@
     <el-table-column label="Trạng thái" header-align="center" align="center">
       <template slot-scope="scope">
         <el-dropdown :hide-on-click="false">
-        <el-button size="mini" :loading="accept_loading">{{get_status(scope.row.status)}}</el-button>
+        <el-button size="mini" :loading="accept_loading">{{get_status(scope.row.status).label}}</el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
               v-for="item in STATUS_LIST"
@@ -335,7 +336,11 @@
     >
     </el-pagination>
   </div>
-  <edit-transaction-component ref='edit_transaction' @transaction_edited='transaction_edited'/>
+  <edit-transaction-component
+    ref='edit_transaction'
+    @transaction_edited='transaction_edited'
+    :bank_list="bank_list"
+  />
   <delete-transaction-component ref="delete_transaction" />
 </section>
 </template>
@@ -566,11 +571,9 @@ export default {
         size: this.pagination.per_page,
         page: this.pagination.page - 1
       }
-      console.log('dâta searrch', data)
 
       const response = await this.$services.do_request('get', TRANSACTION_URL, data)
       this.transaction.loading = false
-      console.log('response', response)
 
       if (response.data.data) {
         this.transaction.list = response.data.data.data.content
@@ -640,9 +643,6 @@ export default {
       this.load_transaction_list()
     },
     open_edit (transaction) {
-      this.$refs.edit_transaction.load_bank_list(this.bank.list)
-      this.$refs.edit_transaction.load_product_list(this.product.list)
-      this.$refs.edit_transaction.load_customer_list(this.customer.list)
       this.$refs.edit_transaction.open(transaction)
     },
     open_delete (transaction) {

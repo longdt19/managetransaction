@@ -42,7 +42,7 @@
           <el-select v-model="bank_name" placeholder="Chọn ngân hàng" filterable clearable  style="width: 250px">
             <el-option
               v-for="item in bank_list"
-              :key="item.id"
+              :key="item.bankName"
               :label="item.bankName"
               :value="item.id"
               >
@@ -156,10 +156,11 @@
 </template>
 
 <script>
-import { NUMBER_VALIDATOR, TYPE_LIST, STATUS_LIST } from '@/constants'
+import { NUMBER_VALIDATOR, TYPE_LIST_TRANSACTION, STATUS_LIST } from '@/constants'
 import { TRANSACTION_URL } from '@/constants/endpoints'
 
 export default {
+  props: ['bank_list'],
   data () {
     return {
       code: '',
@@ -179,7 +180,7 @@ export default {
       transaction: {},
       input_type: {
         input: null,
-        select: TYPE_LIST
+        select: TYPE_LIST_TRANSACTION
       },
       input_status: {
         input: null,
@@ -187,7 +188,6 @@ export default {
       },
       radio: 1,
       status_list: ['Xuất', 'Nhập', 'Hoàn tiền'],
-      bank_list: [],
       product_list: [],
       customer_list: [],
       dialogVisible: false,
@@ -263,7 +263,7 @@ export default {
       this.input_status.input = transaction.status
       this.created_input = this.convert_date_from_timestamp(transaction.created)
 
-      if (transaction.bankAccount) this.bank_name = transaction.bankAccount.id
+      if (transaction.toBankAccount) this.bank_name = transaction.toBankAccount.id
       this.transaction = transaction
       this.dialogVisible = true
     },
@@ -302,12 +302,13 @@ export default {
         'owed': this.unpaid_input,
         'note': this.note,
         'bankFee': this.bank_fee,
-        'type': this.input_type,
+        'type': this.input_type.input,
         'created': this.created_input
       }
+      console.log('data edit', data)
 
       if (this.bank_name) {
-        data['bankAccountId'] = this.bank_name
+        data['toBankAccountId'] = this.bank_name
       }
 
       let url = TRANSACTION_URL + `/${this.transaction.id}`
@@ -325,9 +326,6 @@ export default {
       } else {
         this.$router.push('/e-500')
       }
-    },
-    load_bank_data (bank) {
-      this.bank_list = bank
     },
     load_product_data (product) {
       this.product_list = product
@@ -383,9 +381,6 @@ export default {
       } else {
         return true
       }
-    },
-    load_bank_list (bank) {
-      this.bank_list = bank
     },
     load_product_list (product) {
       this.product_list = product

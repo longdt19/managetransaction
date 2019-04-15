@@ -1,7 +1,7 @@
 <template lang="html">
   <el-col :xs="24" :md="24">
     <el-row :gutter="10">
-      <el-col :span="4"><div class="grid-content bg-purple" style="margin-left: 12px">
+      <el-col :xs="24" :md="4"><div class="grid-content bg-purple" style="margin-left: 12px">
         <span>Từ ngày:</span>
         <el-date-picker
           v-model="from_date"
@@ -12,7 +12,7 @@
         >
         </el-date-picker>
       </div></el-col>
-      <el-col :span="4"><div class="grid-content bg-purple-light">
+      <el-col :xs="24" :md="4"><div class="grid-content bg-purple-light">
         <span>Đến ngày:</span>
         <el-date-picker
           v-model="to_date"
@@ -24,7 +24,7 @@
         </el-date-picker>
       </div></el-col>
 
-      <el-col :span="4"><div class="grid-content bg-purple">
+      <el-col :xs="24" :md="3"><div class="grid-content bg-purple">
         <span>Ngân hàng:</span>
         <div class="group" element-loading-spinner="el-icon-loading" v-loading="load_bank_list">
           <el-select v-model="from_bank" placeholder="Ngân hàng chuyển" filterable clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
@@ -43,7 +43,7 @@
         </div>
       </div></el-col>
 
-      <el-col :span="4"><div class="grid-content bg-purple">
+      <el-col :xs="24" :md="4"><div class="grid-content bg-purple">
         <span>Ngân hàng:</span>
         <div class="group" element-loading-spinner="el-icon-loading" v-loading="load_bank_list">
           <el-select v-model="to_bank" placeholder="Ngân hàng nhận" filterable clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
@@ -62,7 +62,7 @@
         </div>
       </div></el-col>
 
-      <el-col :span="2"><div class="grid-content bg-purple" style="">
+      <el-col :xs="24" :md="2"><div class="grid-content bg-purple" style="">
         <span>Tìm kiếm:</span>
         <div class="group">
           <el-button slot="append" icon="el-icon-search"

@@ -10,12 +10,12 @@
       </div>
     </div></el-col> -->
     <el-col :sm="24" :md="6" :lg="3"><div class="grid-content bg-purple">
-      <div class="group" v-loading="$parent.bank.loading" element-loading-spinner="el-icon-loading">
+      <div class="group" v-loading="load_bank_list" element-loading-spinner="el-icon-loading">
         <el-select v-model="input_bank" placeholder="Ngân hàng" filterable clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
           style="width: 180px"
         >
           <el-option
-            v-for="item in $parent.bank.list"
+            v-for="item in bank_list"
             :key="item.id"
             :label="item.bankName"
             :value="item.id"
@@ -127,6 +127,7 @@
 
 <script>
 export default {
+  props: ['bank_list', 'load_bank_list'],
   data () {
     return {
       input_bank: null,

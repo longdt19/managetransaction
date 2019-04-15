@@ -22,7 +22,7 @@
           <el-form-item label="Sản phẩm(*)" label-width="130px">
             <el-select v-model="input_product" filterable placeholder="Chọn sản phẩm" clearable  style="width: 250px">
               <el-option
-                v-for="item in product_list_loaded"
+                v-for="item in product_list"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id"
@@ -49,7 +49,7 @@
             <el-select v-model="input_bank" placeholder="Chọn ngân hàng" filterable clearable  style="width: 250px; border-color: red">
               <el-option
                 style=" border-color: red"
-                v-for="item in bank_list_loaded"
+                v-for="item in bank_list"
                 :key="item.id"
                 :label="item.bankName"
                 :value="item.id"
@@ -160,13 +160,12 @@ import { TRANSACTION_URL } from '@/constants/endpoints'
 import getDays from '@/utils/day'
 
 export default {
-  props: ['bank_list_loaded', 'product_list_loaded', 'customer_list_loaded'],
+  props: ['bank_list', 'product_list_loaded', 'customer_list_loaded'],
   data () {
     return {
       input_customer: '',
       input_product: '',
       input_bank: '',
-      bank_list: [],
       product_list: [],
       customer_list: [],
       code_input: '',

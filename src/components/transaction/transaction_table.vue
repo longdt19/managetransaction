@@ -1,29 +1,27 @@
 <template>
 <section v-if="common_data.navigation.TRANSACTION.status === 1">
-  <div class="" style="margin-bottom: 20px; text-align: right">
-    <el-row>
-
-      <el-col :xs="8" :md="18"><div>
-        <!-- <el-button>Thêm mới giao dịch</el-button> -->
+  <div class="" style="text-align: right">
+    <el-row :gutter="20">
+      <el-col :xs="24" :md="20">
         <add-transaction-component
           @transaction_object_added="transaction_object_added"
-          :bank_list_loaded="bank.list"
+          :bank_list="bank_list"
           :product_list_loaded="product.list"
           :customer_list_loaded="customer.list"
         />
-      </div></el-col>
-      <el-col :xs="8" :md="4"><div class="grid-content bg-purple-light" style="text-align: right">
+      </el-col>
+      <el-col :xs="24" :md="4">
         <el-button style="background-color: #2e7d32" :disabled="common_data.navigation.TRANSACTION.getMethod === 0" @click="export_excel">
           <img src="../../assets/icon/download.svg" style="height: 15px" />
           <span style="margin-left: 5px; color: white">Xuất Excel</span>
         </el-button>
-      </div></el-col>
+      </el-col>
     </el-row>
   </div>
   <div class="">
     <el-col :xs="24" :md="24"><div class="grid-content bg-purple-light">
-      <el-row >
-        <el-col :span="4"><div class="grid-content bg-purple" style="margin-left: 12px">
+      <el-row :gutter="50">
+        <el-col :xs="12" :md="3"><div class="grid-content bg-purple" style="margin-left: 12px">
           <span>Từ ngày:</span>
           <el-date-picker
             v-model="from_date"
@@ -34,7 +32,7 @@
           >
           </el-date-picker>
         </div></el-col>
-        <el-col :span="4"><div class="grid-content bg-purple-light">
+        <el-col :xs="12" :md="3"><div class="grid-content bg-purple-light">
           <span>Đến ngày:</span>
           <el-date-picker
             v-model="to_date"
@@ -46,29 +44,29 @@
           </el-date-picker>
         </div></el-col>
 
-        <el-col :span="4"><div class="grid-content bg-purple">
-            <span style="font-size: 15px;">Số tiền:</span>
+        <el-col :xs="12" :md="3"><div class="grid-content bg-purple">
+            <span style="font-size: 15px;">Số tiền : </span>
             <el-tag type="warning" v-if="statistic.cost">
               <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.cost)}}</span>
             </el-tag>
         </div></el-col>
 
-        <el-col :span="4"><div class="grid-content bg-purple">
-            <span style="font-size: 15px;">Thanh toán:</span>
+        <el-col :xs="12" :md="3"><div class="grid-content bg-purple">
+            <span style="font-size: 15px;">Thanh toán : </span>
             <el-tag type="success" v-if="statistic.paid">
               <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.paid)}}</span>
             </el-tag>
         </div></el-col>
 
-        <el-col :span="4"><div class="grid-content bg-purple-light">
-          <span style="font-size: 15px;">Nợ:</span>
+        <el-col :xs="12" :md="3"><div class="grid-content bg-purple-light">
+          <span style="font-size: 15px;">Nợ : </span>
           <el-tag type="danger" v-if="statistic.owed">
             <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.owed)}}</span>
           </el-tag>
         </div></el-col>
 
-        <el-col :span="4"><div class="grid-content bg-purple-light">
-          <span style="font-size: 15px;">Tổng:</span>
+        <el-col :xs="12" :md="3"><div class="grid-content bg-purple-light">
+          <span style="font-size: 15px;">Tổng : </span>
           <el-tag v-if="statistic.total">
             <span style="font-size: 20px; font-weight: bold">{{formatNumber(statistic.total)}}</span>
           </el-tag>
@@ -80,16 +78,21 @@
   <div class="" style="margin-top: 30px; margin-bottom: 0px;">
   </div>
 
-  <div class="" style="display: flex; align-items: flex-end; justify-content: space-between">
+  <search-component
+    :bank_list="bank_list"
+    :load_bank_list="load_bank_list"
+  />
+
+  <!-- <div class="" style="display: flex; align-items: flex-end; justify-content: space-between">
     <div class=""  style="width: 100%">
-      <search-component ></search-component>
+
     </div>
-  </div>
+  </div> -->
   <div class="" style="margin-top:20px">
     <el-row>
-      <el-col :span="22">
+      <el-col :xs="24" :md="22">
         <el-row>
-          <el-col :span="4">
+          <el-col :xs="24" :md="4">
             <el-button @click="display_accept_multi()" v-if="accept_multi_display === false"
               :disabled="common_data.navigation.TRANSACTION.putMethod === 0"
             >
@@ -101,7 +104,7 @@
               Hủy duyệt đơn
             </el-button>
           </el-col>
-          <el-col :span="8">
+          <el-col :xs="24" :md="8">
             <div class="">
               <span style="font-size: 20px; color:#F56C6C"
                 v-if="this.transaction_selections.length"
@@ -111,7 +114,7 @@
             </div>
           </el-col>
 
-          <el-col :span="8">
+          <el-col ::xs="24" :md="8">
             <el-button
               v-if="this.transaction_selections.length"
               @click="accept_multi_transaction()"
@@ -123,7 +126,7 @@
         </el-row>
       </el-col>
 
-      <el-col :span="2" style="text-align: right">
+      <el-col :xs="24" :md="2" style="text-align: right">
         <span>Hiển thị: </span>
         <el-select v-model="pagination.per_page" style="width: 80px">
           <el-option
@@ -248,7 +251,7 @@
 
       <!-- ngân hàng khách hàng dùng để thanh toán -->
       <el-table-column label="Ngân hàng" header-align="center" align="center">
-        <template slot-scope="scope" v-if="scope.row.bankAccount">
+        <template slot-scope="scope" v-if="scope.row.toBankAccount">
           {{scope.row.toBankAccount.bankName}}
         </template>
       </el-table-column>
@@ -339,7 +342,7 @@
 
 <script>
 import _ from 'lodash'
-import { BANK_LIST_URL, CUSTOMER_LIST_URL, PRODUCT_LIST_URL, TRANSACTION_URL, TRANSACTION_DOWNLOAD_URL } from '@/constants/endpoints'
+import { CUSTOMER_LIST_URL, PRODUCT_LIST_URL, TRANSACTION_URL, TRANSACTION_DOWNLOAD_URL } from '@/constants/endpoints'
 import { TYPE_LIST, STATUS_LIST } from '@/constants'
 
 import formatNumber from '@/utils/numeric'
@@ -352,6 +355,7 @@ import DeleteTransactionComponent from './delete_transaction'
 import AddComponent from './add'
 
 export default {
+  props: ['bank_list', 'load_bank_list'],
   components: {
     SearchComponent,
     AddTransactionComponent,
@@ -512,8 +516,8 @@ export default {
         'created': this.convert_date_from_timestamp(transaction.created)
       }
 
-      if (transaction.bankAccount) {
-        data['bankAccountId'] = transaction.bankAccount.id
+      if (transaction.toBankAccount) {
+        data['toBankAccountId'] = transaction.toBankAccount.id
       }
 
       let url = TRANSACTION_URL + `/${transaction.id}`
@@ -562,6 +566,7 @@ export default {
         size: this.pagination.per_page,
         page: this.pagination.page - 1
       }
+      console.log('dâta searrch', data)
 
       const response = await this.$services.do_request('get', TRANSACTION_URL, data)
       this.transaction.loading = false
@@ -577,22 +582,22 @@ export default {
         this.$router.push('/e-500')
       }
     },
-    async load_bank_list () {
-      if (this.common_data.navigation.TRANSACTION.getMethod === 0) {
-        return
-      }
-
-      if (this.bank.loading) return
-      this.bank.loading = true
-      const response = await this.$services.do_request('get', BANK_LIST_URL)
-
-      this.bank.loading = false
-      if (response.data.data) {
-        this.bank.list = response.data.data
-      } else {
-        this.$router.push('/e-500')
-      }
-    },
+    // async load_bank_list () {
+    //   if (this.common_data.navigation.TRANSACTION.getMethod === 0) {
+    //     return
+    //   }
+    //
+    //   if (this.bank.loading) return
+    //   this.bank.loading = true
+    //   const response = await this.$services.do_request('get', BANK_LIST_URL)
+    //
+    //   this.bank.loading = false
+    //   if (response.data.data) {
+    //     this.bank.list = response.data.data
+    //   } else {
+    //     this.$router.push('/e-500')
+    //   }
+    // },
     async load_customer_list () {
       if (this.common_data.navigation.TRANSACTION.getMethod === 0) {
         return
@@ -667,15 +672,17 @@ export default {
     },
     change_page (val) {
       this.pagination.page = val
+    },
+    load_data_component () {
+      if (this.common_data.navigation.TRANSACTION.getMethod === 1) {
+        this.load_customer_list()
+        this.load_product_list()
+        this.load_transaction_list()
+      }
     }
   },
   created () {
-    if (this.common_data.navigation.TRANSACTION.getMethod === 1) {
-      this.load_bank_list()
-      this.load_customer_list()
-      this.load_product_list()
-      this.load_transaction_list()
-    }
+    this.load_data_component()
   }
 }
 </script>

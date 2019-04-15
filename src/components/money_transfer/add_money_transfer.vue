@@ -86,7 +86,7 @@
     <div class="" style="text-align: right; margin-bottom: 20px">
       <span slot="footer" class="dialog-footer">
         <el-button @click="close_dialog()">Hủy bỏ</el-button>
-        <el-button type="primary" @click="create">Tạo mới</el-button>
+        <el-button type="primary" @click="create" v-loading="loading">Tạo mới</el-button>
       </span>
     </div>
   </el-row>
@@ -130,8 +130,10 @@ export default {
         'created': this.created,
         'cost': this.price_input,
         'code': this.code,
-        'type': 'CHUYEN_TIEN_NOI_BO'
+        'type': 'CHUYEN_TIEN_NOI_BO',
+        'bankFee': this.bank_fee
       }
+      console.log('data crete', data)
 
       const response = await this.$services.do_request('post', TRANSACTION_URL, data)
       this.loading = false

@@ -27,7 +27,7 @@
       <el-col :span="4"><div class="grid-content bg-purple">
         <span>Ngân hàng:</span>
         <div class="group" element-loading-spinner="el-icon-loading" v-loading="load_bank_list">
-          <el-select v-model="input_bank" placeholder="Ngân hàng chuyển" filterable clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
+          <el-select v-model="from_bank" placeholder="Ngân hàng chuyển" filterable clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
             style="width: 180px"
           >
             <el-option
@@ -46,7 +46,7 @@
       <el-col :span="4"><div class="grid-content bg-purple">
         <span>Ngân hàng:</span>
         <div class="group" element-loading-spinner="el-icon-loading" v-loading="load_bank_list">
-          <el-select v-model="input_bank" placeholder="Ngân hàng nhận" filterable clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
+          <el-select v-model="to_bank" placeholder="Ngân hàng nhận" filterable clearable :disabled="common_data.navigation.TRANSACTION.getMethod === 0"
             style="width: 180px"
           >
             <el-option
@@ -83,16 +83,18 @@ export default {
     return {
       from_date: null,
       to_date: null,
-      input_bank: null
+      from_bank: null,
+      to_bank: null
     }
   },
   methods: {
     search () {
       const data = {
-        'fromData': this.from_date,
+        'fromDate': this.from_date,
         'toDate': this.to_date,
         'type': 'CHUYEN_TIEN_NOI_BO',
-        'toBankAccountId': this.input_bank
+        'toBankAccountId': this.to_bank,
+        'fromBankAccountId': this.from_bank
       }
 
       this.$emit('search', data)

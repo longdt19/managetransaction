@@ -209,8 +209,8 @@ export default {
         'toDate': this.$parent.to_date,
         'code': this.code,
         'note': this.note,
-        'type': this.type,
-        'status': this.status
+        'type': this.status === '' ? -1 : this.status,
+        'status': this.type === '' ? -1 : this.type
       }
     },
     async search () {

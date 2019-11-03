@@ -4,17 +4,17 @@ export const STORE_KEY = 'Management-System-Store'
 
 export const TYPE_LIST = [
   {
-    type: 'XUAT',
+    type: 2,
     label: 'Xuất',
     type_label: 'success'
   },
   {
-    type: 'NHAP',
+    type: 1,
     label: 'Nhập',
     type_label: 'warning'
   },
   {
-    type: 'HOAN_TIEN',
+    type: 3,
     label: 'Hoàn tiền',
     type_label: 'danger'
   },
@@ -27,17 +27,17 @@ export const TYPE_LIST = [
 
 export const TYPE_LIST_TRANSACTION = [
   {
-    type: 'XUAT',
+    type: 2,
     label: 'Xuất',
     type_label: 'success'
   },
   {
-    type: 'NHAP',
+    type: 1,
     label: 'Nhập',
     type_label: 'warning'
   },
   {
-    type: 'HOAN_TIEN',
+    type: 3,
     label: 'Hoàn tiền',
     type_label: 'danger'
   }
@@ -45,11 +45,11 @@ export const TYPE_LIST_TRANSACTION = [
 
 export const STATUS_LIST = [
   {
-    value: 'TAO_MOI',
+    value: 0,
     label: 'Đã tạo'
   },
   {
-    value: 'DA_DUYET',
+    value: 1,
     label: 'Đã duyệt'
   }
 ]

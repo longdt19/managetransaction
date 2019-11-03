@@ -1,6 +1,11 @@
 <template>
 <section v-if="common_data.navigation.TRANSACTION.status === 1">
-  <el-tabs v-model="activeName"  @tab-click="handleClick">
+  <transaction-table-component
+    :bank_list="bank.list"
+    :load_bank_list="bank.loading"
+    ref="transaction_table_component"
+  />
+  <!-- <el-tabs v-model="activeName"  @tab-click="handleClick">
     <el-tab-pane label="Thống kê giao dịch" name="first">
       <transaction-table-component
         :bank_list="bank.list"
@@ -16,7 +21,7 @@
         ref="money_transfer_component"
       />
     </el-tab-pane>
-  </el-tabs>
+  </el-tabs> -->
 </section>
 </template>
 

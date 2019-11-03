@@ -188,7 +188,7 @@
       3: Hoàn tiền -->
       <el-table-column label="Loại" header-align="center" align="center">
         <template slot-scope="scope" >
-          <el-tag v-if="scope.row.type" :type="get_type(scope.row.type).type_label">{{get_type(scope.row.type).label}}</el-tag>
+          <el-tag :type="get_type(scope.row.type).type_label">{{get_type(scope.row.status).label}}</el-tag>
         </template>
       </el-table-column>
 
@@ -292,7 +292,7 @@
     <el-table-column label="Trạng thái" header-align="center" align="center">
       <template slot-scope="scope">
         <el-dropdown :hide-on-click="false">
-        <el-button size="mini" :loading="accept_loading">{{get_status(scope.row.status).label}}</el-button>
+        <el-button size="mini" :loading="accept_loading">{{get_status(scope.row.type).label}}</el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item
               v-for="item in STATUS_LIST"
@@ -576,6 +576,7 @@ export default {
       this.transaction.loading = false
 
       if (response.data.data) {
+        console.log('123123', response.data.data)
         this.transaction.list = response.data.data.data.content
         this.pagination.totalElement = response.data.data.data.totalElements
         this.pagination.totalPage = response.data.data.data.totalPages
@@ -654,6 +655,7 @@ export default {
         label: '',
         type_label: ''
       }
+      console.log('type', STATUS_LIST)
       this.TYPE_LIST.forEach(item => {
         if (item.type === type) {
           result = item
